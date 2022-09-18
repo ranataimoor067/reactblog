@@ -2,6 +2,12 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 8000
 const {MongoClient} = require("mongodb");
+const cors = require("cors")
+app.use(
+	cors({
+		origin: "*",
+		methods: ["GET", "POST", "PUT"],
+	}))
 
 
 
@@ -9,7 +15,7 @@ app.use(express.json({extend: false}));
 
 const withDB = async(operations, res) => {
 	try {
-		const client = await MongoClient.connect('mongodb://localhost:27017');
+		const client = await MongoClient.connect("mongodb://localhost:27017");
 		const db = client.db("blog");
 		await operations(db);
 		client.close();
@@ -34,11 +40,11 @@ app.post("/api/articles/:name/add-comments", (req, res) => {
 		const articleInfo = await db.collection('articles').findOne({name: articleName})
 		await db.collection('articles').updateOne({name: articleName} , {
 			$set: {
-				coments: articleInfo.comments.concat({username, text}),
+				comments: articleInfo.comments.concat({username, text}),
 			},
 		}
 	  );
-		const updateArticleInfo = await db.collection('articles').findOne({name: articleName})
+		const updateArticleInfo = await db.collection("articles").findOne({name: articleName})
 		res.status(200).json(updateArticleInfo)
 	}, res)
 });

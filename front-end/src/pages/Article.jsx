@@ -3,9 +3,16 @@ import {useParams} from 'react-router-dom'
 import articleContent from './article-content'
 import Articles from '../components/Articles'
 import NotFound from './NotFound'
-import CommentsList from "../components/CommentList"
+import CommentsList from "../components/CommentsList"
 import AddComment from "../components/AddComment"
 
+
+/*const fetchData = async () => {
+      const result = await fetch(`http://localhost:8000/api/articles/learn-react`);
+      const body = await result.json();
+      console.log(body);
+    };
+fetchData();*/
 
 const Article = () => {
   const { name } = useParams();
@@ -14,7 +21,7 @@ const Article = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch(`/api/articles/${name}`);
+      const result = await fetch(`http://localhost:8000/api/articles/${name}`);
       const body = await result.json();
       console.log(body);
       setArticleInfo(body);
@@ -31,7 +38,7 @@ const Article = () => {
       <h1 className='sm:text-4xl text-2xl font-bold my-6 text-gray-900'>
         {article.title}
       </h1>
-      {article.content.map((paragraph, index) => (
+      {article.content && article.content.map((paragraph, index) => (
         <p className='mx-auto leading-relaxed text-base mb-4' key={index}>
           {paragraph}
         </p>
@@ -45,7 +52,7 @@ const Article = () => {
         <Articles articles={otherArticles} />
       </div>
     </>
-  );
-};
+  )
+}
 
 export default Article;
