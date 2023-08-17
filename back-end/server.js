@@ -1,8 +1,12 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 8080
 const {MongoClient} = require("mongodb");
 const cors = require("cors")
+const dotenv = require("dotenv")
+
+dotenv.config()
+
 app.use(
 	cors({
 		origin: "*",
@@ -15,7 +19,7 @@ app.use(express.json({extend: false}));
 
 const withDB = async(operations, res) => {
 	try {
-		const client = await MongoClient.connect("mongodb://localhost:27017");
+		const client = process.env.CONNECTION_URL;
 		const db = client.db("blog");
 		await operations(db);
 		client.close();
