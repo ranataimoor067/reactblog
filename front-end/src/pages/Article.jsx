@@ -21,7 +21,7 @@ const Article = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch(`http://localhost:8000/api/articles/${name}`);
+	 const result = await fetch(`/api/articles/${name}`);
       const body = await result.json();
       console.log(body);
       setArticleInfo(body);
