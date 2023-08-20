@@ -14,3 +14,5 @@ Decided to do a Blog project while learning the MERN Stack. I used vite for Reac
 - CORS
 - MongoDB
 - NodeJS
+
+# !!  I STILL NEED TO WORK ON THE BACKEND UGHHH!!!
