@@ -21,7 +21,11 @@ const Article = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+<<<<<<< HEAD
       const result = await fetch(`http://localhost:8080/api/articles/${name}`);
+=======
+	 const result = await fetch(`/api/articles/${name}`);
+>>>>>>> c501af01a6d94acc84070ae9f335d9f8f1d61253
       const body = await result.json();
       console.log(body);
       setArticleInfo(body);
