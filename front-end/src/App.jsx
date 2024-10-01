@@ -6,6 +6,7 @@ import ArticleList from './pages/ArticleList'
 import Article from './pages/Article'
 import Navbar from './components/Navbar'
 import NotFound from './pages/NotFound'
+import ProfilePage from  './pages/ProfilePage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,6 +20,7 @@ function App() {
         <Route path="/about" element={<About/>}/>
         <Route path="/article-list" element={<ArticleList/>}/>
         <Route path="/article/:name" element={<Article/>}/>
+        <Route path="/profile" element={<ProfilePage/>} />
         <Route path="*" element={<NotFound/>}/>
       </Routes>
       </div>

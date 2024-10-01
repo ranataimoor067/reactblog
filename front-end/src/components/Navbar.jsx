@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import Model from "./Model";
 import axios from 'axios';
 
@@ -32,6 +33,7 @@ const Navbar = () => {
   try {
     const response = await axios.post('http://localhost:8080/api/login', { username, password });
     const token = response.data.token;
+    console.log(token)
     localStorage.setItem('token', `Bearer ${token}`);
     setIsLoggedIn(true);
     setUser(username);
@@ -88,6 +90,12 @@ const register = async (event) => {
     window.location.href = '/';
   };
 
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
+
   return (
     <>
       <nav className="border-b-4 border-green-700 text-center fixed top-0 bg-green-900 font-bold w-full text-lg text-white">
@@ -104,7 +112,7 @@ const register = async (event) => {
           <li className="inline-block py-4">
             {isLoggedIn? (
               <div>
-                <p className="inline-block mr-4">{user}</p>
+                <p className="inline-block mr-4" onClick={handleProfileClick}>{user}</p>
                 <button onClick={logout}>Logout</button>
               </div>
             ) : (
