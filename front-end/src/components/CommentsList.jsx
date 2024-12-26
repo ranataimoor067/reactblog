@@ -3,7 +3,7 @@ import React from "react";
 const CommentsList = ({ comments }) => {
   return (
     <>
-      <h3 className='sm:text-2xl text-xl font-bold my-6 text-gray-900'>
+      <h3 className='sm:text-2xl text-xl font-bold my-6 text-gray-900'style={{ color: 'var(--text-color)' }}>
         Comments :
       </h3>
       {comments && comments.map((comment, index) => (

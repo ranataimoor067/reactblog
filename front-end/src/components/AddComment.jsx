@@ -19,7 +19,7 @@ const AddComment = ({articleName, setArticleInfo}) => {
 	}
 	return (
 		<form className="shadow rounded px-8 pt-6 mb-4">
-			<h3 className="text=xl font-bold mb-4 text-gray-900">Add a comment</h3>
+			<h3 className="text=xl font-bold mb-4 text-gray-900" style={{ color: 'var(--text-color)' }}>Add a comment</h3>
 			<label className="block text-gray-70 text-sm font-bold mb-2">Name: </label>
 			<input type="text" onChange={(e)=> setUsername(e.target.value)} value={username} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
 			<label className="block text-gray-70 text-sm font-bold mb-2">Text: </label>
