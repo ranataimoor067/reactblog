@@ -3,14 +3,14 @@
     "name": "react-project",
     "version": "1.0.0",
     "description": "MERN Blog App",
-    "main": "server.js",
+    "main": "index.js",
     "scripts": {
         "server": "nodemon server",
         "dev": "npm run server",
-        "build": "react-scripts build build"
+        "build": "react-scripts build"
     },
     "keywords": [],
-    "author": "Oken K.",
+    "author": "Oken Keithellakpam",
     "license": "ISC",
     "dependencies": {
         "axios": "^1.7.7",
@@ -23,7 +23,6 @@
         "mongoose": "^6.0.12"
     },
     "devDependencies": {
-        "concurrently": "^7.4.0",
-        "nodemon": "^2.0.19"
+        "nodemon": "^2.0.19",
     }
 }
