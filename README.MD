@@ -1,6 +1,4 @@
-# Blog Project using MERN stack
-Decided to do a Blog project while learning the MERN Stack. I used vite for React. It utilized nodemon server so that it can run both front-end and backedn concurrently. Features can be added but for now adding comments to an article is a basic future at the moment. Will add more stuff in the mean time.
-
+![swoc2024 Banner]("./swoc.jpg")
 # Steps
 - First you need to have and install NodeJs,preferrably versions > 14.0 and mongoDB also
 - Copy your database url link of the MongoDB database and replace the link to a .env file under the variable named **CONNECTION_URL** e.g. `CONNECTION_URL = "mongodb://localhost:27017"` like this.
@@ -11,8 +9,6 @@ Decided to do a Blog project while learning the MERN Stack. I used vite for Reac
 - TailwindCSS
 - ExpressJS
 - ReactJS
-- CORS
 - MongoDB
 - NodeJS
 
-# !!  I STILL NEED TO WORK ON THE BACKEND UGHHH!!!
