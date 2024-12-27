@@ -6,7 +6,8 @@
     "main": "server.js",
     "scripts": {
         "server": "nodemon server",
-        "dev": "npm run server"
+        "dev": "npm run server",
+        "build": "react-scripts build"
     },
     "keywords": [],
     "author": "Oken K.",
