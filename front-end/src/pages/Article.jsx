@@ -21,7 +21,7 @@ const Article = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch(`http://localhost:8080/api/articles/${name}`);
+      const result = await fetch(`https://react-blog-onlk.onrender.com/api/articles/${name}`);
       const body = await result.json();
       console.log(body);
       setArticleInfo(body);
