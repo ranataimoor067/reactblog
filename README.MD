@@ -1,4 +1,4 @@
-![swoc2024 Banner]("./swoc.jpg")
+![swoc2024 Banner](./swoc.jpg)
 # Steps
 - First you need to have and install NodeJs,preferrably versions > 14.0 and mongoDB also
 - Copy your database url link of the MongoDB database and replace the link to a .env file under the variable named **CONNECTION_URL** e.g. `CONNECTION_URL = "mongodb://localhost:27017"` like this.
