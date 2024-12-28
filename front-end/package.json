@@ -2,7 +2,7 @@
   "name": "react-project",
   "private": true,
   "version": "0.0.0",
-  "proxy": "http://localhost:8000",
+  "proxy": "https://react-blog-onlk.onrender.com",
   "type": "module",
   "scripts": {
     "dev": "vite",
