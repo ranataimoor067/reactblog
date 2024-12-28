@@ -12,7 +12,7 @@ const Articles = ({articles}) => {
 								</Link>
 								<div className="p-6">
 									<Link key={index} to={`/article/${article.name}`}>
-										<h3 className="text-lg font-medium text-gray-900 mb-3">{article.title}</h3>
+										<h3 className="text-lg font-medium text-gray-900 mb-3" style={{ color: 'var(--text-color)' }}>{article.title}</h3>
 									</Link>
 									<p className="leading-relaxed mb-3">
 										{article.content[0].substring(0,110)}...
