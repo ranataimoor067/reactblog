@@ -143,34 +143,88 @@ const register = async (event) => {
         </ul>
       </nav>
 
-      <Model isOpen={open} onClose={handleClose}>
-        <>
-          <div className="login-container">
-            <div className="login-header text-slate-900">
-              <h2>{isLogin ? 'Login' : 'Register'}</h2>
+      {open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className={`relative w-full max-w-sm p-8 rounded-lg shadow-2xl ${
+                  theme === 'dark' ? 'bg-gray-900 text-slate-100' : 'bg-slate-200'}`}>
+            <button
+              onClick={handleClose}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-2xl font-bold"
+            >
+              &times;
+            </button>
+            <div className="text-center mb-6">
+              <h2 className={`text-3xl font-extrabold ${
+                  theme === 'dark' ? 'bg-gray-900 text-white' : ''
+              }`}>
+                {isLogin ? 'Login' : 'Register'}
+              </h2>
+              <p className={`text-sm mt-2 ${
+                  theme === 'dark' ? 'bg-gray-900 text-white' : ''
+                }>`}>
+                {isLogin
+                  ? "Welcome back! Please login to your account."
+                  : "Create your account to get started."}
+              </p>
             </div>
-            <form onSubmit={isLogin ? login : register} className="login-form" style={{ display: 'flex', flexDirection: 'column' }}>
-              <input type="text" value={username} onChange={(event) => setUsername(event.target.value)} className="input-field" placeholder="Username" required />
-              {isLogin ? null : <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="input-field" placeholder="Email" required />}
-              <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="input-field" placeholder="Password" required />
-              {error && <p style={{ color: 'red' }}>{error}</p>}
+            <form
+              onSubmit={isLogin ? login : register}
+              className="flex flex-col gap-4"
+            >
+              <input
+                type="text"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+                placeholder="Username"
+                required
+                className={`w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 ${
+                  theme === 'dark' ? 'bg-gray-700 text-white' : ''
+                }`} 
+              />
+              {!isLogin && (
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Email"
+                  required
+                  className={`w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 ${
+                    theme === 'dark' ? 'bg-gray-700 text-white' : ''
+                  }`}
+                />
+              )}
+              <input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="Password"
+                required
+                className={`w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none text-gray-700 ${
+                  theme === 'dark' ? 'bg-gray-700 text-white' : ''
+                }`}
+              />
+              {error && (
+                <p className="text-red-500 text-sm text-center">{error}</p>
+              )}
               <button
-                className="login-button"
-                style={{
-                  background: '#44bb44',
-                  width: '100%',
-                  height: 40,
-                }}
+                type="submit"
+                className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-lg transition-transform transform hover:scale-105 shadow-lg"
               >
                 {isLogin ? 'Login' : 'Register'}
               </button>
-              <p onClick={toggleLogin} style={{ cursor: 'pointer', color: 'blue' }}>
-                {isLogin ? "Don't have an account? Register" : 'Already have an account? Login'}
+              <p
+                onClick={toggleLogin}
+                className="text-center text-blue-500 text-sm cursor-pointer hover:underline"
+              >
+                {isLogin
+                  ? "Don't have an account? Register"
+                  : "Already have an account? Login"}
               </p>
             </form>
           </div>
-        </>
-      </Model>
+        </div>
+      )}
+
     </>
   );
 };
