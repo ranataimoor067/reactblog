@@ -6,7 +6,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:8080/api/profile', {
+    axios.get('https://react-blog-onlk.onrender.com/api/profile', {
       headers: {
         Authorization: token,
       },

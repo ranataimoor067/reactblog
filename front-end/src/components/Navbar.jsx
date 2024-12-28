@@ -28,34 +28,34 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [user, setUser] = useState('');
 
   const navigate = useNavigate();
-
   const login = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8080/api/login', { username, password });
-      const token = response.data.token;
-      localStorage.setItem('token', `Bearer ${token}`);
-      setIsLoggedIn(true);
-      setUser(username);
-      handleClose();
-    } catch (error) {
-      setError(error.response?.data?.error || 'An error occurred during login');
-    }
-  };
+  event.preventDefault();
+  try {
+    const response = await axios.post('https://react-blog-onlk.onrender.com/api/login', { username, password });
+    const token = response.data.token;
+    console.log(token)
+    localStorage.setItem('token', `Bearer ${token}`);
+    setIsLoggedIn(true);
+    setUser(username);
+    handleClose();
+  } catch (error) {
+    setError(error.response?.data?.error || 'An error occurred during login');
+  }
+};
 
-  const register = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8080/api/register', { username, email, password });
-      const token = response.data.token;
-      localStorage.setItem('token', `Bearer ${token}`);
-      setIsLoggedIn(true);
-      setUser(username);
-      handleClose();
-    } catch (error) {
-      setError(error.response?.data?.error || 'An error occurred during registration');
-    }
-  };
+const register = async (event) => {
+  event.preventDefault();
+  try {
+    const response = await axios.post('https://react-blog-onlk.onrender.com/api/register', { username, email, password });
+    const token = response.data.token;
+    localStorage.setItem('token', `Bearer ${token}`);
+    setIsLoggedIn(true);
+    setUser(username);
+    handleClose();
+  } catch (error) {
+    setError(error.response?.data?.error || 'An error occurred during registration');
+  }
+};
 
   const handleOpen = () => {
     setOpen(true);
@@ -75,8 +75,15 @@ const Navbar = ({ theme, toggleTheme }) => {
       axios
         .get('http://localhost:8080/api/profile')
         .then((response) => {
-          setUser(response.data.username);
-          setIsLoggedIn(true);
+          axios
+            .get('https://react-blog-onlk.onrender.com/api/profile')
+            .then((response) => {
+              setUser(response.data.username);
+              setIsLoggedIn(true);
+            })
+            .catch(() => {
+              setIsLoggedIn(false);
+            });
         })
         .catch(() => {
           setIsLoggedIn(false);
