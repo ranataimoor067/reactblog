@@ -7,11 +7,7 @@ dotenv.config()
 const app = express();
 // const PORT = process.env.PORT || 8080
 
-app.use(
-    cors({
-        origin: "*",
-        methods: ["GET", "POST", "PUT"],
-    }))
+app.use(cors())
 app.use(express.json({extend: false}));
 
 // app.use("/",(req,res)=>{res.send('express running , mongo running')})

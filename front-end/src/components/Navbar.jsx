@@ -31,7 +31,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   const login = async (event) => {
   event.preventDefault();
   try {
-    const response = await axios.post('https://react-blog-onlk.onrender.com/api/login', { username, password });
+    const response = await axios.post('https://react-blog-inky-seven.vercel.app/api/login', { username, password });
     const token = response.data.token;
     console.log(token)
     localStorage.setItem('token', `Bearer ${token}`);
@@ -46,7 +46,7 @@ const Navbar = ({ theme, toggleTheme }) => {
 const register = async (event) => {
   event.preventDefault();
   try {
-    const response = await axios.post('https://react-blog-onlk.onrender.com/api/register', { username, email, password });
+    const response = await axios.post('https://react-blog-inky-seven.vercel.app/api/register', { username, email, password });
     const token = response.data.token;
     localStorage.setItem('token', `Bearer ${token}`);
     setIsLoggedIn(true);
