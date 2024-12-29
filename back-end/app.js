@@ -8,8 +8,11 @@ const app = express();
 // const PORT = process.env.PORT || 8080
 
 app.use(cors({
-    origin:"*"
-}))
+    origin: '*', // Allows all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+}));
+
 app.use(express.json({extend: false}));
 
 
