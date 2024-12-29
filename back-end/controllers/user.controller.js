@@ -45,7 +45,7 @@ const getProfile = async (req,res) => {
     }
   
     const token = authHeader.split(' ')[1]; // Extract the token from "Bearer <token>"
-    // const token = authHeader //do not need to splid as the token is only one and we need to use that token only
+    // const token = authHeader //do not need to splid as the token is only one and we need to use that token only for testing the api if it is woring
     try {
       const decoded = jwt.verify(token, "this is secret key");
       const user = await User.findById(decoded.userId);
