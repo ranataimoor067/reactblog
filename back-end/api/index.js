@@ -1,13 +1,15 @@
+// import { app } from "../app.js";
 import { app } from "../app.js";
+// import { connectDB } from "../db.js";
 import { connectDB } from "../db.js";
+const port = 3000
 
-export default async (req, res) => {
-  try {
-    await connectDB();
-    console.log("MongoDB initialized");
-    app(req, res); // Pass the request/response to the app
-  } catch (error) {
-    console.error("Cannot connect to DB", error);
-    res.status(500).send("Internal Server Error");
-  }
-};
+try {
+  connectDB()
+  .then(()=>{
+    console.log("mongodb initialized")
+    app.listen(port,()=>`server running at ${port}`)
+  })
+} catch (error) {
+  console.error("cannot connect to db, check app.js trycach block")
+}

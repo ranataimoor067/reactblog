@@ -17,7 +17,7 @@ app.use(express.json({extend: false}));
 
 
 
-app.use("/",(req,res)=>{res.send('express running , mongo running')})
+// app.use("/",(req,res)=>{res.send('express running , mongo running')})
 //routes importing
 import {userRouter} from "./routes/user.routes.js"
 import { articleRouter } from './routes/article.routes.js';
