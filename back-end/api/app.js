@@ -7,12 +7,14 @@ dotenv.config()
 const app = express();
 // const PORT = process.env.PORT || 8080
 
-app.use(cors())
+app.use(cors({
+    origin:"*"
+}))
 app.use(express.json({extend: false}));
 
-// app.use("/",(req,res)=>{res.send('express running , mongo running')})
 
 
+app.use("/",(req,res)=>{res.send('express running , mongo running')})
 //routes importing
 import {userRouter} from "../routes/user.routes.js"
 import { articleRouter } from '../routes/article.routes.js';
