@@ -13,7 +13,7 @@ const MONGO_URI = process.env.CONNECTION_URL ;
 
 const connectDB= async () => {
     try {
-        const resp =mongoose.connect(MONGO_URI)
+        const resp =mongoose.connect("mongodb+srv://arkabasak62:1234@cluster0.i3bju.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
         if (resp) {
             console.log("monog db connected")
         }
