@@ -63,4 +63,19 @@ const addcomments = async (req, res) => {
     }
 }
 
-export {getarticles, addcomments, addArticle}
+const getAllArticles = async (req, res) => {
+try {
+    const articles = await Article.find(); // Fetch all articles
+    if (articles.length === 0) {
+    return res.status(404).json({ message: 'No articles found' });
+    }
+    res.status(200).json(articles);
+} catch (error) {
+    console.error('Error fetching all articles:', error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+};
+  
+
+
+export {getarticles, addcomments, addArticle, getAllArticles}
