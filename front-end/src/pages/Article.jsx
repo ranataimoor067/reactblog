@@ -11,12 +11,14 @@ const Article = () => {
   const [article, setArticle] = useState(null);
   const [error, setError] = useState(null);
 
+  const url = "react-blog-server-gamma.vercel.app"
+
   useEffect(() => {
     const fetchArticleData = async () => {
       try {
         // POST request to fetch the article
         const { data } = await axios.post(
-          'https://react-blog-kwxf.vercel.app/api/article/getarticle',
+          url + 'api/article/getarticle',
           { articleName: name } // Sending the article name in the POST body
         );
 

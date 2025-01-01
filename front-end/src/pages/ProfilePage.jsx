@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const ProfilePage = () => {
   const [user, setUser] = useState({});
-
+  const url = "react-blog-server-gamma.vercel.app"
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('https://react-blog-kwxf.vercel.app/api/auth/getProfile', {
+    axios.get(url + 'api/auth/getProfile', {
       headers: {
         Authorization: token,
       },

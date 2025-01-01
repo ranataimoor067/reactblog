@@ -5,9 +5,11 @@ const AddComment = ({ articleName, setArticleInfo }) => {
   const [username, setUsername] = useState('');
   const [commentText, setCommentText] = useState('');
 
+  const url "react-blog-server-gamma.vercel.app"
+
   const addComments = async () => {
     try {
-      const response = await axios.post('https://react-blog-kwxf.vercel.app/api/article/addcomment', {
+      const response = await axios.post(url + 'api/article/addcomment', {
         articleName,
         username,
         text: commentText,

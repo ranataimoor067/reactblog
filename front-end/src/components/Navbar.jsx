@@ -18,6 +18,8 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
   );
 
+  const url = "react-blog-server-gamma.vercel.app/"
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -31,7 +33,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   const login = async (event) => {
   event.preventDefault();
   try {
-    const response = await axios.post("https://react-blog-kwxf.vercel.app/api/auth/login", { username, password });
+    const response = await axios.post(url + "api/auth/login", { username, password });
     const token = response.data.token;
     console.log(token)
     localStorage.setItem('token', `Bearer ${token}`);
@@ -46,7 +48,7 @@ const Navbar = ({ theme, toggleTheme }) => {
 const register = async (event) => {
   event.preventDefault();
   try {
-    const response = await axios.post('https://react-blog-kwxf.vercel.app/api/auth/register', { username, email, password });
+    const response = await axios.post(url + 'api/auth/register', { username, email, password });
     const token = response.data.token;
     localStorage.setItem('token', `Bearer ${token}`);
     setIsLoggedIn(true);
@@ -73,10 +75,10 @@ const register = async (event) => {
     const token = localStorage.getItem('token');
     if (token) {
       axios
-        .get('https://react-blog-kwxf.vercel.app/api/auth/getProfile')
+        .get(url + 'api/auth/getProfile')
         .then((response) => {
           axios
-            .get('https://react-blog-kwxf.vercel.app/api/auth/getProfile')
+            .get(url + 'api/auth/getProfile')
             .then((response) => {
               setUser(response.data.username);
               setIsLoggedIn(true);

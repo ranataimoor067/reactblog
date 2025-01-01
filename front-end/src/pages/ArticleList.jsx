@@ -6,11 +6,13 @@ const ArticleList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const url = "react-blog-server-gamma.vercel.app"
+
   useEffect(() => {
     // Replace with your actual database URL
     const fetchArticles = async () => {
       try {
-        const response = await fetch('https://react-blog-kwxf.vercel.app/api/article/getallarticle');
+        const response = await fetch(url + 'api/article/getallarticle');
         if (!response.ok) {
           throw new Error(`Error fetching articles: ${response.statusText}`);
         }
