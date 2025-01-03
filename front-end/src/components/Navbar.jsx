@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 const Navbar = ({ theme, toggleTheme }) => {
   axios.interceptors.request.use(
     (config) => {
@@ -147,7 +148,7 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <>
-      <nav className="border-b-4 border-green-700 text-center fixed top-0 bg-green-900 font-bold w-full text-lg text-white">
+  
       <nav className="border-b-4 border-green-700 text-center fixed top-0 bg-green-900 font-bold w-full text-lg text-white z-50">
         <ul>
           <li className="inline-block py-4">
@@ -274,4 +275,5 @@ const Navbar = ({ theme, toggleTheme }) => {
     </>
   );
 };
+
 export default Navbar;
