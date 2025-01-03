@@ -10,7 +10,7 @@ const app = express();
 // app.use(cors({ origin: 'true', credentials: true }));
 // uncomment the cors above when testing it locally and comment the one below. 
 // make sure you reverse the changes being made when you about to make a PR
-app.use(cors({ origin: 'https://react-blog-lake-omega.vercel.app/', credentials: true }));
+app.use(cors({ origin: 'https://react-blog-lake-omega.vercel.app', credentials: true }));
 
 app.use(express.json({extend: false}));
 
