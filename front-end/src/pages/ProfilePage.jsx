@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
-  const [user, setUser] = useState({});  const url = "https://react-blog-server-gamma.vercel.app/"
-
-
+  const [user, setUser] = useState({}); 
+  
+  const url = "https://react-blog-server-gamma.vercel.app/"
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     axios.get(url + 'api/auth/getProfile', {
@@ -19,15 +21,17 @@ const ProfilePage = () => {
         console.error(error);
       });
   }, []);
+  
+  const navigate = useNavigate();
 
   return (
-    <div className="profile-container bg-gray-100 min-h-screen p-8">
+    <div className="profile-container min-h-screen p-8" style={{ color: 'var(--text-color)' }}>
       <div className="profile-header text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-800">Profile</h1>
-        <p className="text-lg text-gray-600">View and update your personal information</p>
+        <h1 className="text-4xl font-bold">Profile</h1>
+        <p className="text-lg">View and update your personal information</p>
       </div>
 
-      <div className="profile-card max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+      <div className="profile-card max-w-lg mx-auto p-6 rounded-lg shadow-lg">
         <div className="profile-header flex justify-center mb-4">
           <img
             src={user.picture || 'https://via.placeholder.com/150'}
@@ -50,7 +54,7 @@ const ProfilePage = () => {
 
         <div className="text-center mt-6">
           <button
-            onClick={() => alert('Edit Profile functionality to be added')}
+            onClick={() => navigate('/edit-profile')}
             className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
           >
             Edit Profile

@@ -165,4 +165,92 @@ const getProfile = async (req, res) => {
   }
 };
 
-export { getProfile, registerUser, loginUser };
+
+const editProfile = async (req, res) => {
+  try {
+    console.log("editProfile called");
+
+    // Get the token from the authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      console.error("Authorization header is missing.");
+      return res.status(401).json({ error: "No token provided." });
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      console.error("Bearer token is missing.");
+      return res.status(401).json({ error: "Invalid token format." });
+    }
+
+    let decoded;
+    try {
+      // Verify and decode the token
+      decoded = jwt.verify(token, secretKey);
+    } catch (err) {
+      console.error("Error decoding token:", err.message);
+      return res.status(401).json({ error: "Invalid or expired token." });
+    }
+
+    const userId = decoded.userId;
+
+    // Extract fields to be updated from request body
+    const { name, location, picture, dob, currentPassword, newPassword } = req.body;
+
+    if (!name && !location && !picture && !dob && !currentPassword && !newPassword) {
+      console.error("No fields provided for update.");
+      return res.status(400).json({ error: "No fields to update." });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      console.error(`User with ID ${userId} not found.`);
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // Handle password change
+    if (currentPassword || newPassword) {
+      if (!currentPassword || !newPassword) {
+        console.error("Both current and new passwords are required.");
+        return res.status(400).json({ error: "Both current and new passwords are required to change the password." });
+      }
+
+      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isCurrentPasswordValid) {
+        console.error("Current password is incorrect.");
+        return res.status(401).json({ error: "Current password is incorrect." });
+      }
+
+      if (newPassword.length < 8) {
+        console.error("New password must be at least 8 characters long.");
+        return res.status(400).json({ error: "New password must be at least 8 characters long." });
+      }
+
+      // Hash and update the new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+    }
+
+    // Update other fields if provided
+    if (name) user.name = name;
+    if (location) user.location = location;
+    if (picture) user.picture = picture;
+    if (dob) user.dob = dob;
+
+    // Save the updated user
+    await user.save();
+
+    res.json({
+      message: "Profile updated successfully.",
+      user
+    });
+
+    console.log(`Profile updated successfully for user ${user.username}.`);
+  } catch (error) {
+    console.error("Error during profile update:", error);
+    res.status(500).json({ error: "An error occurred while updating the profile." });
+  }
+};
+
+export { getProfile, registerUser, loginUser, editProfile };

@@ -162,7 +162,7 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <>
-      <nav className="border-b-4 border-green-700 text-center fixed top-0 bg-green-900 font-bold w-full text-lg text-white">
+      <nav className="border-b-4 border-green-700 text-center fixed top-0 bg-green-900 font-bold w-full text-lg text-white z-50">
         <ul>
           <li className="inline-block py-4">
             <Link to="/" className="pl-6 pr-8">Home</Link>

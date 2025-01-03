@@ -7,6 +7,7 @@ import Article from './pages/Article';
 import Navbar from './components/Navbar';
 import NotFound from './pages/NotFound';
 import ProfilePage from './pages/ProfilePage';
+import EditProfilePage from './pages/EditProfilePage';
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -33,6 +34,7 @@ function App() {
           <Route path="/article-list" element={<ArticleList />} />
           <Route path="/article/:name" element={<Article />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/edit-profile" element={<EditProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
