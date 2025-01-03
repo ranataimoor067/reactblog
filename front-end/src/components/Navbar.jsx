@@ -18,7 +18,7 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
   );
 
-  const url = "react-blog-server-gamma.vercel.app/"
+  const url = "https://react-blog-server-gamma.vercel.app/"
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
