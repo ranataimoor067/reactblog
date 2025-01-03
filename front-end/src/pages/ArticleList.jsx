@@ -6,7 +6,9 @@ const ArticleList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const url = "react-blog-server-gamma.vercel.app"
+  // const url = "react-blog-server-gamma.vercel.app"
+  const url = "react-blog-server-gamma.vercel.app/";
+
 
   useEffect(() => {
     // Replace with your actual database URL

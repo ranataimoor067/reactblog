@@ -14,7 +14,8 @@ if (!secretKey) {
 
 const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, name, location, picture, dob } = req.body;
+    console.log(req.body);
 
     // Input validation
     if (!username || !email || !password) {
@@ -29,14 +30,41 @@ const registerUser = async (req, res) => {
       return res.status(409).json({ error: "Email already in use." });
     }
 
-    // Password hashing and user creation
+    // Password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, email, password: hashedPassword });
+
+    // User creation with additional fields
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      name,
+      location,
+      picture,
+      dob
+    });
+
     await user.save();
 
     // Token generation
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
-    res.status(201).json({ token });
+
+    res.status(201).json({
+      message: `User ${username} registered successfully.`,
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        name: user.name,
+        location: user.location,
+        picture: user.picture,
+        dob: user.dob,
+        accountCreated: user.accountCreated,
+        articlesPublished: user.articlesPublished
+      }
+    });
+
     console.log(`User ${username} registered successfully.`);
   } catch (error) {
     console.error("Error during user registration:", error);
@@ -46,40 +74,62 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { credential, password } = req.body;
 
     // Input validation
-    if (!username || !password) {
-      console.error("Missing required fields: username or password.");
-      return res.status(400).json({ error: "Both username and password are required." });
+    if (!credential || !password) {
+      console.error("Missing required fields: credential or password");
+      return res.status(400).json({ error: "Both credential (email/username) and password are required" });
     }
 
-    // Fetch user from database
-    const user = await User.findOne({ username });
+    // Determine if credential is email or username
+    const isEmail = credential.includes('@');
+    
+    // Fetch user from database based on either email or username
+    const user = await User.findOne(
+      isEmail ? { email: credential } : { username: credential }
+    );
+
     if (!user) {
-      console.error(`Login failed for username: ${username}. User not found.`);
-      return res.status(401).json({ error: "Invalid credentials." });
+      console.error(`Login failed for credential: ${credential}. User not found.`);
+      return res.status(404).json({ 
+        error: `No user found with this ${isEmail ? 'email' : 'username'}` 
+      });
     }
 
     // Password validation
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      console.error(`Login failed for username: ${username}. Incorrect password.`);
-      return res.status(401).json({ error: "Invalid credentials." });
+      console.error(`Login failed for user: ${user.username}. Invalid password.`);
+      return res.status(401).json({ error: "Incorrect password" });
     }
 
-    // Token generation
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
-    res.json({ token });
-    console.log(`User ${username} logged in successfully.`);
+
+    // Send successful response with token and user data
+    res.json({ 
+      token,
+      username: user.username,
+      email: user.email,
+      name: user.name || '',
+      picture: user.picture || '',
+      location: user.location || ''
+    });
+
+    console.log(`User ${user.username} logged in successfully`);
+
   } catch (error) {
     console.error("Error during user login:", error);
-    res.status(500).json({ error: "An error occurred while logging in the user." });
+    res.status(500).json({ 
+      error: "An error occurred during login. Please try again later." 
+    });
   }
 };
-
 const getProfile = async (req, res) => {
   try {
+    console.log("getProfile called");
+
+    // Get the token from the authorization header
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       console.error("Authorization header is missing.");
@@ -92,7 +142,7 @@ const getProfile = async (req, res) => {
       return res.status(401).json({ error: "Invalid token format." });
     }
 
-    // Verify token
+    // Verify the token
     const decoded = jwt.verify(token, secretKey);
     const user = await User.findById(decoded.userId);
     if (!user) {
@@ -100,7 +150,11 @@ const getProfile = async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
-    res.json({ username: user.username });
+    // Send back detailed user profile data
+    res.json({
+      user
+    });
+
     console.log(`Profile fetched successfully for user ${user.username}.`);
   } catch (error) {
     console.error("Error during profile retrieval:", error);
