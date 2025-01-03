@@ -7,7 +7,7 @@ dotenv.config()
 const app = express();
 // const PORT = process.env.PORT || 8080
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: 'https://react-blog-server-gamma.vercel.app', credentials: true }));
 
 app.use(express.json({extend: false}));
 
