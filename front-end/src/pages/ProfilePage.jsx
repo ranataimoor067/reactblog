@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const ProfilePage = () => {
-  const [user, setUser] = useState({});
-  const url = "react-blog-server-gamma.vercel.app/";
+  const [user, setUser] = useState({});  const url = "https://react-blog-server-gamma.vercel.app/"
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');

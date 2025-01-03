@@ -10,8 +10,8 @@ const Article = () => {
   const { name } = useParams();
   const [article, setArticle] = useState(null);
   const [error, setError] = useState(null);
+  const url = "https://react-blog-server-gamma.vercel.app/"
 
-  const url = "react-blog-server-gamma.vercel.app/";
   
   useEffect(() => {
     const fetchArticleData = async () => {
