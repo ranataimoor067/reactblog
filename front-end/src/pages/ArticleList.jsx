@@ -6,7 +6,8 @@ const ArticleList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const url = "react-blog-server-gamma.vercel.app"  const url = "https://react-blog-server-gamma.vercel.app/"
+  // const url = "react-blog-server-gamma.vercel.app"  
+  const url = "https://react-blog-server-gamma.vercel.app/"
 
 
 
