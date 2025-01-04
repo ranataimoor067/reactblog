@@ -12,9 +12,8 @@ const Article = () => {
   const [error, setError] = useState(null);
   const url = "https://react-blog-server-gamma.vercel.app/"
 
-  
   useEffect(() => {
-    const fetchArticleData = async () => {
+    const fetchArticleData = async () => {    
       try {
         // POST request to fetch the article
         const { data } = await axios.post(

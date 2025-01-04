@@ -18,7 +18,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       return Promise.reject(error);
     }
   );
-  const url = "https://react-blog-server-gamma.vercel.app/"
+const url = "https://react-blog-server-gamma.vercel.app/"
   const [loginCredential, setLoginCredential] = useState(''); // For email/username
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,6 +44,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       localStorage.setItem('token', `Bearer ${token}`);
       setIsLoggedIn(true);
       setUser(response.data.username);
+      navigate('/');
       handleClose();
       resetForm();
     } catch (error) {
@@ -75,7 +76,9 @@ const Navbar = ({ theme, toggleTheme }) => {
       const token = response.data.token;
       localStorage.setItem('token', `Bearer ${token}`);
       setIsLoggedIn(true);
+
       setUser(loginCredential);
+      navigate('/');
       handleClose();
       resetForm();
     } catch (error) {
@@ -142,8 +145,10 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
   }, []);
   const logout = () => {
+    setIsLoggedIn(false);
     localStorage.removeItem('token');
-    window.location.href = '/';
+    setUser('');
+    navigate('/');
   };
   const handleProfileClick = () => {
     navigate('/profile');

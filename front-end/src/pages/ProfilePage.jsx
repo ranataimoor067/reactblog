@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const ProfilePage = () => {
   const [user, setUser] = useState({}); 
   
-  const url = "https://react-blog-server-gamma.vercel.app/"
+const url = "https://react-blog-server-gamma.vercel.app/"
   
   useEffect(() => {
     const token = localStorage.getItem('token');

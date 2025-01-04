@@ -1,12 +1,18 @@
 import { Router } from "express";
 import { getarticles, addcomments,addArticle, getAllArticles } from "../controllers/article.controller.js";
 
-
 const articleRouter = Router()
 
-articleRouter.route("/getarticle").post(getarticles)
-articleRouter.route("/getallarticle").get(getAllArticles)
-articleRouter.route("/addcomment").post(addcomments)
-articleRouter.route("/addarticle").post(addArticle)
+// add article route
+articleRouter.post('/addarticle', addArticle); 
 
-export {articleRouter}
+// get article route
+articleRouter.post('/getarticle', getarticles);
+
+// get all article route
+articleRouter.get('/getallarticle', getAllArticles);
+
+// add comment route
+articleRouter.post('/addcomment', addcomments);
+
+export { articleRouter };
