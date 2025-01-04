@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import menuIcon from "../assets/menu.svg";
+import closeIcon from "../assets/close.svg";
 
 const Navbar = ({ theme, toggleTheme }) => {
   axios.interceptors.request.use(
@@ -29,6 +31,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState('');
+  const [toggle,setToggle] = useState(false)
   const navigate = useNavigate();
   const login = async (event) => {
     event.preventDefault();
@@ -149,19 +152,29 @@ const Navbar = ({ theme, toggleTheme }) => {
   return (
     <>
   
-      <nav className="border-b-4 border-green-700 text-center fixed top-0 bg-green-900 font-bold w-full text-lg text-white z-50">
-        <ul>
-          <li className="inline-block py-4">
-            <Link to="/" className="pl-6 pr-8">Home</Link>
+  <div
+      id="navbar"
+      className="flex justify-between items-center flex-row p-4 m-0 text-[18px] bg-green-900 text-white"
+    >
+    
+      <div id="logo" className="font-bold">
+        React Blog
+      </div>
+
+      {/* Main Menu for Medium and Larger Screens */}
+      <div id="comp" className="hidden md:flex justify-center items-center">
+        <ul className="flex justify-center items-center flex-row font-semibold">
+          <li className="p-3 cursor-pointer">
+            <Link to="/" className="">Home</Link>
           </li>
-          <li className="inline-block py-4">
-            <Link to="/about" className="pl-6 pr-8">About</Link>
+          <li className="p-3 cursor-pointer">
+            <Link to="/about" className="">About</Link>
           </li>
-          <li className="inline-block py-4">
-            <Link to="/article-list" className="pl-6 pr-8">Articles</Link>
+          <li className="p-3 cursor-pointer">
+            <Link to="/article-list" className="">Articles</Link>
           </li>
-          <li className="inline-block py-4">
-            {isLoggedIn ? (
+          <li className="p-3 cursor-pointer">
+          {isLoggedIn ? (
               <div>
                 <p className="inline-block mr-4 cursor-pointer hover:text-green-300" onClick={handleProfileClick}>{user}</p>
                 <button onClick={logout} className="hover:text-red-300">Logout</button>
@@ -176,7 +189,52 @@ const Navbar = ({ theme, toggleTheme }) => {
             </button>
           </li>
         </ul>
-      </nav>
+      </div>
+
+      {/* Hamburger Menu*/}
+      <div className="sm:flex md:hidden justify-between items-center">
+        <img
+          src={toggle ? closeIcon : menuIcon}
+          className="h-[24px] w-[24px] object-contain cursor-pointer"
+          alt="menu"
+          onClick={() => setToggle((prev) => !prev)}
+        />
+
+        {/* Dropdown Menu */}
+        <div
+          className={`${
+            toggle ? "flex" : "hidden"
+          } p-6 bg-gradient-to-r from-green-700 to-green-900 absolute top-20 right-0 mx-4 my-2 min-w-[140px] rounded-md`}
+        >
+          <ul className="list-none flex flex-col justify-end items-start space-y-3">
+            <li className="p-3 cursor-pointer text-white">
+              <Link to="/" className="">Home</Link>
+            </li>
+            <li className="p-3 cursor-pointer text-white">
+              <Link to="/about" className="">About</Link> 
+            </li>
+            <li className="p-3 cursor-pointer text-white">
+              <Link to="/article-list" className="">Articles</Link>
+            </li>
+            <li className="p-3 cursor-pointer text-white">
+            {isLoggedIn ? (
+              <div>
+                <p className="inline-block mr-4 cursor-pointer hover:text-green-300" onClick={handleProfileClick}>{user}</p>
+                <button onClick={logout} className="hover:text-red-300">Logout</button>
+              </div>
+            ) : (
+              <button type="button" onClick={handleOpen} className="hover:text-green-300">Login/Register</button>
+            )}
+            </li>
+            <li className="inline-block py-4">
+            <button className="theme-toggler" onClick={toggleTheme}>
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className={`relative w-full max-w-sm p-8 rounded-lg shadow-2xl ${theme === 'dark' ? 'bg-gray-900 text-slate-100' : 'bg-slate-200'}`}>
