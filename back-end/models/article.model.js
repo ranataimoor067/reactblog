@@ -3,24 +3,23 @@ import mongoose from 'mongoose';
 const commentSchema = new mongoose.Schema({
   username: { type: String, required: true },
   text: { type: String, required: true },
+  article: { type: mongoose.Schema.Types.ObjectId, ref: 'Article', required: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
-
+const Comment = mongoose.model('Comment', commentSchema);
 
 const articleSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
+  thumbnail: { type: String, required: true },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   comments: [
-    {
-      username: { type: String, required: true },
-      text: { type: String, required: true },
-    },
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }
   ],
 });
 
-
-
 const Article = mongoose.model('Article', articleSchema);
 
-export {Article};
+export { Comment, Article };
