@@ -1,7 +1,7 @@
 import React from 'react'
 import Centre from "../components/Centre"
 import Footer from "../components/Footer"
-import "../App.css"
+
 
 
 const Home = () => {

@@ -8,7 +8,6 @@ import Navbar from './components/Navbar';
 import NotFound from './pages/NotFound';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from './pages/EditProfilePage';
-
 function App() {
   const [theme, setTheme] = useState('light');
   useEffect(() => {
@@ -27,7 +26,7 @@ function App() {
   return (
     <Router>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <div className="max-w-screen-md mx-auto pt-20">
+      <div className="w-full mt-20">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
