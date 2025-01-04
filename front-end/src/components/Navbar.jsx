@@ -182,10 +182,10 @@ const url = "https://react-blog-server-gamma.vercel.app/"
           {isLoggedIn ? (
               <div>
                 <p className="inline-block mr-4 cursor-pointer hover:text-green-300" onClick={handleProfileClick}>{user}</p>
-                <button onClick={logout} className="hover:text-red-300">Logout</button>
+                <button onClick={logout} className="bg-green-600 text-white px-3 py-1 rounded-lg">Logout</button>
               </div>
             ) : (
-              <button type="button" onClick={handleOpen} className="hover:text-green-300">Login/Register</button>
+              <button type="button" onClick={handleOpen} className="bg-green-600 text-white px-3 py-1 rounded-lg">Login/Register</button>
             )}
           </li>
           <li className="inline-block py-4">
