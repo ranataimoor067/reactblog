@@ -16,9 +16,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       return Promise.reject(error);
     }
   );
-
   const url = "https://react-blog-server-gamma.vercel.app/"
-
   const [loginCredential, setLoginCredential] = useState(''); // For email/username
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,9 +29,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState('');
-
   const navigate = useNavigate();
-
   const login = async (event) => {
     event.preventDefault();
     try {
@@ -57,14 +53,12 @@ const Navbar = ({ theme, toggleTheme }) => {
       }
     }
   };
-
   const register = async (event) => {
     event.preventDefault();
     try {
       if (!validateRegistration()) {
         return;
       }
-
       const response = await axios.post(url + 'api/auth/register', {
         username: loginCredential,
         email,
@@ -91,7 +85,6 @@ const Navbar = ({ theme, toggleTheme }) => {
       }
     }
   };
-
   const validateRegistration = () => {
     if (password.length < 8) {
       setError('Password must be at least 8 characters long');
@@ -107,7 +100,6 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
     return true;
   };
-
   const resetForm = () => {
     setLoginCredential('');
     setEmail('');
@@ -118,22 +110,18 @@ const Navbar = ({ theme, toggleTheme }) => {
     setDob('');
     setError('');
   };
-
   const handleOpen = () => {
     setOpen(true);
     resetForm();
   };
-
   const handleClose = () => {
     setOpen(false);
     resetForm();
   };
-
   const toggleLogin = () => {
     setIsLogin(!isLogin);
     resetForm();
   };
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -150,18 +138,17 @@ const Navbar = ({ theme, toggleTheme }) => {
       setIsLoggedIn(false);
     }
   }, []);
-
   const logout = () => {
     localStorage.removeItem('token');
     window.location.href = '/';
   };
-
   const handleProfileClick = () => {
     navigate('/profile');
   };
 
   return (
     <>
+  
       <nav className="border-b-4 border-green-700 text-center fixed top-0 bg-green-900 font-bold w-full text-lg text-white z-50">
         <ul>
           <li className="inline-block py-4">
@@ -190,7 +177,6 @@ const Navbar = ({ theme, toggleTheme }) => {
           </li>
         </ul>
       </nav>
-
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className={`relative w-full max-w-sm p-8 rounded-lg shadow-2xl ${theme === 'dark' ? 'bg-gray-900 text-slate-100' : 'bg-slate-200'}`}>
