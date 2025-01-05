@@ -1,2 +1,2 @@
-const link = "mongodb+srv://oken:neko@cluster0.uvenj7d.mongodb.net/?retryWrites=true&w=majority"
+const link = "https://react-blog-server-gamma.vercel.app"
 export {link}
