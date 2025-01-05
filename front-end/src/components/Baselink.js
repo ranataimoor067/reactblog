@@ -1,2 +1,6 @@
-const link = "http://localhost:3000"
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const link = process.env.CONNECTION_URL
 export {link}
