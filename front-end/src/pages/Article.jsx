@@ -5,24 +5,24 @@ import Articles from '../components/Articles';
 import NotFound from './NotFound';
 import CommentsList from '../components/CommentsList';
 import AddComment from '../components/AddComment';
+import { link } from '../components/Baselink';
 
 const Article = () => {
   const { name } = useParams();
   const [article, setArticle] = useState(null);
   const [error, setError] = useState(null);
-  const url = "https://react-blog-server-gamma.vercel.app/"
+  const url = `${link}`;
 
   useEffect(() => {
-    const fetchArticleData = async () => {    
+    const fetchArticleData = async () => {
       try {
-        // POST request to fetch the article
         const { data } = await axios.post(
-          url + 'api/article/getarticle',
-          { articleName: name } // Sending the article name in the POST body
+          url + '/api/article/getarticle',
+          { articleName: name }
         );
 
         if (data.name === name) {
-          setArticle(data); // Set the article directly from the response
+          setArticle(data);
         } else {
           setArticle(null);
         }
@@ -35,30 +35,57 @@ const Article = () => {
     fetchArticleData();
   }, [name]);
 
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   if (!article) return <NotFound />;
 
   return (
-    <>
-      <h1
-        className="sm:text-4xl text-2xl font-bold my-6 text-gray-900"
-        style={{ color: 'var(--text-color)' }}
-      >
-        {article.title}
-      </h1>
-      {article.content &&
-        article.content.split('\n').map((paragraph, index) => (
-          <p
-            className="mx-auto leading-relaxed text-base mb-4"
-            style={{ color: 'var(--text-color)' }}
-            key={index}
-          >
-            {paragraph}
-          </p>
-        ))}
-      <CommentsList comments={article.comments || []} />
-      <AddComment articleName={name} setArticleInfo={(info) => setArticle((prev) => ({ ...prev, comments: info.comments }))} />
-    </>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4 mb-6">
+        <h1
+          className="text-gray-900 sm:text-4xl text-2xl font-bold text-center sm:text-left"
+          style={{ color: 'var(--text-color)' }}
+        >
+          {article.title}
+        </h1>
+        <button
+          onClick={() => {
+            window.location.href = `/edit-article/${article._id}`;
+          }}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4 sm:mt-0"
+        >
+          Edit Article
+        </button>
+      </div>
+
+      <div className="prose prose-sm sm:prose-lg mx-auto">
+        {article.content &&
+          article.content.split('\n').map((paragraph, index) => (
+            <p
+              className="text-base mb-4 leading-relaxed"
+              style={{ color: 'var(--text-color)' }}
+              key={index}
+            >
+              {paragraph}
+            </p>
+          ))}
+      </div>
+
+      <div className="mt-8">
+        <h2
+          className="text-lg sm:text-xl font-semibold text-gray-800 mb-4"
+          style={{ color: 'var(--text-color)' }}
+        >
+          Comments
+        </h2>
+        <CommentsList comments={article.comments || []} />
+        <AddComment
+          articleName={name}
+          setArticleInfo={(info) =>
+            setArticle((prev) => ({ ...prev, comments: info.comments }))
+          }
+        />
+      </div>
+    </div>
   );
 };
 

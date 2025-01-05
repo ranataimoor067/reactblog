@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { link } from '../components/Baselink';
 
 const ProfilePage = () => {
   const [user, setUser] = useState({}); 
   
-const url = "https://react-blog-server-gamma.vercel.app/"
+// const url = "https://react-blog-server-gamma.vercel.app/"
+const url = `${link}`
   
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get(url + 'api/auth/getProfile', {
+    axios.get(url + '/api/auth/getProfile', {
       headers: {
         Authorization: token,
       },
