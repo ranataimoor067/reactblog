@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Articles from '../components/Articles';
 import AddArticleModal from './AddArticle';
+import { link } from '../components/Baselink';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -8,12 +9,12 @@ const ArticleList = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const url = "https://react-blog-server-gamma.vercel.app/";
+  const url = `${link}`;
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch(url + 'api/article/getallarticle');
+        const response = await fetch(url + '/api/article/getallarticle');
         if (!response.ok) {
           console.alert("Error while fetching articles");
         }

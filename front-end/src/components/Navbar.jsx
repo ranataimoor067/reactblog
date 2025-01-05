@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import menuIcon from "../assets/menu.svg";
 import closeIcon from "../assets/close.svg";
+import { link } from './Baselink';
 
 const Navbar = ({ theme, toggleTheme }) => {
   axios.interceptors.request.use(
@@ -18,7 +19,8 @@ const Navbar = ({ theme, toggleTheme }) => {
       return Promise.reject(error);
     }
   );
-const url = "https://react-blog-server-gamma.vercel.app/"
+// const url = "https://react-blog-server-gamma.vercel.app/"
+const url = `${link}`
   const [loginCredential, setLoginCredential] = useState(''); // For email/username
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,7 +38,7 @@ const url = "https://react-blog-server-gamma.vercel.app/"
   const login = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(url + "api/auth/login", { 
+      const response = await axios.post(url + "/api/auth/login", { 
         credential: loginCredential, // Can be either email or username
         password 
       });
@@ -63,7 +65,7 @@ const url = "https://react-blog-server-gamma.vercel.app/"
       if (!validateRegistration()) {
         return;
       }
-      const response = await axios.post(url + 'api/auth/register', {
+      const response = await axios.post(url + '/api/auth/register', {
         username: loginCredential,
         email,
         password,
@@ -131,7 +133,7 @@ const url = "https://react-blog-server-gamma.vercel.app/"
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      axios.get(url + 'api/auth/getProfile')
+      axios.get(url + '/api/auth/getProfile')
         .then((response) => {
           setIsLoggedIn(true);
           setUser(response.data.user.username);

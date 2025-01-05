@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getarticles, addcomments,addArticle, getAllArticles } from "../controllers/article.controller.js";
+import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid } from "../controllers/article.controller.js";
 
 const articleRouter = Router()
 
@@ -14,5 +14,11 @@ articleRouter.get('/getallarticle', getAllArticles);
 
 // add comment route
 articleRouter.post('/addcomment', addcomments);
+
+//edit article
+articleRouter.post('/editarticle', editArticle)
+
+//get article by id
+articleRouter.post('/getarticlebyid', getarticlebyid)
 
 export { articleRouter };
