@@ -285,5 +285,50 @@ const editArticle = async (req, res) => {
     }
 };
 
+const deleteArticle = async (req, res) => {
+    try {
+        const { id } = req.body;
 
-export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid };
+        if (!id) {
+            return res.status(400).json({ error: "Article ID is required." });
+        }
+
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: "No token provided." });
+        }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: "Invalid token format." });
+        }
+
+        let decoded;
+        try {
+            decoded = jwt.verify(token, secretKey);
+        } catch (err) {
+            return res.status(401).json({ error: "Invalid or expired token." });
+        }
+
+        const userId = decoded.userId;
+
+        // Check if the article exists and belongs to the authenticated user
+        const existingArticle = await Article.findById(id);
+        if (!existingArticle) {
+            return res.status(404).json({ error: "Article not found." });
+        }
+
+        if (existingArticle.author.toString() !== userId) {
+            return res.status(403).json({ error: "You do not have permission to delete this article." });
+        }
+
+        await Article.findByIdAndDelete(id);
+
+        return res.status(200).json({ message: "Article deleted successfully." });
+    } catch (err) {
+        console.error("Error deleting article:", err.message);
+        return res.status(500).json({ error: "An internal server error occurred." });
+    }
+};
+
+export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle };
