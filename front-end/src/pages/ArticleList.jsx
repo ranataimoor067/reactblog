@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Articles from '../components/Articles';
 import AddArticleModal from './AddArticle';
 import { link } from '../components/Baselink';
+import axios from 'axios';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -15,13 +16,13 @@ const ArticleList = () => {
     const fetchArticles = async () => {
       try {
         console.log(url)
-        const response = await fetch(`${url}/api/article/getallarticle`);
-        console.log(response)
+        const response = await axios.get(`http://localhost:3000/api/article/getallarticle`);
+        console.log(response.data)
         if (!response.ok) {
-          console.alert("Error while fetching articles");
+          console.log("Error while fetching articles");
         }
-        const data = await response.json();
-        setArticles(data);
+        const data = response.data
+        setArticles(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
