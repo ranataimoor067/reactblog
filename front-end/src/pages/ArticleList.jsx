@@ -14,7 +14,9 @@ const ArticleList = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch(url + '/api/article/getallarticle');
+        console.log(url)
+        const response = await fetch(`${url}/api/article/getallarticle`);
+        console.log(response)
         if (!response.ok) {
           console.alert("Error while fetching articles");
         }

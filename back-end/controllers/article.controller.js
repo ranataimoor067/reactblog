@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Article } from '../models/article.model.js';
 import { User } from '../models/user.model.js';
+import { upload_on_cloudinary } from '../utils/cloudinary.js';
 
 const secretKey = process.env.SECRET_KEY;
 
@@ -81,15 +82,27 @@ const secretKey = process.env.SECRET_KEY;
 
 const addArticle = async (req, res) => {
     try {
-        const { title, content, thumbnail } = req.body;
+        const { title, content} = req.body;
+        const filebuffer = req.file ? req.file.buffer : null
+        console.log(filebuffer)
         console.log("addArticle called");
 
-        if (!title || !content || !thumbnail) {
+        if (!title || !content ) {
             return res.status(400).json({ error: "Title, content, and thumbnail are required." });
+        }
+
+        if (!filebuffer) {
+            return res.status(400).json({error:"error receiveing thumbnail"})
         }
 
         // Set name same as title
         const name = title;
+
+        const upload_image_url = await upload_on_cloudinary(filebuffer)
+
+        if (!upload_image_url) {
+            return res.status(400).json({error:"error while uploading"})
+        }
 
         // Validate Authorization Header
         const authHeader = req.headers.authorization;
@@ -136,7 +149,7 @@ const addArticle = async (req, res) => {
             name,
             title,
             content,
-            thumbnail,
+            thumbnail:upload_image_url,
             author: userId,
             username, // Add this if required in the Article schema
             comments: [],
