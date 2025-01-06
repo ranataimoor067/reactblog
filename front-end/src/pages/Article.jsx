@@ -38,7 +38,7 @@ const Article = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(url + '/api/article/deletearticle', { data: { id: article._id } });
-      history.push('/article-list'); // Redirect to article list page after deletion
+      window.location.href = '/article-list'; // Redirect to article list page after deletion
     } catch (err) {
       console.error('Error deleting article:', err.message);
       setError('Failed to delete the article.');
