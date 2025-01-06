@@ -35,6 +35,16 @@ const Article = () => {
     fetchArticleData();
   }, [name]);
 
+  const handleDelete = async () => {
+    try {
+      await axios.delete(url + '/api/article/deletearticle', { data: { id: article._id } });
+      history.push('/article-list'); // Redirect to article list page after deletion
+    } catch (err) {
+      console.error('Error deleting article:', err.message);
+      setError('Failed to delete the article.');
+    }
+  };
+
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   if (!article) return <NotFound />;
 
@@ -47,14 +57,22 @@ const Article = () => {
         >
           {article.title}
         </h1>
-        <button
-          onClick={() => {
-            window.location.href = `/edit-article/${article._id}`;
-          }}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4 sm:mt-0"
-        >
-          Edit Article
-        </button>
+        <div>
+          <button
+            onClick={() => {
+              window.location.href = `/edit-article/${article._id}`;
+            }}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4 sm:mt-0"
+          >
+            Edit Article
+          </button>
+          <button
+            onClick={handleDelete}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-4"
+          >
+            Delete Article
+          </button>
+        </div>
       </div>
 
       <div className="prose prose-sm sm:prose-lg mx-auto">
