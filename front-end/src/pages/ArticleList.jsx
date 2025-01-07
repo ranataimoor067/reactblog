@@ -14,6 +14,7 @@ const ArticleList = () => {
 
   useEffect(() => {
     const fetchArticles = async () => {
+
       try {
         console.log(url)
         const response = await axios.get(`http://localhost:3000/api/article/getallarticle`);
