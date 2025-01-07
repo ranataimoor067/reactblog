@@ -39,7 +39,7 @@ const Articles = ({ articles }) => {
 
           {/* Author */}
           <p className="text-xs text-green-600">
-            Author ID: {article.author}
+            Author ID: {article.authorName ? article.authorName : article.author}
           </p>
         </Link>
       ))}
