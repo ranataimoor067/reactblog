@@ -18,7 +18,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       return Promise.reject(error);
     }
   );
-const url = "https://react-blog-server-gamma.vercel.app/"
+  const url = "https://react-blog-server-gamma.vercel.app/"
   const [loginCredential, setLoginCredential] = useState(''); // For email/username
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,14 +31,28 @@ const url = "https://react-blog-server-gamma.vercel.app/"
   const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState('');
-  const [toggle,setToggle] = useState(false)
+  const [toggle, setToggle] = useState(false)
+  const [otp, setOtp] = useState('');
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [registrationData, setRegistrationData] = useState(null);
   const navigate = useNavigate();
   const login = async (event) => {
     event.preventDefault();
+    
+    // Add validation before making the API call
+    if (!loginCredential) {
+      setError('Please enter your email or username');
+      return;
+    }
+    if (!password) {
+      setError('Please enter your password');
+      return;
+    }
+
     try {
-      const response = await axios.post(url + "api/auth/login", { 
+      const response = await axios.post(url + "api/auth/login", {
         credential: loginCredential, // Can be either email or username
-        password 
+        password
       });
       const token = response.data.token;
       localStorage.setItem('token', `Bearer ${token}`);
@@ -70,37 +84,56 @@ const url = "https://react-blog-server-gamma.vercel.app/"
         name,
         location,
         picture,
-        dob
+        dob,
+        otp
       });
-      
+
       const token = response.data.token;
       localStorage.setItem('token', `Bearer ${token}`);
       setIsLoggedIn(true);
-
       setUser(loginCredential);
       navigate('/');
       handleClose();
       resetForm();
     } catch (error) {
-      if (error.response?.status === 409) {
-        setError('Username or email already exists. Please choose different credentials.');
-      } else if (error.response?.status === 400) {
-        setError('Invalid registration data. Please check all fields.');
-      } else {
-        setError('An error occurred during registration. Please try again later.');
-      }
+      setError(error.response?.data?.error || 'Registration failed. Please try again.');
     }
   };
   const validateRegistration = () => {
+    // Enhanced password validation
+    if (!password) {
+      setError('Password is required');
+      return false;
+    }
     if (password.length < 8) {
       setError('Password must be at least 8 characters long');
       return false;
     }
-    if (!email.includes('@')) {
+    if (!/(?=.*[A-Z])/.test(password)) {
+      setError('Password must contain at least one uppercase letter');
+      return false;
+    }
+    if (!/(?=.*[0-9])/.test(password)) {
+      setError('Password must contain at least one number');
+      return false;
+    }
+    if (!/(?=.*[!@#$%^&*])/.test(password)) {
+      setError('Password must contain at least one special character (!@#$%^&*)');
+      return false;
+    }
+
+    // Enhanced email validation
+    if (!email) {
+      setError('Email is required');
+      return false;
+    }
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       setError('Please enter a valid email address');
       return false;
     }
-    if (!loginCredential || !email || !password || !name) {
+
+    // Other validations remain the same
+    if (!loginCredential || !name) {
       setError('Please fill in all required fields');
       return false;
     }
@@ -115,6 +148,9 @@ const url = "https://react-blog-server-gamma.vercel.app/"
     setPicture('');
     setDob('');
     setError('');
+    setOtp('');
+    setShowOtpInput(false);
+    setRegistrationData(null);
   };
   const handleOpen = () => {
     setOpen(true);
@@ -153,93 +189,119 @@ const url = "https://react-blog-server-gamma.vercel.app/"
   const handleProfileClick = () => {
     navigate('/profile');
   };
+  const handleGenerateOtp = async (event) => {
+    event.preventDefault();
+    try {
+      if (!validateRegistration()) {
+        return;
+      }
+      setError('');
+      await axios.post(url + 'api/auth/register/generate-otp', {
+        email: email
+      });
+      setError('OTP has been sent to your email');
+      // Store registration data temporarily
+      setRegistrationData({
+        username: loginCredential,
+        email,
+        password,
+        name,
+        location,
+        picture,
+        dob,
+      });
+      
+      setShowOtpInput(true);
+    } catch (error) {
+      setError(error.response?.data?.message || 'Failed to send OTP. Please try again.');
+    }
+  };
 
   return (
     <>
-  
-  <div
-      id="navbar"
-      className="flex justify-between items-center flex-row p-4 m-0 text-[18px] bg-green-900 text-white"
-    >
-    
-      <div id="logo" className="font-bold">
-        React Blog
-      </div>
 
-      {/* Main Menu for Medium and Larger Screens */}
-      <div id="comp" className="hidden md:flex justify-center items-center">
-        <ul className="flex justify-center items-center flex-row font-semibold">
-          <li className="p-3 cursor-pointer">
-            <Link to="/" className="">Home</Link>
-          </li>
-          <li className="p-3 cursor-pointer">
-            <Link to="/about" className="">About</Link>
-          </li>
-          <li className="p-3 cursor-pointer">
-            <Link to="/article-list" className="">Articles</Link>
-          </li>
-          <li className="p-3 cursor-pointer">
-          {isLoggedIn ? (
-              <div>
-                <p className="inline-block mr-4 cursor-pointer hover:text-green-300" onClick={handleProfileClick}>{user}</p>
-                <button onClick={logout} className="bg-green-600 text-white px-3 py-1 rounded-lg">Logout</button>
-              </div>
-            ) : (
-              <button type="button" onClick={handleOpen} className="bg-green-600 text-white px-3 py-1 rounded-lg">Login/Register</button>
-            )}
-          </li>
-          <li className="inline-block py-4">
-            <button className="theme-toggler" onClick={toggleTheme}>
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
-          </li>
-        </ul>
-      </div>
+      <div
+        id="navbar"
+        className="flex justify-between items-center flex-row p-4 m-0 text-[18px] bg-green-900 text-white"
+      >
 
-      {/* Hamburger Menu*/}
-      <div className="sm:flex md:hidden justify-between items-center">
-        <img
-          src={toggle ? closeIcon : menuIcon}
-          className="h-[24px] w-[24px] object-contain cursor-pointer"
-          alt="menu"
-          onClick={() => setToggle((prev) => !prev)}
-        />
+        <div id="logo" className="font-bold">
+          React Blog
+        </div>
 
-        {/* Dropdown Menu */}
-        <div
-          className={`${
-            toggle ? "flex" : "hidden"
-          } p-6 bg-gradient-to-r from-green-700 to-green-900 absolute top-20 right-0 mx-4 my-2 min-w-[140px] rounded-md`}
-        >
-          <ul className="list-none flex flex-col justify-end items-start space-y-3">
-            <li className="p-3 cursor-pointer text-white">
+        {/* Main Menu for Medium and Larger Screens */}
+        <div id="comp" className="hidden md:flex justify-center items-center">
+          <ul className="flex justify-center items-center flex-row font-semibold">
+            <li className="p-3 cursor-pointer">
               <Link to="/" className="">Home</Link>
             </li>
-            <li className="p-3 cursor-pointer text-white">
-              <Link to="/about" className="">About</Link> 
+            <li className="p-3 cursor-pointer">
+              <Link to="/about" className="">About</Link>
             </li>
-            <li className="p-3 cursor-pointer text-white">
+            <li className="p-3 cursor-pointer">
               <Link to="/article-list" className="">Articles</Link>
             </li>
-            <li className="p-3 cursor-pointer text-white">
-            {isLoggedIn ? (
-              <div>
-                <p className="inline-block mr-4 cursor-pointer hover:text-green-300" onClick={handleProfileClick}>{user}</p>
-                <button onClick={logout} className="hover:text-red-300">Logout</button>
-              </div>
-            ) : (
-              <button type="button" onClick={handleOpen} className="hover:text-green-300">Login/Register</button>
-            )}
+            <li className="p-3 cursor-pointer">
+              {isLoggedIn ? (
+                <div>
+                  <p className="inline-block mr-4 cursor-pointer hover:text-green-300" onClick={handleProfileClick}>{user}</p>
+                  <button onClick={logout} className="bg-green-600 text-white px-3 py-1 rounded-lg">Logout</button>
+                </div>
+              ) : (
+                <button type="button" onClick={handleOpen} className="bg-green-600 text-white px-3 py-1 rounded-lg">Login/Register</button>
+              )}
             </li>
             <li className="inline-block py-4">
-            <button className="theme-toggler" onClick={toggleTheme}>
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
+              <button className="theme-toggler" onClick={toggleTheme}>
+                {theme === 'light' ? '🌙' : '☀️'}
+              </button>
             </li>
           </ul>
         </div>
+
+        {/* Hamburger Menu*/}
+        <div className="sm:flex md:hidden justify-between items-center">
+          <img
+            src={toggle ? closeIcon : menuIcon}
+            className="h-[24px] w-[24px] object-contain cursor-pointer"
+            alt="menu"
+            onClick={() => setToggle((prev) => !prev)}
+          />
+
+          {/* Dropdown Menu */}
+          <div
+            className={`${toggle ? "flex" : "hidden"
+              } p-6 bg-gradient-to-r from-green-700 to-green-900 absolute top-20 right-0 mx-4 my-2 min-w-[140px] rounded-md`}
+          >
+            <ul className="list-none flex flex-col justify-end items-start space-y-3">
+              <li className="p-3 cursor-pointer text-white">
+                <Link to="/" className="">Home</Link>
+              </li>
+              <li className="p-3 cursor-pointer text-white">
+                <Link to="/about" className="">About</Link>
+              </li>
+              <li className="p-3 cursor-pointer text-white">
+                <Link to="/article-list" className="">Articles</Link>
+              </li>
+              <li className="p-3 cursor-pointer text-white">
+                {isLoggedIn ? (
+                  <div>
+                    <p className="inline-block mr-4 cursor-pointer hover:text-green-300" onClick={handleProfileClick}>{user}</p>
+                    <button onClick={logout} className="hover:text-red-300">Logout</button>
+                  </div>
+                ) : (
+                  <button type="button" onClick={handleOpen} className="hover:text-green-300">Login/Register</button>
+                )}
+              </li>
+              <li className="inline-block py-4">
+                <button className="theme-toggler" onClick={toggleTheme}>
+                  {theme === 'light' ? '🌙' : '☀️'}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className={`relative w-full max-w-sm p-8 rounded-lg shadow-2xl ${theme === 'dark' ? 'bg-gray-900 text-slate-100' : 'bg-slate-200'}`}>
@@ -316,21 +378,48 @@ const url = "https://react-blog-server-gamma.vercel.app/"
               />
               {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                  {error}
+                  <span className="block sm:inline">{error}</span>
                 </div>
               )}
-              <button
-                type="submit"
-                className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-lg transition-transform transform hover:scale-105 shadow-lg"
-              >
-                {isLogin ? 'Login' : 'Register'}
-              </button>
+              {!isLogin && !showOtpInput && (
+                <button
+                  type="button"
+                  onClick={handleGenerateOtp}
+                  className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-lg transition-transform transform hover:scale-105 shadow-lg"
+                >
+                  Generate OTP
+                </button>
+              )}
+
+              {!isLogin && showOtpInput && (
+                <>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(event) => setOtp(event.target.value)}
+                    placeholder="Enter OTP"
+                    required
+                    className={`w-full p-3 rounded-lg border ${otp ? 'border-green-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-700'}`}
+                  />
+                  <button
+                    type="submit"
+                    className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-lg transition-transform transform hover:scale-105 shadow-lg"
+                  >
+                    Register
+                  </button>
+                </>
+              )}
               <p
                 onClick={toggleLogin}
                 className="text-center text-blue-500 text-sm cursor-pointer hover:underline"
               >
                 {isLogin ? "Don't have an account? Register" : "Already have an account? Login"}
               </p>
+              {
+                isLogin && !showOtpInput && (
+                  <button type="submit" className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-lg transition-transform transform hover:scale-105 shadow-lg">Submit</button>
+                )
+              }
             </form>
           </div>
         </div>

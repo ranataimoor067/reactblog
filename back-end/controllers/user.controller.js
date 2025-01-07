@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user.model.js';
+import {User} from '../models/user.model.js';
+import OTP from '../models/otp.model.js';
 import dotenv from 'dotenv';
 
 
@@ -14,13 +15,13 @@ if (!secretKey) {
 
 const registerUser = async (req, res) => {
   try {
-    const { username, email, password, name, location, picture, dob } = req.body;
+    const { username, email, password, name, location, picture, dob, otp } = req.body;
     console.log(req.body);
-
+    console.log(otp);
     // Input validation
-    if (!username || !email || !password) {
-      console.error("Missing required fields: username, email, or password.");
-      return res.status(400).json({ error: "All fields (username, email, password) are required." });
+    if (!username || !email || !password || !otp) {
+      console.error("Missing required fields: username, email, password, or otp.");
+      return res.status(400).json({ error: "All fields (username, email, password, otp) are required." });
     }
 
     // Check for existing user
@@ -30,6 +31,13 @@ const registerUser = async (req, res) => {
       return res.status(409).json({ error: "Email already in use." });
     }
 
+    //* Check OTP
+    const latestOTP = await OTP.findOne({ email }).sort({ createdAt: -1 }).limit(1);
+    if (!latestOTP || latestOTP.otp !== otp) {
+      return res.status(400).json({ error: "Invalid or expired OTP" });
+    }
+
+    await OTP.deleteMany({ email });
     // Password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -41,7 +49,8 @@ const registerUser = async (req, res) => {
       name,
       location,
       picture,
-      dob
+      dob,
+      isEmailVerified: true
     });
 
     await user.save();
@@ -84,7 +93,7 @@ const loginUser = async (req, res) => {
 
     // Determine if credential is email or username
     const isEmail = credential.includes('@');
-    
+
     // Fetch user from database based on either email or username
     const user = await User.findOne(
       isEmail ? { email: credential } : { username: credential }
@@ -92,8 +101,8 @@ const loginUser = async (req, res) => {
 
     if (!user) {
       console.error(`Login failed for credential: ${credential}. User not found.`);
-      return res.status(404).json({ 
-        error: `No user found with this ${isEmail ? 'email' : 'username'}` 
+      return res.status(404).json({
+        error: `No user found with this ${isEmail ? 'email' : 'username'}`
       });
     }
 
@@ -107,7 +116,7 @@ const loginUser = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
 
     // Send successful response with token and user data
-    res.json({ 
+    res.json({
       token,
       username: user.username,
       email: user.email,
@@ -120,8 +129,8 @@ const loginUser = async (req, res) => {
 
   } catch (error) {
     console.error("Error during user login:", error);
-    res.status(500).json({ 
-      error: "An error occurred during login. Please try again later." 
+    res.status(500).json({
+      error: "An error occurred during login. Please try again later."
     });
   }
 };

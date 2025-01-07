@@ -22,6 +22,8 @@ app.use(express.json({extend: false}));
 //routes importing
 import {userRouter} from "./routes/user.routes.js"
 import { articleRouter } from './routes/article.routes.js';
+import { sendMail } from './Utils/mailsender.js'
+app.use('/sendMail', sendMail);
 
 //routes declare
 app.use("/api/auth",userRouter)
