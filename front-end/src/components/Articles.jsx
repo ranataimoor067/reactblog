@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Articles = ({ articles }) => {
   if (!articles || articles.length === 0) {
@@ -8,7 +9,7 @@ const Articles = ({ articles }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {articles.map((article) => (
-        <div
+        <Link to={`/article/${article.name}`}
           key={article._id}
           className="bg-green-100 border border-green-300 rounded-lg shadow-md p-4 flex flex-col"
         >
@@ -40,7 +41,7 @@ const Articles = ({ articles }) => {
           <p className="text-xs text-green-600">
             Author ID: {article.author}
           </p>
-        </div>
+        </Link>
       ))}
     </div>
   );
