@@ -1,30 +1,119 @@
 import jwt from 'jsonwebtoken';
 import { Article } from '../models/article.model.js';
 import { User } from '../models/user.model.js';
+import { upload_on_cloudinary } from '../utils/cloudinary.js';
 
 const secretKey = process.env.SECRET_KEY;
 
+// const addArticle = async (req, res) => {
+//     try {
+//         const { title, content, thumbnail } = req.body;
+//         console.log("addArticle called");
+
+//         if(!title || !content || !thumbnail){
+//             return res.status(400).json({ error: "Title, content, and thumbnail are required." });
+//         }
+
+//         // Set name same as title
+//         const name = title;
+
+//         // Validate Authorization Header
+//         const authHeader = req.headers.authorization;
+//         if (!authHeader) {
+//             console.error("Authorization header is missing.");
+//             return res.status(401).json({ error: "No token provided." });
+//         }
+
+//         const token = authHeader.split(' ')[1];
+//         if (!token) {   
+//             console.error("Bearer token is missing.");
+//             return res.status(401).json({ error: "Invalid token format." });
+//         }
+
+//         // Decode and Verify Token
+//         let decoded;
+//         try {
+//             decoded = jwt.verify(token, secretKey);
+//         } catch (err) {
+//             console.error("Error decoding token:", err.message);
+//             return res.status(401).json({ error: "Invalid or expired token." });
+//         }
+
+//         // Find the authenticated user
+//         const userId = decoded.userId;
+//         const user = await User.findById(userId);
+//         if (!user) {
+//             console.error(`User with ID ${userId} not found.`);
+//             return res.status(404).json({ error: "User not found." });
+//         }
+
+//         // Check if an article with the same name already exists
+//         const existingArticle = await Article.findOne({ name });
+//         if (existingArticle) {
+//             return res.status(400).json({ error: "Article with this title already exists." });
+//         }
+
+//         // Create and save the new article
+//         const newArticle = new Article({
+//             name, 
+//             title,
+//             content,
+//             thumbnail,
+//             author: userId,
+//             comments: [],
+//         });
+
+//         await newArticle.save();
+
+//         // Increment the user's article count
+//         user.articlesPublished += 1;
+//         await user.save();
+
+//         res.status(201).json({ message: "Article created successfully", article: newArticle });
+//     } catch (error) {
+//         console.error("Error adding article:", error);
+//         if (error.code === 11000) {
+//             return res.status(400).json({ error: "Article with this title already exists" });
+//         }
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// };
+
+
 const addArticle = async (req, res) => {
     try {
-        const { title, content, thumbnail } = req.body;
+        const { title, content} = req.body;
+        const filebuffer = req.file ? req.file.buffer : null
+        console.log(filebuffer)
         console.log("addArticle called");
 
-        if(!title || !content || !thumbnail){
+        if (!title || !content ) {
             return res.status(400).json({ error: "Title, content, and thumbnail are required." });
+        }
+
+        if (!filebuffer) {
+            return res.status(400).json({error:"error receiveing thumbnail"})
         }
 
         // Set name same as title
         const name = title;
 
+        const upload_image_url = await upload_on_cloudinary(filebuffer)
+
+        if (!upload_image_url) {
+            return res.status(400).json({error:"error while uploading"})
+        }
+
         // Validate Authorization Header
         const authHeader = req.headers.authorization;
+        console.log(authHeader);
         if (!authHeader) {
             console.error("Authorization header is missing.");
             return res.status(401).json({ error: "No token provided." });
         }
 
-        const token = authHeader.split(' ')[1];
-        if (!token) {   
+        const token = authHeader.split(" ")[1];
+        if (!token) {
             console.error("Bearer token is missing.");
             return res.status(401).json({ error: "Invalid token format." });
         }
@@ -52,13 +141,17 @@ const addArticle = async (req, res) => {
             return res.status(400).json({ error: "Article with this title already exists." });
         }
 
+        // Include `username` if required
+        const username = user.username; // Ensure `username` exists in the User model
+
         // Create and save the new article
         const newArticle = new Article({
-            name, 
+            name,
             title,
             content,
-            thumbnail,
+            thumbnail:upload_image_url,
             author: userId,
+            username, // Add this if required in the Article schema
             comments: [],
         });
 
@@ -127,4 +220,128 @@ const getAllArticles = async (req, res) => {
     }
 };
 
-export { getarticles, addcomments, addArticle, getAllArticles };
+const getarticlebyid = async (req,res) => {
+    try {
+        const {id} = req.body;
+        console.log(id)
+        const articleInfo = await Article.findById(id)
+        if (!articleInfo) {
+            return res.status(404).json({ error: 'Article not found' });
+        }
+        res.status(200).json(articleInfo);
+    } catch (error) {
+        console.error('Error fetching article:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+const editArticle = async (req, res) => {
+    try {
+        const { id, title, content } = req.body;
+
+        if (!id) {
+            return res.status(400).send({ error: "Article ID is required." });
+        }
+
+        if (!title || !content) {
+            return res.status(400).send({ error: "Title and content are required." });
+        }
+
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: "No token provided." });
+        }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: "Invalid token format." });
+        }
+
+        let decoded;
+        try {
+            decoded = jwt.verify(token, secretKey);
+        } catch (err) {
+            return res.status(401).json({ error: "Invalid or expired token." });
+        }
+
+        const userId = decoded.userId;
+
+        // Check if the article exists and belongs to the authenticated user
+        const existingArticle = await Article.findById(id);
+        console.log("this is controller ", existingArticle)
+        if (!existingArticle) {
+            return res.status(404).send({ error: "Article not found." });
+        }
+
+        if (existingArticle.author.toString() !== userId) {
+            return res.status(403).send({ error: "You do not have permission to edit this article." });
+        }
+
+        // Perform the update
+        const updatedArticle = await Article.findByIdAndUpdate(
+            id,
+            { title: title.trim(), content: content.trim() },
+            { new: true, runValidators: true } // Return the updated document and validate fields
+        );
+
+        if (!updatedArticle) {
+            return res.status(500).send({ error: "Failed to update the article." });
+        }
+
+        return res.status(200).send({
+            success: "Article updated successfully.",
+            article: updatedArticle,
+        });
+    } catch (err) {
+        console.error("Error updating article:", err.message);
+        return res.status(500).send({ error: "An internal server error occurred." });
+    }
+};
+
+const deleteArticle = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ error: "Article ID is required." });
+        }
+
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: "No token provided." });
+        }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: "Invalid token format." });
+        }
+
+        let decoded;
+        try {
+            decoded = jwt.verify(token, secretKey);
+        } catch (err) {
+            return res.status(401).json({ error: "Invalid or expired token." });
+        }
+
+        const userId = decoded.userId;
+
+        // Check if the article exists and belongs to the authenticated user
+        const existingArticle = await Article.findById(id);
+        if (!existingArticle) {
+            return res.status(404).json({ error: "Article not found." });
+        }
+
+        if (existingArticle.author.toString() !== userId) {
+            return res.status(403).json({ error: "You do not have permission to delete this article." });
+        }
+
+        await Article.findByIdAndDelete(id);
+
+        return res.status(200).json({ message: "Article deleted successfully." });
+    } catch (err) {
+        console.error("Error deleting article:", err.message);
+        return res.status(500).json({ error: "An internal server error occurred." });
+    }
+};
+
+export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle };

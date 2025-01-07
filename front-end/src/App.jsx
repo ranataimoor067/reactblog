@@ -1,25 +1,27 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import ArticleList from './pages/ArticleList';
-import Article from './pages/Article';
-import Navbar from './components/Navbar';
-import NotFound from './pages/NotFound';
-import ProfilePage from './pages/ProfilePage';
-import EditProfilePage from './pages/EditProfilePage';
+import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import ArticleList from "./pages/ArticleList";
+import Article from "./pages/Article";
+import Navbar from "./components/Navbar";
+import NotFound from "./pages/NotFound";
+import ProfilePage from "./pages/ProfilePage";
+import EditProfilePage from "./pages/EditProfilePage";
+import EditArticle from "./pages/EditArticle";
+import FAQ from "./pages/FAQ";
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
     document.documentElement.className = savedTheme;
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem("theme", newTheme);
     document.documentElement.className = newTheme;
   };
 
@@ -30,10 +32,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route path="/article-list" element={<ArticleList />} />
           <Route path="/article/:name" element={<Article />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/edit-profile" element={<EditProfilePage />} />
+          <Route path="/edit-article/:id" element={<EditArticle />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

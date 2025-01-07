@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { link } from '../components/Baselink';
 
 const AddArticleModal = ({ onClose, onSuccess }) => {
     const [formData, setFormData] = useState({
@@ -14,14 +15,15 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const url = "https://react-blog-server-gamma.vercel.app/";
+    // const url = "https://react-blog-server-gamma.vercel.app/";
+    const url = `${link}`
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                url + 'api/article/addarticle',
+                url + '/api/article/addarticle',
                 { ...formData },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

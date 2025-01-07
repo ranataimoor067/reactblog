@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Articles from '../components/Articles';
 import AddArticleModal from './AddArticle';
+import { link } from '../components/Baselink';
+import axios from 'axios';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -8,17 +10,19 @@ const ArticleList = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const url = "https://react-blog-server-gamma.vercel.app/";
+  const url = `${link}`;
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch(url + 'api/article/getallarticle');
+        console.log(url)
+        const response = await axios.get(`http://localhost:3000/api/article/getallarticle`);
+        console.log(response.data)
         if (!response.ok) {
-          console.alert("Error while fetching articles");
+          console.log("Error while fetching articles");
         }
-        const data = await response.json();
-        setArticles(data);
+        const data = response.data
+        setArticles(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
