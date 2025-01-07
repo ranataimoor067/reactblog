@@ -130,6 +130,7 @@ const addArticle = async (req, res) => {
         // Find the authenticated user
         const userId = decoded.userId;
         const user = await User.findById(userId);
+        console.log("this is user",user)
         if (!user) {
             console.error(`User with ID ${userId} not found.`);
             return res.status(404).json({ error: "User not found." });
@@ -151,6 +152,7 @@ const addArticle = async (req, res) => {
             content,
             thumbnail:upload_image_url,
             author: userId,
+            authorName:user.username,
             username, // Add this if required in the Article schema
             comments: [],
         });

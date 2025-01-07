@@ -15,6 +15,7 @@ const articleSchema = new mongoose.Schema({
   content: { type: String, required: true },
   thumbnail: { type: String, required: true },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  authorName:{type: String},
   comments: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }
   ],

@@ -32,12 +32,12 @@ const registerUser = async (req, res) => {
     }
 
     //* Check OTP
-    const latestOTP = await OTP.findOne({ email }).sort({ createdAt: -1 }).limit(1);
-    if (!latestOTP || latestOTP.otp !== otp) {
-      return res.status(400).json({ error: "Invalid or expired OTP" });
-    }
+    // const latestOTP = await OTP.findOne({ email }).sort({ createdAt: -1 }).limit(1);
+    // if (!latestOTP || latestOTP.otp !== otp) {
+    //   return res.status(400).json({ error: "Invalid or expired OTP" });
+    // }
 
-    await OTP.deleteMany({ email });
+    // await OTP.deleteMany({ email });
     // Password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
 

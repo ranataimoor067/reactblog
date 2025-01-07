@@ -14,10 +14,10 @@ const ArticleList = () => {
 
   useEffect(() => {
     const fetchArticles = async () => {
-      
+
       try {
         console.log(url)
-        const response = await axios.get(`http://localhost:3000/api/article/getallarticle`);
+        const response = await axios.get(`${url}/api/article/getallarticle`);
         console.log(response.data)
         if (!response.ok) {
           console.log("Error while fetching articles");
