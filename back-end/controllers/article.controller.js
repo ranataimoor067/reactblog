@@ -82,17 +82,17 @@ const secretKey = process.env.SECRET_KEY;
 
 const addArticle = async (req, res) => {
     try {
-        const { title, content} = req.body;
+        const { title, content } = req.body;
         const filebuffer = req.file ? req.file.buffer : null
         console.log(filebuffer)
         console.log("addArticle called");
 
-        if (!title || !content ) {
+        if (!title || !content) {
             return res.status(400).json({ error: "Title, content, and thumbnail are required." });
         }
 
         if (!filebuffer) {
-            return res.status(400).json({error:"error receiveing thumbnail"})
+            return res.status(400).json({ error: "error receiveing thumbnail" })
         }
 
         // Set name same as title
@@ -101,7 +101,7 @@ const addArticle = async (req, res) => {
         const upload_image_url = await upload_on_cloudinary(filebuffer)
 
         if (!upload_image_url) {
-            return res.status(400).json({error:"error while uploading"})
+            return res.status(400).json({ error: "error while uploading" })
         }
 
         // Validate Authorization Header
@@ -130,7 +130,7 @@ const addArticle = async (req, res) => {
         // Find the authenticated user
         const userId = decoded.userId;
         const user = await User.findById(userId);
-        console.log("this is user",user)
+        console.log("this is user", user)
         if (!user) {
             console.error(`User with ID ${userId} not found.`);
             return res.status(404).json({ error: "User not found." });
@@ -150,9 +150,9 @@ const addArticle = async (req, res) => {
             name,
             title,
             content,
-            thumbnail:upload_image_url,
+            thumbnail: upload_image_url,
             author: userId,
-            authorName:user.username,
+            authorName: user.username,
             username, // Add this if required in the Article schema
             comments: [],
         });
@@ -175,7 +175,7 @@ const addArticle = async (req, res) => {
 
 const getarticles = async (req, res) => {
     try {
-        const {articleName} = req.body;
+        const { articleName } = req.body;
         console.log(articleName)
         const articleInfo = await Article.findOne({ name: articleName });
         if (!articleInfo) {
@@ -222,9 +222,9 @@ const getAllArticles = async (req, res) => {
     }
 };
 
-const getarticlebyid = async (req,res) => {
+const getarticlebyid = async (req, res) => {
     try {
-        const {id} = req.body;
+        const { id } = req.body;
         console.log(id)
         const articleInfo = await Article.findById(id)
         if (!articleInfo) {
@@ -346,4 +346,66 @@ const deleteArticle = async (req, res) => {
     }
 };
 
-export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle };
+const likeArticle = async (req, res) => {
+    try {
+        const { articleId } = req.params;
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            return res.status(401).json({ error: "No token provided." });
+        }
+
+        const token = authHeader.split(' ')[1];
+
+        if (!token) {
+            console.error("Bearer token is missing.");
+            return res.status(401).json({ error: "Invalid token format." });
+        }
+
+        const decoded = jwt.verify(token, secretKey);
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            console.error(`User not found for token with userId: ${decoded.userId}.`);
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        const userId = user._id;
+
+        const article = await Article.findById(articleId);
+        if (!article) {
+            return res.status(404).json({ error: "Article not found." });
+        }
+
+        const userIndex = article.likedBy.indexOf(userId);
+        if (userIndex === -1) {
+            // User has not liked the article yet
+            article.likedBy.push(userId);
+            article.likes += 1;
+        } else {
+            // User has already liked the article, so unlike it
+            article.likedBy.splice(userIndex, 1);
+            article.likes -= 1;
+        }
+
+        // Save only the fields that are being updated
+        await article.save({ validateModifiedOnly: true });
+
+        // Add the article to the user's likedArticles array
+        const articleIndex = user.likedArticles.indexOf(article._id);
+        if (articleIndex === -1) {
+            // User has not liked the article yet
+            user.likedArticles.push(article._id);
+        } else {
+            // User has already liked the article, so unlike it
+            user.likedArticles.splice(articleIndex, 1);
+        }
+        await user.save();
+
+        res.status(200).json({ message: "Article like status updated.", likes: article.likes });
+    } catch (error) {
+        console.error("Error updating like status:", error);
+        res.status(500).json({ error: "An error occurred while updating like status." });
+    }
+};
+
+export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, likeArticle };

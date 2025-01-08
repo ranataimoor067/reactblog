@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle } from "../controllers/article.controller.js";
+import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, likeArticle } from "../controllers/article.controller.js";
 import multer from 'multer'
 import { upload_on_cloudinary } from "../utils/cloudinary.js";
 
@@ -27,4 +27,7 @@ articleRouter.post('/getarticlebyid', getarticlebyid)
 // delete article
 articleRouter.delete('/deletearticle', deleteArticle);
 
+// Like/Unlike article route
+articleRouter.post('/like/:articleId', likeArticle);
+    
 export { articleRouter };
