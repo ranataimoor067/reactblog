@@ -19,8 +19,8 @@ const ArticleList = () => {
         console.log(url)
         const response = await axios.get(`${url}/api/article/getallarticle`);
         console.log(response.data)
-        if (!response.ok) {
-          console.log("Error while fetching articles");
+        if (!(response.statusText=="OK")) {
+          console.log("error while fetching article")
         }
         const data = response.data
         setArticles(response.data);
