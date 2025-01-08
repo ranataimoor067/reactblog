@@ -36,7 +36,7 @@ const FAQ = () => {
   ];
 
   return (
-    <div className="max-w-xl mx-auto p-4">
+    <div className="max-w-xl mx-auto p-4 pt-20">
       <h1 className="text-3xl font-bold mb-6">Frequently Asked Questions</h1>
       <div className="faq-section">
         {faqData.map((faq, index) => (
