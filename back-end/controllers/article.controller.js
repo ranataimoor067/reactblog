@@ -240,6 +240,7 @@ const getarticlebyid = async (req,res) => {
 const editArticle = async (req, res) => {
     try {
         const { id, title, content } = req.body;
+        const filebuffer = req.file ? req.file.buffer : null;
 
         if (!id) {
             return res.status(400).send({ error: "Article ID is required." });
@@ -270,7 +271,6 @@ const editArticle = async (req, res) => {
 
         // Check if the article exists and belongs to the authenticated user
         const existingArticle = await Article.findById(id);
-        console.log("this is controller ", existingArticle)
         if (!existingArticle) {
             return res.status(404).send({ error: "Article not found." });
         }
@@ -279,10 +279,28 @@ const editArticle = async (req, res) => {
             return res.status(403).send({ error: "You do not have permission to edit this article." });
         }
 
+        let upload_image_url;
+        if (filebuffer) {
+            upload_image_url = await upload_on_cloudinary(filebuffer);
+            if (!upload_image_url) {
+                return res.status(400).json({ error: "Error while uploading thumbnail." });
+            }
+        }
+
+        // Prepare update data
+        const updateData = {
+            title: title.trim(),
+            content: content.trim(),
+        };
+
+        if (upload_image_url) {
+            updateData.thumbnail = upload_image_url; // Add thumbnail only if provided
+        }
+
         // Perform the update
         const updatedArticle = await Article.findByIdAndUpdate(
             id,
-            { title: title.trim(), content: content.trim() },
+            updateData,
             { new: true, runValidators: true } // Return the updated document and validate fields
         );
 

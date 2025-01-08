@@ -22,7 +22,7 @@ articleRouter.post("/getarticlesbyuser", getarticlesbyuser)
 articleRouter.post('/addcomment', addcomments);
 
 //edit article
-articleRouter.post('/editarticle', editArticle)
+articleRouter.post('/editarticle', upload.single("thumbnail") ,editArticle)
 
 //get article by id
 articleRouter.post('/getarticlebyid', getarticlebyid)
