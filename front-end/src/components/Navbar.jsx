@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import menuIcon from "../assets/menu.svg";
 import closeIcon from "../assets/close.svg";
@@ -39,16 +39,16 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [registrationData, setRegistrationData] = useState(null);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
+  const locationOfPage = useLocation();
 
   // Modified styling classes
   const navBg = theme === 'light'
     ? 'bg-white/90 backdrop-blur-md'
     : 'bg-gray-900/90 backdrop-blur-md';
 
-    const navClass = `fixed w-full z-50 transition-all duration-300 ${navBg} ${
-      theme === 'light'
-        ? 'shadow-[0_4px_20px_rgb(0,0,0,0.05)]'
-        : 'shadow-[0_4px_20px_rgb(255,255,255,0.05)]'
+  const navClass = `fixed w-full z-50 transition-all duration-300 ${navBg} ${theme === 'light'
+      ? 'shadow-[0_4px_20px_rgb(0,0,0,0.05)]'
+      : 'shadow-[0_4px_20px_rgb(255,255,255,0.05)]'
     }`;
 
   const linkClass = `group relative flex items-center px-4 py-2 rounded-lg text-sm font-medium
@@ -57,11 +57,27 @@ const Navbar = ({ theme, toggleTheme }) => {
       : 'text-gray-300 hover:text-blue-400'
     }`;
 
-  const underlineClass = `absolute bottom-0 left-1/2 w-0 h-0.5 -translate-x-1/2
-    transition-all duration-300 ease-out group-hover:w-4/5 ${theme === 'light'
-      ? 'bg-blue-600'
-      : 'bg-blue-400'
-    }`;
+    const getLinkClass = (path) => {
+      const isActive = locationOfPage.pathname === path;
+      return `group relative flex items-center px-4 py-2 rounded-lg text-sm font-medium
+          transition-all duration-300 transform hover:scale-105 
+          ${isActive
+          ? theme === 'light'
+            ? 'text-indigo-600'
+            : 'text-purple-400'
+          : theme === 'light'
+            ? 'text-gray-600 hover:text-indigo-600'
+            : 'text-gray-300 hover:text-purple-400'
+        }`;
+    };
+    
+    const getUnderlineClass = (path) => {
+      const isActive = locationOfPage.pathname === path;
+      return `absolute bottom-0 left-1/2 h-0.5 -translate-x-1/2
+          transition-all duration-300 ease-out
+          ${isActive ? 'w-4/5' : 'w-0 group-hover:w-4/5'}
+          ${theme === 'light' ? 'bg-indigo-600' : 'bg-purple-400'}`;
+    };
 
   const login = async (event) => {
     event.preventDefault();
@@ -258,28 +274,28 @@ const Navbar = ({ theme, toggleTheme }) => {
           <div className="flex justify-between items-center h-20">
             <Link to="/" className="flex items-center space-x-2 group">
               <span className={`text-2xl font-bold ${theme === 'light'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600'
-                  : 'bg-gradient-to-r from-blue-400 to-indigo-400'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600'
+                : 'bg-gradient-to-r from-blue-400 to-indigo-400'
                 } bg-clip-text text-transparent transform transition-transform duration-300 group-hover:scale-105`}>
                 React Blog
               </span>
             </Link>
 
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className={linkClass}>
+              <Link to="/" className={getLinkClass('/')}>
                 <HiHome className="w-5 h-5 mr-2" />
                 <span>Home</span>
-                <div className={underlineClass} />
+                <div className={getUnderlineClass('/')} />
               </Link>
-              <Link to="/about" className={linkClass}>
+              <Link to="/about" className={getLinkClass('/about')}>
                 <HiInformationCircle className="w-5 h-5 mr-2" />
                 <span>About</span>
-                <div className={underlineClass} />
+                <div className={getUnderlineClass('/about')} />
               </Link>
-              <Link to="/article-list" className={linkClass}>
+              <Link to="/article-list" className={getLinkClass('/article-list')}>
                 <HiNewspaper className="w-5 h-5 mr-2" />
                 <span>Articles</span>
-                <div className={underlineClass} />
+                <div className={getUnderlineClass('/article-list')} />
               </Link>
 
               <div className="flex items-center space-x-4">
@@ -341,8 +357,8 @@ const Navbar = ({ theme, toggleTheme }) => {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`p-2 rounded-lg transition-all duration-300 transform hover:scale-110 ${theme === 'light'
-                    ? 'hover:bg-gray-100 text-gray-600'
-                    : 'hover:bg-gray-800 text-gray-300'
+                  ? 'hover:bg-gray-100 text-gray-600'
+                  : 'hover:bg-gray-800 text-gray-300'
                   }`}
               >
                 {isOpen ? (
@@ -357,8 +373,8 @@ const Navbar = ({ theme, toggleTheme }) => {
 
         <div className={`md:hidden transition-all duration-300 ${isOpen ? 'max-h-screen' : 'max-h-0'} overflow-hidden`}>
           <div className={`px-6 py-4 space-y-3 shadow-lg ${theme === 'light'
-              ? 'bg-white/95 backdrop-blur-md'
-              : 'bg-gray-900/95 backdrop-blur-md'
+            ? 'bg-white/95 backdrop-blur-md'
+            : 'bg-gray-900/95 backdrop-blur-md'
             }`}>
             <Link to="/" className={`${linkClass} w-full`}>
               <HiHome className="w-5 h-5 mr-2" />
