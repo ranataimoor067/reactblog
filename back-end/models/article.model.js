@@ -19,6 +19,8 @@ const articleSchema = new mongoose.Schema({
   comments: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }
   ],
+  likes: { type: Number, default: 0 },
+  likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
 const Article = mongoose.model('Article', articleSchema);
