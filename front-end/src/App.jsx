@@ -12,6 +12,7 @@ import EditArticle from "./pages/EditArticle";
 import FAQ from "./pages/FAQ";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme as toggle } from "./store/authSlice";
+import Footer from "./components/Footer";
 
 function App() {
   const theme = useSelector((state) => state.auth.theme);
@@ -41,6 +42,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+      <Footer/>
     </Router>
   );
 }
