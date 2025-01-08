@@ -56,7 +56,8 @@ const userSchema = new Schema(
         isEmailVerified: {
             type: Boolean,
             default: false
-        }
+        },
+        likedArticles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
     }
 );
 
