@@ -240,6 +240,7 @@ const getarticlebyid = async (req,res) => {
 const editArticle = async (req, res) => {
     try {
         const { id, title, content } = req.body;
+        const filebuffer = req.file ? req.file.buffer : null;
 
         if (!id) {
             return res.status(400).send({ error: "Article ID is required." });
@@ -270,7 +271,6 @@ const editArticle = async (req, res) => {
 
         // Check if the article exists and belongs to the authenticated user
         const existingArticle = await Article.findById(id);
-        console.log("this is controller ", existingArticle)
         if (!existingArticle) {
             return res.status(404).send({ error: "Article not found." });
         }
@@ -279,10 +279,28 @@ const editArticle = async (req, res) => {
             return res.status(403).send({ error: "You do not have permission to edit this article." });
         }
 
+        let upload_image_url;
+        if (filebuffer) {
+            upload_image_url = await upload_on_cloudinary(filebuffer);
+            if (!upload_image_url) {
+                return res.status(400).json({ error: "Error while uploading thumbnail." });
+            }
+        }
+
+        // Prepare update data
+        const updateData = {
+            title: title.trim(),
+            content: content.trim(),
+        };
+
+        if (upload_image_url) {
+            updateData.thumbnail = upload_image_url; // Add thumbnail only if provided
+        }
+
         // Perform the update
         const updatedArticle = await Article.findByIdAndUpdate(
             id,
-            { title: title.trim(), content: content.trim() },
+            updateData,
             { new: true, runValidators: true } // Return the updated document and validate fields
         );
 
@@ -346,4 +364,45 @@ const deleteArticle = async (req, res) => {
     }
 };
 
-export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle };
+
+const getarticlesbyuser = async (req, res) => {
+    try {
+        const { uid } = req.body;
+
+        // Check if uid is provided
+        if (!uid) {
+            return res.status(400).send({ success: false, message: "User ID is required." });
+        }
+
+        // Check if uid is in valid format (modify regex as per your ID format)
+        if (typeof uid !== "string" || !/^[a-fA-F0-9]{24}$/.test(uid)) {
+            return res.status(400).send({ success: false, message: "Invalid User ID format." });
+        }
+
+        // Fetch articles
+        const articles = await Article.find({ author: uid }).lean();
+
+        // Check if articles exist
+        if (!articles || articles.length === 0) {
+            return res.status(404).send({ success: false, message: "No articles found for this user." });
+        }
+
+        // Respond with articles
+        res.status(200).send({
+            success: true,
+            message: "Articles fetched successfully.",
+            articleDetails: articles,
+        });
+    } catch (error) {
+        console.error("Error fetching articles:", error);
+
+        // Handle unexpected errors
+        res.status(500).send({
+            success: false,
+            message: "An error occurred while fetching articles.",
+        });
+    }
+};
+
+
+export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser };
