@@ -34,7 +34,7 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [open, setOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const isLoggedIn = useSelector((state) => state.auth.authStatus);
-  const [user, setUser] = useState("");
+  // const [user, setUser] = useState("");
   const [toggle, setToggle] = useState(false);
   const [otp, setOtp] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
@@ -309,7 +309,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                         }`}
                     >
                       <HiUser className="w-5 h-5" />
-                      <span>{user}</span>
+                      <span>{loginCredential}</span>
                     </button>
                     <button
                       onClick={logout}
@@ -394,7 +394,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                   className={`w-full text-left ${linkClass}`}
                 >
                   <HiUser className="w-5 h-5 mr-2" />
-                  <span>{user}</span>
+                  <span>{loginCredential}</span>
                 </button>
                 <button
                   onClick={logout}
