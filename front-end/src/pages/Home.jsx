@@ -11,10 +11,6 @@ const Home = () => {
        			<Centre/>
 
       		</div>
-      		<div id="footer" className='w-full'>
-        		<Footer/>
-
-      		</div>
 		</div>
 	)
 }

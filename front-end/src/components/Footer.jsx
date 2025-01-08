@@ -5,64 +5,89 @@ import twitter from "../assets/twitter.svg";
 
 function Footer() {
   return (
-    <footer className="bg-green-900 text-white p-6 mt-8 w-full">
-      <div className="container flex justify-between flex-wrap w-full">
-        <div className="w-full md:w-1/3 mb-4">
+    <footer className="bg-indigo-500 text-white p-6 mt-8 w-full">
+      <div className="container mx-auto flex flex-wrap justify-between">
+        {/* About Section */}
+        <div className="w-full md:w-1/3 mb-6">
           <h3 className="font-bold text-lg">React Blog</h3>
-          <p className="text-sm">
+          <p className="text-sm mt-2">
             Share your story, inspire the world. A platform for bloggers and
             readers.
           </p>
         </div>
-        <div className="w-full md:w-1/3 mb-4">
+
+        {/* Quick Links Section */}
+        <div className="w-full md:w-1/3 mb-6">
           <h3 className="font-bold text-lg">Quick Links</h3>
-          <ul className="text-sm">
+          <ul className="text-sm mt-2">
             <li className="mt-2">
-              <a href="/" className="hover:text-gray-300">
+              <a href="/" className="hover:underline hover:text-gray-300">
                 Home
               </a>
             </li>
             <li className="mt-2">
-              <a href="/about" className="hover:text-gray-300">
+              <a href="/about" className="hover:underline hover:text-gray-300">
                 About
               </a>
             </li>
             <li className="mt-2">
-              <a href="/article-list" className="hover:text-gray-300">
+              <a
+                href="/article-list"
+                className="hover:underline hover:text-gray-300"
+              >
                 Articles
               </a>
             </li>
             <li className="mt-2">
-              <a href="/faq" className="hover:text-gray-300">
+              <a href="/faq" className="hover:underline hover:text-gray-300">
                 FAQ's
               </a>
             </li>
             <li className="mt-2">
               <a
                 href="https://github.com/OkenHaha/react-blog/graphs/contributors"
-                className="hover:text-gray-300"
+                className="hover:underline hover:text-gray-300"
               >
                 Contributors
               </a>
             </li>
           </ul>
         </div>
-        <div className="w-full md:w-1/3 mb-4">
+
+        {/* Social Media Section */}
+        <div className="w-full md:w-1/3 mb-6">
           <h3 className="font-bold text-lg">Follow Us</h3>
-          <div className="flex mt-2 space-x-4">
-            <a href="https://www.facebook.com/">
+          <div className="flex mt-4 space-x-4">
+            <a
+              href="https://www.facebook.com/"
+              aria-label="Follow us on Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img src={facebook} alt="Facebook" className="w-6 h-6" />
             </a>
-            <a href="https://x.com/">
+            <a
+              href="https://x.com/"
+              aria-label="Follow us on Twitter"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img src={twitter} alt="Twitter" className="w-6 h-6" />
             </a>
-            <a href="https://www.instagram.com/">
+            <a
+              href="https://www.instagram.com/"
+              aria-label="Follow us on Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img src={instagram} alt="Instagram" className="w-6 h-6" />
             </a>
           </div>
         </div>
       </div>
-      <div className="text-center mt-4 text-sm">
+
+      {/* Footer Bottom */}
+      <div className="text-center mt-6 text-sm border-t border-indigo-500 pt-4">
         © 2025 React Blog. All Rights Reserved.
       </div>
     </footer>
