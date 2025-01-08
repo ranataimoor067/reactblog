@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Articles from '../components/Articles';
 import NotFound from './NotFound';
 import CommentsList from '../components/CommentsList';
 import AddComment from '../components/AddComment';
 import { link } from '../components/Baselink';
 
-const Article = () => {
+const Article = ({ loggedInUserId }) => {
   const { name } = useParams();
   const [article, setArticle] = useState(null);
   const [error, setError] = useState(null);
@@ -48,6 +47,8 @@ const Article = () => {
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   if (!article) return <NotFound />;
 
+  const isAuthor = article.author === loggedInUserId;
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20">
       <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4 mb-6">
@@ -57,22 +58,24 @@ const Article = () => {
         >
           {article.title}
         </h1>
-        <div>
-          <button
-            onClick={() => {
-              window.location.href = `/edit-article/${article._id}`;
-            }}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4 sm:mt-0"
-          >
-            Edit Article
-          </button>
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-4"
-          >
-            Delete Article
-          </button>
-        </div>
+        {isAuthor && (
+          <div>
+            <button
+              onClick={() => {
+                window.location.href = `/edit-article/${article._id}`;
+              }}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4 sm:mt-0"
+            >
+              Edit Article
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-4"
+            >
+              Delete Article
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="prose prose-sm sm:prose-lg mx-auto">
