@@ -24,6 +24,9 @@ app.use(express.json({extend: false}));
 import {userRouter} from "./routes/user.routes.js"
 import { articleRouter } from './routes/article.routes.js';
 import { sendMail } from './Utils/mailsender.js'
+app.get('/',async(req,res)=>{
+    res.status(200).send("express")
+})
 app.use('/sendMail', sendMail);
 
 //routes declare
