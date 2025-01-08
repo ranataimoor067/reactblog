@@ -346,4 +346,45 @@ const deleteArticle = async (req, res) => {
     }
 };
 
-export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle };
+
+const getarticlesbyuser = async (req, res) => {
+    try {
+        const { uid } = req.body;
+
+        // Check if uid is provided
+        if (!uid) {
+            return res.status(400).send({ success: false, message: "User ID is required." });
+        }
+
+        // Check if uid is in valid format (modify regex as per your ID format)
+        if (typeof uid !== "string" || !/^[a-fA-F0-9]{24}$/.test(uid)) {
+            return res.status(400).send({ success: false, message: "Invalid User ID format." });
+        }
+
+        // Fetch articles
+        const articles = await Article.find({ author: uid }).lean();
+
+        // Check if articles exist
+        if (!articles || articles.length === 0) {
+            return res.status(404).send({ success: false, message: "No articles found for this user." });
+        }
+
+        // Respond with articles
+        res.status(200).send({
+            success: true,
+            message: "Articles fetched successfully.",
+            articleDetails: articles,
+        });
+    } catch (error) {
+        console.error("Error fetching articles:", error);
+
+        // Handle unexpected errors
+        res.status(500).send({
+            success: false,
+            message: "An error occurred while fetching articles.",
+        });
+    }
+};
+
+
+export { getarticles, addcomments, addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser };

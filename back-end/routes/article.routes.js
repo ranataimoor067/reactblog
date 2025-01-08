@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle } from "../controllers/article.controller.js";
+import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser } from "../controllers/article.controller.js";
 import multer from 'multer'
 import { upload_on_cloudinary } from "../utils/cloudinary.js";
 
@@ -14,6 +14,9 @@ articleRouter.post('/getarticle', getarticles);
 
 // get all article route
 articleRouter.get('/getallarticle', getAllArticles);
+
+//get article by specfic user
+articleRouter.post("/getarticlesbyuser", getarticlesbyuser)
 
 // add comment route
 articleRouter.post('/addcomment', addcomments);

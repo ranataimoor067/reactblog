@@ -5,7 +5,7 @@ import { link } from '../components/Baselink';
 
 const ProfilePage = () => {
   const [user, setUser] = useState({}); 
-  
+  const [userArticles, setUserArticles] = useState([])
 // const url = "https://react-blog-server-gamma.vercel.app/"
 const url = `${link}`
   
@@ -17,7 +17,13 @@ const url = `${link}`
       },
     })
       .then(response => {
+        console.log(response.data.user._id)
         setUser(response.data.user);
+        
+        axios.post(`${url}/api/article/getarticlesbyuser`,{uid:response.data.user._id})
+        .then((response)=>{
+          console.log(response)
+        })
       })
       .catch(error => {
         console.error(error);
