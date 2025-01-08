@@ -2,7 +2,7 @@ import React from 'react'
 
 const About = () => {
 	return (
-		<div className="mb-20">
+		<div className="mb-20 pt-20">
 			<h1 className="sm:text-4xl text-2xl font-bold my-6 text-gray-900" style={{ color: 'var(--text-color)' }}>About</h1>
 			<p className="mx-auto leading-relaxed text-base mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet corrupti, vel repudiandae ipsam culpa obcaecati voluptates dolorem. Est autem maxime quia amet laudantium consectetur modi, sapiente, voluptas, velit et nam repellat suscipit, libero recusandae nihil vitae aut animi ducimus dolorem saepe accusantium sequi omnis quis voluptatibus labore. Dignissimos, explicabo, ratione.</p>
 			<p className="mx-auto leading-relaxed text-base mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet corrupti, vel repudiandae ipsam culpa obcaecati voluptates dolorem. Est autem maxime quia amet laudantium consectetur modi, sapiente, voluptas, velit et nam repellat suscipit, libero recusandae nihil vitae aut animi ducimus dolorem saepe accusantium sequi omnis quis voluptatibus labore. Dignissimos, explicabo, ratione.</p>

@@ -28,7 +28,7 @@ function App() {
   return (
     <Router>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <div className="w-full mt-20">
+      <div className="w-full">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
