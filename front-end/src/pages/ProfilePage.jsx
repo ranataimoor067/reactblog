@@ -27,7 +27,7 @@ const url = `${link}`
   const navigate = useNavigate();
 
   return (
-    <div className="profile-container min-h-screen p-8" style={{ color: 'var(--text-color)' }}>
+    <div className="profile-container min-h-screen p-8 pt-20" style={{ color: 'var(--text-color)' }}>
       <div className="profile-header text-center mb-8">
         <h1 className="text-4xl font-bold">Profile</h1>
         <p className="text-lg">View and update your personal information</p>

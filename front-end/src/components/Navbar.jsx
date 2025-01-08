@@ -5,6 +5,7 @@ import menuIcon from "../assets/menu.svg";
 import closeIcon from "../assets/close.svg";
 import { link } from "./Baselink";
 import { BsMoon, BsSun } from "react-icons/bs";  // You can import icons from react-icons
+import { HiHome, HiInformationCircle, HiNewspaper, HiUser, HiMenu, HiX } from 'react-icons/hi';
 
 const Navbar = ({ theme, toggleTheme }) => {
   axios.interceptors.request.use(
@@ -37,10 +38,34 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [registrationData, setRegistrationData] = useState(null);
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  // Modified styling classes
+  const navBg = theme === 'light'
+    ? 'bg-white/90 backdrop-blur-md'
+    : 'bg-gray-900/90 backdrop-blur-md';
+
+    const navClass = `fixed w-full z-50 transition-all duration-300 ${navBg} ${
+      theme === 'light'
+        ? 'shadow-[0_4px_20px_rgb(0,0,0,0.05)]'
+        : 'shadow-[0_4px_20px_rgb(255,255,255,0.05)]'
+    }`;
+
+  const linkClass = `group relative flex items-center px-4 py-2 rounded-lg text-sm font-medium
+    transition-all duration-300 transform hover:scale-105 ${theme === 'light'
+      ? 'text-gray-600 hover:text-blue-600'
+      : 'text-gray-300 hover:text-blue-400'
+    }`;
+
+  const underlineClass = `absolute bottom-0 left-1/2 w-0 h-0.5 -translate-x-1/2
+    transition-all duration-300 ease-out group-hover:w-4/5 ${theme === 'light'
+      ? 'bg-blue-600'
+      : 'bg-blue-400'
+    }`;
 
   const login = async (event) => {
     event.preventDefault();
-    
+
     // Add validation before making the API call
     if (!loginCredential) {
       setError('Please enter your email or username');
@@ -68,8 +93,8 @@ const Navbar = ({ theme, toggleTheme }) => {
         error.response?.status === 401
           ? "Invalid credentials. Please check your email/username and password."
           : error.response?.status === 404
-          ? "User not found. Please check your email/username."
-          : "An error occurred during login. Please try again later.";
+            ? "User not found. Please check your email/username."
+            : "An error occurred during login. Please try again later.";
       setError(errorMessage);
     }
   };
@@ -219,7 +244,7 @@ const Navbar = ({ theme, toggleTheme }) => {
         picture,
         dob,
       });
-      
+
       setShowOtpInput(true);
     } catch (error) {
       setError(error.response?.data?.message || 'Failed to send OTP. Please try again.');
@@ -228,139 +253,153 @@ const Navbar = ({ theme, toggleTheme }) => {
 
   return (
     <>
-      <div
-        id="navbar"
-        className="flex justify-between items-center p-4 text-[18px] bg-green-900 text-white transition-all duration-300 ease-in-out"
-      >
-        <div id="logo" className="font-bold hover:text-green-400 transition-colors duration-300 ease-in-out">
-          <Link to="/">React Blog</Link>
-        </div>
+      <nav className={navClass}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <Link to="/" className="flex items-center space-x-2 group">
+              <span className={`text-2xl font-bold ${theme === 'light'
+                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600'
+                  : 'bg-gradient-to-r from-blue-400 to-indigo-400'
+                } bg-clip-text text-transparent transform transition-transform duration-300 group-hover:scale-105`}>
+                React Blog
+              </span>
+            </Link>
 
-        <div id="comp" className="hidden md:flex justify-center items-center">
-          <ul className="flex space-x-6 font-semibold text-sm">
-            <li className="p-3 cursor-pointer hover:text-green-400 transition-all duration-300 ease-in-out">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="p-3 cursor-pointer hover:text-green-400 transition-all duration-300 ease-in-out">
-              <Link to="/about">About</Link>
-            </li>
-            <li className="p-3 cursor-pointer hover:text-green-400 transition-all duration-300 ease-in-out">
-              <Link to="/article-list">Articles</Link>
-            </li>
-            <li className="p-3 cursor-pointer hover:text-green-400 transition-all duration-300 ease-in-out">
-              {isLoggedIn ? (
-                <div className="flex items-center space-x-4">
-                  <p
-                    className="cursor-pointer hover:text-green-300"
-                    onClick={handleProfileClick}
-                  >
-                    {user}
-                  </p>
-                  <button
-                    onClick={logout}
-                    className="bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-500 transition-all duration-300 ease-in-out"
-                  >
-                    Logout
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleOpen}
-                  className="bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-500 transition-all duration-300 ease-in-out"
-                >
-                  Login/Register
-                </button>
-              )}
-            </li>
-            <li className="py-4">
-              <button
-                className="theme-toggler transition-all duration-300"
-                onClick={toggleTheme}
-              >
-                {theme === "light" ? (
-                  <div className="w-10 h-10 rounded-full border-2 border-gray-500 flex items-center justify-center relative hover:bg-gray-300 transition-all duration-300 ease-in-out">
-                    <BsSun className="text-yellow-500 text-xl" />
-                  </div>
-                ) : (
-                  <div className="w-10 h-10 rounded-full border-2 border-gray-500 flex items-center justify-center relative hover:bg-gray-300 transition-all duration-300 ease-in-out">
-                    <BsMoon className="text-white text-xl" />
-                  </div>
-                )}
-              </button>
-            </li>
-          </ul>
-        </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <Link to="/" className={linkClass}>
+                <HiHome className="w-5 h-5 mr-2" />
+                <span>Home</span>
+                <div className={underlineClass} />
+              </Link>
+              <Link to="/about" className={linkClass}>
+                <HiInformationCircle className="w-5 h-5 mr-2" />
+                <span>About</span>
+                <div className={underlineClass} />
+              </Link>
+              <Link to="/article-list" className={linkClass}>
+                <HiNewspaper className="w-5 h-5 mr-2" />
+                <span>Articles</span>
+                <div className={underlineClass} />
+              </Link>
 
-        <div className="sm:flex md:hidden justify-between items-center">
-          <img
-            src={toggle ? closeIcon : menuIcon}
-            className="h-[24px] w-[24px] cursor-pointer transition-all duration-300 ease-in-out"
-            alt="menu"
-            onClick={() => setToggle((prev) => !prev)}
-          />
-          <div
-            className={`${
-              toggle ? "flex" : "hidden"
-            } p-6 bg-gradient-to-r from-green-700 to-green-900 absolute top-20 right-0 mx-4 my-2 min-w-[140px] rounded-md transition-all duration-300 ease-in-out`}
-          >
-            <ul className="list-none flex flex-col space-y-3">
-              <li className="p-3 cursor-pointer text-white hover:text-green-300 transition-all duration-300 ease-in-out">
-                <Link to="/">Home</Link>
-              </li>
-              <li className="p-3 cursor-pointer text-white hover:text-green-300 transition-all duration-300 ease-in-out">
-                <Link to="/about">About</Link>
-              </li>
-              <li className="p-3 cursor-pointer text-white hover:text-green-300 transition-all duration-300 ease-in-out">
-                <Link to="/article-list">Articles</Link>
-              </li>
-              <li className="p-3 cursor-pointer text-white hover:text-green-300 transition-all duration-300 ease-in-out">
+              <div className="flex items-center space-x-4">
                 {isLoggedIn ? (
-                  <div>
-                    <p
-                      className="inline-block mr-4 cursor-pointer hover:text-green-300"
+                  <div className="flex items-center space-x-3">
+                    <button
                       onClick={handleProfileClick}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-full
+                      transition-all duration-300 transform hover:scale-105 ${theme === 'light'
+                          ? 'bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-600'
+                          : 'bg-gray-800 hover:bg-gray-700 text-gray-200'
+                        }`}
                     >
-                      {user}
-                    </p>
+                      <HiUser className="w-5 h-5" />
+                      <span>{user}</span>
+                    </button>
                     <button
                       onClick={logout}
-                      className="hover:text-red-300 transition-all duration-300 ease-in-out"
+                      className="px-4 py-2 rounded-full text-sm font-medium
+                      bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600
+                      text-white transform hover:scale-105 transition-all duration-300
+                      shadow-lg hover:shadow-xl"
                     >
                       Logout
                     </button>
                   </div>
                 ) : (
                   <button
-                    type="button"
                     onClick={handleOpen}
-                    className="hover:text-green-300 transition-all duration-300 ease-in-out"
+                    className={`px-6 py-2 rounded-full text-sm font-medium
+                    transform hover:scale-105 transition-all duration-300
+                    shadow-lg hover:shadow-xl ${theme === 'light'
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
+                        : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600'
+                      }`}
                   >
-                    Login/Register
+                    Login / Register
                   </button>
                 )}
-              </li>
-              <li className="py-4">
+
                 <button
-                  className="theme-toggler transition-all duration-300"
                   onClick={toggleTheme}
+                  className={`p-2 rounded-full 
+                  transition-all duration-300 transform hover:scale-110 hover:rotate-12 ${theme === 'light'
+                      ? 'bg-gray-100 hover:bg-blue-50 text-yellow-500 hover:text-yellow-600'
+                      : 'bg-gray-800 hover:bg-gray-700 text-blue-400 hover:text-blue-300'
+                    }`}
                 >
-                  {theme === "light" ? (
-                    <div className="w-10 h-10 rounded-full border-2 border-gray-500 flex items-center justify-center relative hover:bg-gray-300 transition-all duration-300 ease-in-out">
-                      <BsSun className="text-yellow-500 text-xl" />
-                    </div>
+                  {theme === 'light' ? (
+                    <BsSun className="w-5 h-5" />
                   ) : (
-                    <div className="w-10 h-10 rounded-full border-2 border-gray-500 flex items-center justify-center relative hover:bg-gray-300 transition-all duration-300 ease-in-out">
-                      <BsMoon className="text-white text-xl" />
-                    </div>
+                    <BsMoon className="w-5 h-5" />
                   )}
                 </button>
-              </li>
-            </ul>
+              </div>
+            </div>
+
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={`p-2 rounded-lg transition-all duration-300 transform hover:scale-110 ${theme === 'light'
+                    ? 'hover:bg-gray-100 text-gray-600'
+                    : 'hover:bg-gray-800 text-gray-300'
+                  }`}
+              >
+                {isOpen ? (
+                  <HiX className="h-6 w-6" />
+                ) : (
+                  <HiMenu className="h-6 w-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
+        <div className={`md:hidden transition-all duration-300 ${isOpen ? 'max-h-screen' : 'max-h-0'} overflow-hidden`}>
+          <div className={`px-6 py-4 space-y-3 shadow-lg ${theme === 'light'
+              ? 'bg-white/95 backdrop-blur-md'
+              : 'bg-gray-900/95 backdrop-blur-md'
+            }`}>
+            <Link to="/" className={`${linkClass} w-full`}>
+              <HiHome className="w-5 h-5 mr-2" />
+              <span>Home</span>
+            </Link>
+            <Link to="/about" className={`${linkClass} w-full`}>
+              <HiInformationCircle className="w-5 h-5 mr-2" />
+              <span>About</span>
+            </Link>
+            <Link to="/article-list" className={`${linkClass} w-full`}>
+              <HiNewspaper className="w-5 h-5 mr-2" />
+              <span>Articles</span>
+            </Link>
+            {isLoggedIn ? (
+              <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={handleProfileClick}
+                  className={`w-full text-left ${linkClass}`}
+                >
+                  <HiUser className="w-5 h-5 mr-2" />
+                  <span>{user}</span>
+                </button>
+                <button
+                  onClick={logout}
+                  className="w-full px-4 py-2 text-left text-red-500 hover:text-red-600
+                  transition-all duration-300 rounded-lg"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleOpen}
+                className={`w-full text-left ${linkClass}`}
+              >
+                Login / Register
+              </button>
+            )}
+          </div>
+        </div>
+      </nav>
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className={`relative w-full max-w-sm p-8 rounded-lg shadow-2xl ${theme === 'dark' ? 'bg-gray-900 text-slate-100' : 'bg-slate-200'}`}>

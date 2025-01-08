@@ -123,7 +123,7 @@ const EditProfilePage = () => {
     };
 
     return (
-        <div className={`max-w-2xl mx-auto p-6 ${theme === 'dark' ? 'text-slate-100' : 'text-gray-900'}`}>
+        <div className={`max-w-2xl mx-auto p-6 pt-20 ${theme === 'dark' ? 'text-slate-100' : 'text-gray-900'}`}>
             <div className={`shadow-xl rounded-lg p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold">Edit Profile</h1>

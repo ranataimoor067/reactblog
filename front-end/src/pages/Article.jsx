@@ -49,7 +49,7 @@ const Article = () => {
   if (!article) return <NotFound />;
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20">
       <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4 mb-6">
         <h1
           className="text-gray-900 sm:text-4xl text-2xl font-bold text-center sm:text-left"
