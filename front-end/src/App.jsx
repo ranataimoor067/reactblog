@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -16,14 +16,16 @@ import Footer from "./components/Footer";
 
 function App() {
   const theme = useSelector((state) => state.auth.theme);
-  const dispatch = useDispatch()
-  
+  const loggedInUser = useSelector((state) => state.auth.user); // Get the logged-in user's data
+  const loggedInUserId = loggedInUser ? loggedInUser._id : null; // Extract user ID if logged in
+  const dispatch = useDispatch();
+
   useEffect(() => {
     document.documentElement.className = theme;
   }, [theme]);
 
   const toggleTheme = () => {
-    dispatch(toggle())
+    dispatch(toggle());
   };
 
   return (
@@ -35,14 +37,20 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/article-list" element={<ArticleList />} />
-          <Route path="/article/:name" element={<Article />} />
+          <Route
+            path="/article/:name"
+            element={<Article loggedInUserId={loggedInUserId} />}
+          />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/edit-profile" element={<EditProfilePage />} />
-          <Route path="/edit-article/:id" element={<EditArticle />} />
+          <Route
+            path="/edit-article/:id"
+            element={<EditArticle loggedInUserId={loggedInUserId} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <Footer/>
+      <Footer />
     </Router>
   );
 }
