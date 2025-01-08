@@ -12,8 +12,15 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    
+        if (name === 'thumbnail') {
+            // Handle file input for thumbnail
+            setFormData({ ...formData, thumbnail: e.target.files[0] });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
+    
 
     // const url = "https://react-blog-server-gamma.vercel.app/";
     const url = `${link}`
@@ -22,17 +29,29 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
+            const data = new FormData();
+            data.append('title', formData.title);
+            data.append('content', formData.content);
+            data.append('thumbnail', formData.thumbnail);
+    
             const response = await axios.post(
-                url + '/api/article/addarticle',
-                { ...formData },
-                { headers: { Authorization: `Bearer ${token}` } }
+                `${url}/api/article/addarticle`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
             );
+    
             onSuccess(response.data.article);
             onClose();
         } catch (err) {
             setError(err.response?.data?.error || 'Error creating article');
         }
     };
+    
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
@@ -88,19 +107,19 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Thumbnail URL
-                            </label>
-                            <input
-                                type="text"
-                                name="thumbnail"
-                                placeholder="Enter thumbnail URL"
-                                value={formData.thumbnail}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                            />
-                        </div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+        Thumbnail
+    </label>
+    <input
+        type="file"
+        name="thumbnail"
+        accept="image/*"
+        onChange={handleChange}
+        required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+    />
+</div>
+
 
                         <div className="flex space-x-4 pt-4">
                             <button
