@@ -3,7 +3,9 @@ import jwt from 'jsonwebtoken';
 import {User} from '../models/user.model.js';
 import OTP from '../models/otp.model.js';
 import dotenv from 'dotenv';
-
+import { Article } from '../models/article.model.js';
+import { Comment } from '../models/article.model.js';
+import { sendMail } from '../Utils/mailsender.js';
 
 dotenv.config({ path: './.env' });
 const secretKey = process.env.SECRET_KEY;
@@ -262,4 +264,48 @@ const editProfile = async (req, res) => {
   }
 };
 
-export { getProfile, registerUser, loginUser, editProfile };
+const deleteUserAccount = async (req, res) => {
+  try {
+    const { otp } = req.body;
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      console.error("Authorization header is missing.");
+      return res.status(401).json({ error: "No token provided." });
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      console.error("Bearer token is missing.");
+      return res.status(401).json({ error: "Invalid token format." });
+    }
+
+    const decoded = jwt.verify(token, secretKey);
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      console.error(`User not found for token with userId: ${decoded.userId}.`);
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    const userId = user._id;
+
+    // Check OTP
+    const latestOTP = await OTP.findOne({ email: user.email }).sort({ createdAt: -1 }).limit(1);
+    if (!latestOTP || latestOTP.otp !== otp) {
+      return res.status(400).json({ error: "Invalid or expired OTP" });
+    }
+
+    await OTP.deleteMany({ email: user.email });
+
+    // Assuming verification is done, proceed with deletion
+    await User.findByIdAndDelete(userId);
+    await Article.deleteMany({ author: userId });
+    await Comment.deleteMany({ user: userId });
+
+    res.status(200).json({ message: "Account successfully deleted.", user });
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    res.status(500).json({ error: "An error occurred while deleting the account." });
+  }
+};
+
+export { getProfile, registerUser, loginUser, editProfile, deleteUserAccount };
