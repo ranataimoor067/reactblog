@@ -1,14 +1,39 @@
-import React from 'react'
+import React from "react";
+import AboutImage from "../assets/read-blog.jpg"; // Replace with an appropriate image
 
-const About = () => {
-	return (
-		<div className="mb-20 pt-20">
-			<h1 className="sm:text-4xl text-2xl font-bold my-6 text-gray-900" style={{ color: 'var(--text-color)' }}>About</h1>
-			<p className="mx-auto leading-relaxed text-base mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet corrupti, vel repudiandae ipsam culpa obcaecati voluptates dolorem. Est autem maxime quia amet laudantium consectetur modi, sapiente, voluptas, velit et nam repellat suscipit, libero recusandae nihil vitae aut animi ducimus dolorem saepe accusantium sequi omnis quis voluptatibus labore. Dignissimos, explicabo, ratione.</p>
-			<p className="mx-auto leading-relaxed text-base mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet corrupti, vel repudiandae ipsam culpa obcaecati voluptates dolorem. Est autem maxime quia amet laudantium consectetur modi, sapiente, voluptas, velit et nam repellat suscipit, libero recusandae nihil vitae aut animi ducimus dolorem saepe accusantium sequi omnis quis voluptatibus labore. Dignissimos, explicabo, ratione.</p>
-			<p className="mx-auto leading-relaxed text-base mb-4">Lorem ipsum dolor sit, amet, consectetur adipisicing elit. Facere a modi deserunt saepe beatae atque quis quaerat. Ex vel doloremque neque aspernatur nesciunt unde, cumque necessitatibus perspiciatis saepe aperiam est deserunt. Dolore, qui, recusandae. Quas odio doloremque voluptates mollitia consequuntur tenetur amet ex facilis, velit perferendis assumenda minima quae reprehenderit fugit ab maxime repellat nostrum magni esse repellendus, vitae, totam recusandae libero! Fuga voluptate inventore tenetur est, officia rem enim vitae quod, sed, magni ratione quo consequuntur ducimus. Architecto distinctio aliquam consequuntur quas ipsum enim obcaecati, modi? Dolore expedita sint libero illo quas minus perspiciatis necessitatibus inventore. Debitis, hic, nemo!</p>
-		</div>
-	)
+function About() {
+  return (
+    <div className="w-full bg-gray-50 py-44">
+      <div className="max-w-7xl mx-auto md:flex items-center justify-between">
+        {/* Left Image */}
+        <div className="md:w-1/2 mb-10 md:mb-0 flex justify-center">
+          <img
+            src={"https://static-blog.siteground.com/wp-content/uploads/sites/4/2022/02/what-is-a-blog-1200x600-1.jpeg"}
+            alt="About Us"
+            className="rounded-lg shadow-xl hover:scale-105 transform transition duration-300"
+            width={500}
+          />
+        </div>
+
+        {/* Right Text */}
+        <div className="md:w-1/2 text-center md:text-left">
+          <h2 className="text-5xl font-extrabold mb-6 text-blue-800">About Us</h2>
+          <p className="text-lg text-gray-700 leading-relaxed">
+            Welcome to <span className="font-semibold text-blue-800">React Blog</span>, your go-to platform for creative expression. 
+            We believe everyone has a story to share, an idea to spark, or a voice to amplify. Whether you're an aspiring 
+            writer, a seasoned blogger, or a curious reader, our mission is to provide a seamless and inspiring space to explore 
+            the art of storytelling.
+          </p>
+          <p className="text-lg text-gray-700 mt-4 leading-relaxed">
+            At React Blog, we celebrate diverse perspectives and aim to connect like-minded individuals through shared experiences, 
+            knowledge, and creativity. Let’s build a community where ideas flourish and inspiration knows no bounds!
+          </p>
+        </div>
+		
+      </div>
+	  
+    </div>
+  );
 }
 
-export default About
+export default About;
