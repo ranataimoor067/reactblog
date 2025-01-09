@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Articles from '../components/Articles';
 import AddArticleModal from './AddArticle';
+import LikeButton from '../components/LikeButton';
 import { link } from '../components/Baselink';
 import axios from 'axios';
 
@@ -43,6 +44,9 @@ const ArticleList = () => {
     alert(`New article "${newArticle.title}" created successfully!`);
     setArticles((prevArticles) => [...prevArticles, newArticle]);
   };
+
+
+  const userId = localStorage.getItem("userId");
 
   return (
     <div className="bg-gradient-to-b from-indigo-100 via-purple-100 to-indigo-200 min-h-screen py-10 pt-24">
@@ -103,13 +107,20 @@ const ArticleList = () => {
                     (article.content.length > 100 ? `${article.content.substring(0, 100)}...` : article.content) 
                     : 'No description available.'}
                 </p>
-                <div className="text-right">
+                <div className="flex justify-between items-center mt-4">
                   <button
                     onClick={() => window.location.href = `/article/${article.name}`}
                     className="text-blue-500 underline transform transition-all duration-300 hover:scale-110 hover:text-indigo-600"
                   >
                     Read More
                   </button>
+                  <div className="flex items-center gap-2">
+                    <LikeButton 
+                      articleId={article?._id} 
+                      initialLikes={article?.likes || 0}
+                      initialLikedState={article?.likedBy?.includes(userId)}
+                    />
+                  </div>
                 </div>
               </div>
             ))}

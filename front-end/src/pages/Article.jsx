@@ -5,11 +5,14 @@ import NotFound from './NotFound';
 import CommentsList from '../components/CommentsList';
 import AddComment from '../components/AddComment';
 import { link } from '../components/Baselink';
+import LikeButton from '../components/LikeButton';
 
 const Article = ({ loggedInUserId }) => {
   const { name } = useParams();
   const [article, setArticle] = useState(null);
   const [error, setError] = useState(null);
+  const [liked, setLiked] = useState(false);
+  const [likedBy, setLikedBy] = useState([]);
   const url = `${link}`;
 
   useEffect(() => {
@@ -22,6 +25,8 @@ const Article = ({ loggedInUserId }) => {
 
         if (data.name === name) {
           setArticle(data);
+          setLiked(data.liked);
+          setLikedBy(data.likedBy);
         } else {
           setArticle(null);
         }
@@ -48,6 +53,7 @@ const Article = ({ loggedInUserId }) => {
   if (!article) return <NotFound />;
 
   const isAuthor = article.author === loggedInUserId;
+  const userId = localStorage.getItem("userId");
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20">
@@ -58,24 +64,31 @@ const Article = ({ loggedInUserId }) => {
         >
           {article.title}
         </h1>
-        {isAuthor && (
-          <div>
-            <button
-              onClick={() => {
-                window.location.href = `/edit-article/${article._id}`;
-              }}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4 sm:mt-0"
-            >
-              Edit Article
-            </button>
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-4"
-            >
-              Delete Article
-            </button>
-          </div>
-        )}
+        <div className="flex items-center gap-4">
+          <LikeButton 
+            articleId={article._id} 
+            initialLikes={article.likes || 0}
+            initialLikedState={likedBy?.includes(userId)}
+          />
+          {isAuthor && (
+            <div>
+              <button
+                onClick={() => {
+                  window.location.href = `/edit-article/${article._id}`;
+                }}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4 sm:mt-0"
+              >
+                Edit Article
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-4"
+              >
+                Delete Article
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="prose prose-sm sm:prose-lg mx-auto">
