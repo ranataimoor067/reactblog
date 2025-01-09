@@ -102,6 +102,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       });
       const token = response.data.token;
       localStorage.setItem("token", `Bearer ${token}`);
+      localStorage.setItem("userId", response.data.userId);
       dispatch(authLogin(response.data.username))
       navigate("/");
       handleClose();
@@ -135,6 +136,7 @@ const Navbar = ({ theme, toggleTheme }) => {
 
       const token = response.data.token;
       localStorage.setItem("token", `Bearer ${token}`);
+      localStorage.setItem("userId", response.data.id);
       dispatch(authLogin(loginCredential))
       navigate("/");
       handleClose();

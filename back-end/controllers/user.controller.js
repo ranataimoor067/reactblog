@@ -119,6 +119,7 @@ const loginUser = async (req, res) => {
 
     // Send successful response with token and user data
     res.json({
+      userId: user._id,
       token,
       username: user.username,
       email: user.email,
