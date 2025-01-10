@@ -1,7 +1,10 @@
 import React from "react";
 import Home from "../assets/blog.png";
 import Create from "../assets/write-blog.jpg"; 
-import Read from "../assets/read-blog.jpg";   
+import Read from "../assets/read-blog.jpg"; 
+import mission from "../assets/mission.jpg" ; 
+import values from "../assets/values.avif";
+import vision from "../assets/vision.avif";
 
 
 function Centre() {
@@ -78,7 +81,35 @@ function Centre() {
           />
         </div>
       </div>
+      <section id="mission-vision-values" class="py-12">
+  <div class="max-w-screen-xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-6 text-blue-800">Our Mission, Vision & Values</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <div class="bg-white p-6 border-2 border-gray-800 rounded-lg">
+        <img src={mission} alt="Our Mission" class="w-full h-40 object-cover rounded-lg mb-4" />
+        <h3 class="text-2xl font-semibold text-blue-800 mb-2">Our Mission</h3>
+        <p class="text-lg text-gray-700 text-center max-w-96">Our mission is to empower developers by providing high-quality content on React and front-end technologies. We foster a collaborative community where developers of all experience levels share ideas, solve problems, and stay up-to-date with the latest trends in the React ecosystem and web development.</p>
+      </div>
+
+      <div class="bg-white p-6 border-2 border-gray-800 rounded-lg">
+        <img src={vision} alt="Our Vision" class="w-full h-40 object-cover rounded-lg mb-4" />
+        <h3 class="text-2xl font-semibold text-blue-800 mb-2">Our Vision</h3>
+        <p class="text-lg text-gray-700 text-center max-w-96">Our vision is to become the leading platform for React developers, providing accessible tutorials, in-depth guides, and expert insights. We aim to cultivate a community where developers of all skill levels innovate, grow, and contribute to the advancement of React and modern web development practices.</p>
+      </div>
+
+      <div class="bg-white p-6 border-2 border-gray-800 rounded-lg">
+        <img src={values} alt="Our Values" class="w-full h-40 object-cover rounded-lg mb-4" />
+        <h3 class="text-2xl font-semibold text-blue-800 mb-2">Our Values</h3>
+        <p class="text-lg text-gray-700 text-center max-w-96">We value knowledge sharing, continuous learning, and community-driven development. Integrity, inclusivity, and innovation guide us. We prioritize creating content that is both informative and engaging while fostering an open, supportive environment where all voices are heard and respected by our community.</p>
+      </div>
+
     </div>
+  </div>
+</section>
+
+    </div>
+   
   );
 }
 
