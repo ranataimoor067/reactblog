@@ -101,7 +101,7 @@ We’re thrilled to have you contribute to this project! Please follow these ste
 - Check the `CONTRIBUTING.md` file for detailed contribution rules.
 - Join discussions on issues and share your ideas!
 
-<h3>Project Contributers: <h3>
+<h3>Project Contributers❤️: <h3>
 <a href="https://github.com/OkenHaha/react-blog/graphs/contributors">
 <img src="https://contributors-img.web.app/image?repo=OkenHaha/react-blog"/>
 
