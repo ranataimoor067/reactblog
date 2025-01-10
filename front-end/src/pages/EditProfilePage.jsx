@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { link } from '../components/Baselink';
 
 const EditProfilePage = () => {
     const navigate = useNavigate();
-    const url = "https://react-blog-server-gamma.vercel.app/";
-
+    // const url = "https://react-blog-server-gamma.vercel.app/";
+    const url = link
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -27,8 +28,9 @@ const EditProfilePage = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
+                console.log('entered useeffect')
                 const token = localStorage.getItem('token');
-                const response = await axios.get(url + 'api/auth/getProfile', {
+                const response = await axios.get(url + '/api/auth/getProfile', {
                     headers: { Authorization: token }
                 });
 
@@ -103,7 +105,7 @@ const EditProfilePage = () => {
                 updateData.newPassword = formData.newPassword;
             }
 
-            await axios.put(url + 'api/auth/editProfile', updateData, {
+            await axios.put(url + '/api/auth/editProfile', updateData, {
                 headers: { Authorization: token }
             }).then(() => {
                 setSuccess('Profile updated successfully!');
@@ -123,176 +125,123 @@ const EditProfilePage = () => {
     };
 
     return (
-        <div className={`max-w-2xl mx-auto p-6 pt-20 ${theme === 'dark' ? 'text-slate-100' : 'text-gray-900'}`}>
-            <div className={`shadow-xl rounded-lg p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold">Edit Profile</h1>
-                    <p className="text-sm mt-2">Update your personal information</p>
-                </div>
+        <div className={`w-screen ${theme === 'dark' ? 'bg-slate-700':'bg-gradient-to-b from-blue-100 via-white to-blue-200'}`}>
+            <div className={`max-w-2xl mx-auto p-6 pt-20 ${theme === 'dark' ? 'text-slate-100' : 'text-gray-900'}`}>
+  <div className={`shadow-xl rounded-lg p-6 ${theme === 'dark' ? 'bg-gradient-to-br from-gray-800 via-gray-600 to-gray-500' : ' mt-10 shadow-sm hover:shadow-2xl hover:scale-105 border-4 border-purple-500 bg-white'} transition-all duration-500`}>
+    <div className="text-center mb-8">
+      <h1 className="text-4xl font-bold bg-white to-white bg-clip-text text-transparent ">
+        Edit Profile
+      </h1>
+      <p className="text-xl mt-2 opacity-90">Update your personal information</p>
+    </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Profile Picture Preview */}
-                    <div className="flex justify-center mb-6">
-                        <div className="relative">
-                            <img
-                                src={formData.picture || 'https://via.placeholder.com/150'}
-                                alt="Profile"
-                                className="w-32 h-32 rounded-full object-cover border-4 border-green-500 z-1"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Basic Information */}
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Username</label>
-                            <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                                {formData.username}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Email</label>
-                            <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                                {formData.email}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Full Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                className={`w-full p-3 rounded-lg border ${formData.name ? 'border-green-500' : 'border-gray-300'
-                                    } focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-                                    }`}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Location</label>
-                            <input
-                                type="text"
-                                name="location"
-                                value={formData.location}
-                                onChange={handleChange}
-                                className={`w-full p-3 rounded-lg border ${formData.location ? 'border-green-500' : 'border-gray-300'
-                                    } focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-                                    }`}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Profile Picture URL</label>
-                            <input
-                                type="text"
-                                name="picture"
-                                value={formData.picture}
-                                onChange={handleChange}
-                                className={`w-full p-3 rounded-lg border ${formData.picture ? 'border-green-500' : 'border-gray-300'
-                                    } focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-                                    }`}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Date of Birth</label>
-                            <input
-                                type="date"
-                                name="dob"
-                                value={formData.dob}
-                                onChange={handleChange}
-                                className={`w-full p-3 rounded-lg border ${formData.dob ? 'border-green-500' : 'border-gray-300'
-                                    } focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-                                    }`}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Password Change Section */}
-                    <div className={`border-t pt-6 mt-6 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
-                        <h3 className="text-lg font-medium mb-4">Change Password</h3>
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Current Password</label>
-                                <input
-                                    type="password"
-                                    name="currentPassword"
-                                    value={formData.currentPassword}
-                                    onChange={handleChange}
-                                    className={`w-full p-3 rounded-lg border ${formData.currentPassword ? 'border-green-500' : 'border-gray-300'
-                                        } focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-                                        }`}
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium mb-1">New Password</label>
-                                <input
-                                    type="password"
-                                    name="newPassword"
-                                    value={formData.newPassword}
-                                    onChange={handleChange}
-                                    className={`w-full p-3 rounded-lg border ${formData.newPassword ? 'border-green-500' : 'border-gray-300'
-                                        } focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-                                        }`}
-                                />
-                            </div>
-
-                            <div className="sm:col-span-2">
-                                <label className="block text-sm font-medium mb-1">Confirm New Password</label>
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    className={`w-full p-3 rounded-lg border ${formData.confirmPassword ? 'border-green-500' : 'border-gray-300'
-                                        } focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-                                        }`}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Error and Success Messages */}
-                    {error && (
-                        <div className="bg-red-100 border-l-4 border-red-400 p-4 text-red-700">
-                            <p>{error}</p>
-                        </div>
-                    )}
-
-                    {success && (
-                        <div className="bg-green-100 border-l-4 border-green-400 p-4 text-green-700">
-                            <p>{success}</p>
-                        </div>
-                    )}
-
-                    {/* Action Buttons */}
-                    <div className="flex justify-end space-x-4">
-                        <button
-                            type="button"
-                            onClick={() => navigate('/profile')}
-                            className={`px-6 py-2 rounded-lg ${theme === 'dark'
-                                    ? 'bg-gray-700 text-white hover:bg-gray-600'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                }`}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className={`bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6 py-2 rounded-lg transition-transform transform hover:scale-105 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                                }`}
-                        >
-                            {isLoading ? 'Saving...' : 'Save Changes'}
-                        </button>
-                    </div>
-                </form>
-            </div>
+    <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
+      {/* Profile Picture Preview */}
+      <div className="flex justify-center mb-6">
+        <div className="relative">
+          <img
+            src={formData.picture || 'https://via.placeholder.com/150'}
+            alt="Profile"
+            className="w-32 h-32 rounded-full object-cover border-4 border-purple-400 z-1 transition-transform transform hover:scale-110"
+          />
         </div>
+      </div>
+
+      {/* Basic Information */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium mb-1">Username</label>
+          <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gradient-to-r from-gray-700 to-gray-800' : 'bg-gradient-to-r from-gray-100 to-white'}`}>
+            {formData.username}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Email</label>
+          <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gradient-to-r from-gray-700 to-gray-800' : 'bg-gradient-to-r from-gray-100 to-white'}`}>
+            {formData.email}
+          </div>
+        </div>
+
+        {/* Input fields with animations */}
+        {['name', 'location', 'picture', 'dob'].map((field) => (
+          <div key={field}>
+            <label className="block text-sm font-medium mb-1 capitalize">{field.replace('_', ' ')}</label>
+            <input
+              type={field === 'dob' ? 'date' : 'text'}
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500 focus:outline-none transform transition-transform hover:scale-105 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'} ${formData[field] ? 'border-green-500' : 'border-gray-300'}`}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Password Change Section */}
+      <div className={`border-t pt-6 mt-6 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+        <h3 className="text-lg font-medium mb-4 bg-gradient-to-r from-purple-500 via-blue-500 to-white bg-clip-text text-transparent animate-pulse">Change Password</h3>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {['currentPassword', 'newPassword', 'confirmPassword'].map((passwordField) => (
+            <div key={passwordField}>
+              <label className="block text-sm font-medium mb-1 capitalize">{passwordField.replace('Password', ' Password')}</label>
+              <input
+                type="password"
+                name={passwordField}
+                value={formData[passwordField]}
+                onChange={handleChange}
+                className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500 focus:outline-none transform transition-transform hover:scale-105 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'} ${formData[passwordField] ? 'border-green-500' : 'border-gray-300'}`}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Error and Success Messages */}
+      {error && (
+        <div className="bg-red-100 border-l-4 border-red-400 p-4 text-red-700 animate-bounce">
+          <p>{error}</p>
+        </div>
+      )}
+
+      {success && (
+        <div className="bg-green-100 border-l-4 border-green-400 p-4 text-green-700 animate-fadeIn">
+          <p>{success}</p>
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex justify-end space-x-4">
+        {/* <button
+          type="button"
+          onClick={() => navigate('/profile')}
+          className={`px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white transform transition-transform hover:scale-105`}
+        >
+          Cancel
+        </button> */}
+        <button
+              className="relative rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white transform transition-transform hover:scale-105 px-4 group"
+              onClick={() => navigate('/profile')}
+            >
+              <span className="relative z-10">Cancel</span>
+              <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
+            </button>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={`bg-gradient-to-r relative group  from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-2 rounded-lg transition-transform transform hover:scale-105 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          {/* {isLoading ? 'Saving...' : 'Save Changes'}  */}
+          <span className="relative z-10">{isLoading ? 'Saving...' : 'Save Changes'}</span>
+          <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+        </div>
+
+
     );
 }
 

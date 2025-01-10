@@ -389,6 +389,8 @@ const likeArticle = async (req, res) => {
 
         const userId = user._id;
 
+        let liked = false;
+
         const article = await Article.findById(articleId);
         if (!article) {
             return res.status(404).json({ error: "Article not found." });
@@ -398,11 +400,13 @@ const likeArticle = async (req, res) => {
         if (userIndex === -1) {
             // User has not liked the article yet
             article.likedBy.push(userId);
+            liked = true;
             article.likes += 1;
         } else {
             // User has already liked the article, so unlike it
             article.likedBy.splice(userIndex, 1);
             article.likes -= 1;
+            liked = false;
         }
 
         // Save only the fields that are being updated
@@ -419,7 +423,7 @@ const likeArticle = async (req, res) => {
         }
         await user.save();
 
-        res.status(200).json({ message: "Article like status updated.", likes: article.likes });
+        res.status(200).json({ message: "Article like status updated.", likes: article.likes, liked: liked, likedBy: article.likedBy });
     } catch (error) {
         console.error("Error updating like status:", error);
         res.status(500).json({ error: "An error occurred while updating like status." });

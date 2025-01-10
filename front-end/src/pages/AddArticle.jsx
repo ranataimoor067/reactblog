@@ -12,18 +12,15 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-    
+
         if (name === 'thumbnail') {
-            // Handle file input for thumbnail
             setFormData({ ...formData, thumbnail: e.target.files[0] });
         } else {
             setFormData({ ...formData, [name]: value });
         }
     };
-    
 
-    // const url = "https://react-blog-server-gamma.vercel.app/";
-    const url = `${link}`
+    const url = `${link}`;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,7 +30,7 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
             data.append('title', formData.title);
             data.append('content', formData.content);
             data.append('thumbnail', formData.thumbnail);
-    
+
             const response = await axios.post(
                 `${url}/api/article/addarticle`,
                 data,
@@ -44,24 +41,23 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                     },
                 }
             );
-    
+
             onSuccess(response.data.article);
             onClose();
         } catch (err) {
             setError(err.response?.data?.error || 'Error creating article');
         }
     };
-    
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-md transform transition-all">
-                <div className="p-6">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 transition-opacity duration-300">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-500 text-white rounded-lg shadow-xl w-full max-w-md transform transition-all animate-fadeIn">
+                <div className="p-6 space-y-6">
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900">Create a New Article</h2>
+                        <h2 className="text-2xl font-bold text-white">Create a New Article</h2>
                         <button
                             onClick={onClose}
-                            className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                            className="text-white hover:text-gray-200 focus:outline-none transition-colors duration-300"
                         >
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -70,14 +66,14 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                     </div>
 
                     {error && (
-                        <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-md">
+                        <div className="mb-4 p-4 bg-red-100 border border-red-300 text-red-600 rounded-md">
                             {error}
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-100 mb-1">
                                 Title
                             </label>
                             <input
@@ -87,12 +83,12 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                                 value={formData.title}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                                className="w-full text-black px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-100 mb-1">
                                 Content
                             </label>
                             <textarea
@@ -102,36 +98,36 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                                 onChange={handleChange}
                                 required
                                 rows="6"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
+                                className="w-full text-black px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors resize-none"
                             />
                         </div>
 
                         <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-        Thumbnail
-    </label>
-    <input
-        type="file"
-        name="thumbnail"
-        accept="image/*"
-        onChange={handleChange}
-        required
-        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-    />
-</div>
-
+                            <label className="block text-sm font-medium text-gray-100 mb-1">
+                                Thumbnail
+                            </label>
+                            <input
+                                type="file"
+                                name="thumbnail"
+                                accept="image/*"
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
+                            />
+                        </div>
 
                         <div className="flex space-x-4 pt-4">
                             <button
+                                className="relative bg-gradient-to-r w-40  bg-white rounded-lg shadow-lg px-4 py-2 transform transition-all duration-300 hover:scale-110 group"
                                 type="submit"
-                                className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
                             >
-                                Create Article
+                                <div className="relative z-10">Create</div   >
+                                <span className=" rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-white transition-all duration-300 group-hover:w-full"></span>
                             </button>
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                                className="flex-1 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
                             >
                                 Cancel
                             </button>
