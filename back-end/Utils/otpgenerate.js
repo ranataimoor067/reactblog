@@ -39,7 +39,7 @@ export const genrateOtp = async (req, res) => {
 
         await sendMail(
             email,
-            "OTP FOR REGISTRATION",
+            "Dear Registered User, This is the OTP for your registration for React Blog App",
             finalOTP.otp
         );
 
