@@ -1,10 +1,11 @@
 import express from 'express';
-import { loginUser, registerUser, getProfile, editProfile, deleteUserAccount } from "../controllers/user.controller.js";
-import { genrateOtp, generateOTPForDelete } from '../Utils/otpgenerate.js';
+import { loginUser, registerUser, getProfile, editProfile, deleteUserAccount, resetPassword } from "../controllers/user.controller.js";
+import { genrateOtp, generateOTPForDelete, generateOTPForPassword } from '../Utils/otpgenerate.js';
 import multer from 'multer'
 
 
 const upload = multer({storage: multer.memoryStorage()})
+
 
 const userRouter = express.Router();
 
@@ -24,5 +25,9 @@ userRouter.post('/editProfile', upload.single("picture") , editProfile);
 // Delete account route
 userRouter.post('/deleteAccount/generate-otp', generateOTPForDelete);
 userRouter.delete('/deleteAccount', deleteUserAccount);
+
+// Forgot Password routes
+userRouter.post('/forgot-password/generate-otp', generateOTPForPassword);
+userRouter.post('/reset-password', resetPassword);
 
 export { userRouter };
