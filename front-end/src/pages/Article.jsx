@@ -22,7 +22,11 @@ const Article = ({ loggedInUserId }) => {
           url + '/api/article/getarticle',
           { articleName: name }
         );
-
+        console.log(data)
+        console.log(localStorage.getItem("token"))
+        console.log(localStorage.getItem('userId'))
+        // const decoded = jwt.verify(localStorage.getItem("token").split(" ")[1],"your_very_long_and_random_secret_key_here")
+        // console.log(decoded)
         if (data.name === name) {
           setArticle(data);
           setLiked(data.liked);
@@ -52,7 +56,7 @@ const Article = ({ loggedInUserId }) => {
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   if (!article) return <NotFound />;
 
-  const isAuthor = article.author === loggedInUserId;
+  const isAuthor = article.author === localStorage.getItem("userId");
   const userId = localStorage.getItem("userId");
 
   return (
