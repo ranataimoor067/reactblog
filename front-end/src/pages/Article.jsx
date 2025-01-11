@@ -56,12 +56,9 @@ const Article = ({ loggedInUserId }) => {
   const userId = localStorage.getItem("userId");
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-      <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4 mb-6">
-        <h1
-          className="text-gray-900 sm:text-4xl text-2xl font-bold text-center sm:text-left"
-          style={{ color: 'var(--text-color)' }}
-        >
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 bg-white dark:bg-gray-800 min-h-screen">
+      <div className="flex flex-col sm:flex-row justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
+        <h1 className="text-gray-900 dark:text-white sm:text-4xl text-2xl font-bold text-center sm:text-left">
           {article.title}
         </h1>
         <div className="flex items-center gap-4">
@@ -91,12 +88,11 @@ const Article = ({ loggedInUserId }) => {
         </div>
       </div>
 
-      <div className="prose prose-sm sm:prose-lg mx-auto">
+      <div className="prose prose-sm sm:prose-lg mx-auto dark:prose-invert">
         {article.content &&
           article.content.split('\n').map((paragraph, index) => (
             <p
-              className="text-base mb-4 leading-relaxed"
-              style={{ color: 'var(--text-color)' }}
+              className="text-base mb-4 leading-relaxed text-gray-800 dark:text-gray-200"
               key={index}
             >
               {paragraph}
@@ -105,10 +101,7 @@ const Article = ({ loggedInUserId }) => {
       </div>
 
       <div className="mt-8">
-        <h2
-          className="text-lg sm:text-xl font-semibold text-gray-800 mb-4"
-          style={{ color: 'var(--text-color)' }}
-        >
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-4">
           Comments
         </h2>
         <CommentsList comments={article.comments || []} />
@@ -124,3 +117,4 @@ const Article = ({ loggedInUserId }) => {
 };
 
 export default Article;
+
