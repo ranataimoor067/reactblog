@@ -117,3 +117,14 @@ We’re thrilled to have you contribute to this project! Please follow these ste
 <h3>Project Contributers❤️: <h3>
 <a href="https://github.com/OkenHaha/react-blog/graphs/contributors">
 <img src="https://contributors-img.web.app/image?repo=OkenHaha/react-blog"/>
+
+## Repo Stared By:
+
+
+[![Stargazers repo roster for @OkenHaha/react-blog](https://reporoster.com/stars/dark/OkenHaha/react-blog)](https://github.com/OkenHaha/react-blog/stargazers)
+
+
+## Repo Forked By:
+
+
+[![Forkers repo roster for @OkenHaha/react-blog](https://reporoster.com/forks/dark/OkenHaha/react-blog)](https://github.com/OkenHaha/react-blog/network/members)
