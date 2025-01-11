@@ -268,6 +268,7 @@ const getProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
+    console.log(req.file)
     console.log("editProfile called");
 
     // Get the token from the authorization header

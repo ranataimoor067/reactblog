@@ -19,7 +19,7 @@ userRouter.post('/login', loginUser);
 userRouter.get('/getProfile', getProfile);
 
 // Edit profile route
-userRouter.post('/editProfile', upload.single("profileImage") , editProfile);
+userRouter.post('/editProfile', upload.single("picture") , editProfile);
 
 // Delete account route
 userRouter.post('/deleteAccount/generate-otp', generateOTPForDelete);
