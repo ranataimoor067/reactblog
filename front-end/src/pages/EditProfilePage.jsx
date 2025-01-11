@@ -84,7 +84,14 @@ const EditProfilePage = () => {
         return true;
     };
 
-
+    const validateFileSize = (file) => {
+      const maxFileSize = 500 * 1024; // 500KB in bytes
+      if (file.size > maxFileSize) {
+        setError('Profile picture must be smaller than 500KB.');
+        return false;
+      }
+      return true;
+    };
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -188,7 +195,7 @@ const EditProfilePage = () => {
       
 {/* Picture Upload Section */}
 <div>
-  <label className="block text-sm font-medium mb-1">Upload Profile Picture</label>
+  <label className="block text-sm font-medium mb-1">Upload Profile Picture (Max: 500KB)</label>
   <input
     type="file"
     name="picture"
@@ -196,15 +203,22 @@ const EditProfilePage = () => {
     onChange={(e) => {
       const file = e.target.files[0];
       if (file) {
+        if (file.size > 500 * 1024) {
+          alert("File size exceeds the 500 KB limit. Please choose a smaller file.");
+          return;
+        }
         setFormData(prevData => ({
           ...prevData,
-          picture: file
+          picture: file,
         }));
       }
     }}
-    className={`block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r from-purple-500 to-blue-500 file:text-white hover:file:from-purple-600 hover:file:to-blue-600 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'}`}
+    className={`block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r from-purple-500 to-blue-500 file:text-white hover:file:from-purple-600 hover:file:to-blue-600 ${
+      theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
+    }`}
   />
 </div>
+
 
 
       {/* Password Change Section */}
