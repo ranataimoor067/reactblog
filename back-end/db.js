@@ -1,18 +1,25 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
-dotenv.config({path:"/.env"})
-console.log("this is env variable",process.env.CONNECTION_URL)
+// Load environment variables from the .env file
+dotenv.config({ path: "/.env" });
 
-const connectDB= async () => {
-    try {
-        const resp =mongoose.connect(process.env.CONNECTION_URL)
-        if (resp) {
-            console.log("monog db connected")
-        }
-    } catch (error) {
-        console.log(error)
-    }
+// Check if CONNECTION_URL exists in the environment variables
+if (!process.env.CONNECTION_URL) {
+    throw new Error("Missing CONNECTION_URL in environment variables");
 }
 
-export {connectDB}
+console.log("This is env variable:", process.env.CONNECTION_URL);
+
+const connectDB = async () => {
+    try {
+        const resp = await mongoose.connect(process.env.CONNECTION_URL);
+        if (resp) {
+            console.log("MongoDB connected");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export { connectDB };
