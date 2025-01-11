@@ -120,28 +120,8 @@ export const generateOTPForDelete = async (req, res) => {
 
 export const generateOTPForPassword = async (req, res) => {
     try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader) {
-            console.error("Authorization header is missing.");
-            return res.status(401).json({ error: "No token provided." });
-        }
-
-        const token = authHeader.split(' ')[1];
-        if (!token) {
-            console.error("Bearer token is missing.");
-            return res.status(401).json({ error: "Invalid token format." });
-        }
-
-        // Verify the token
-        const decoded = jwt.verify(token, secretKey);
-        const user = await User.findById(decoded.userId);
-        if (!user) {
-            console.error(`User not found for token with userId: ${decoded.userId}.`);
-            return res.status(404).json({ error: "User not found." });
-        }
-
         const { email } = req.body;
-
+        console.log(email);
         if (!email) {
             return res.status(400).json({
                 success: false,

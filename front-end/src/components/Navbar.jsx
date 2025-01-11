@@ -535,6 +535,17 @@ const Navbar = ({ theme, toggleTheme }) => {
                   <button type="submit" className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-lg transition-transform transform hover:scale-105 shadow-lg">Submit</button>
                 )
               }
+              {isLogin && (
+                <div className="text-center mt-2">
+                  <Link
+                    to="/forgot-password"
+                    onClick={handleClose}
+                    className="text-sm text-blue-500 hover:text-blue-700"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+              )}
             </form>
           </div>
         </div>

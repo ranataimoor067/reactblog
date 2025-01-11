@@ -13,6 +13,7 @@ import FAQ from "./pages/FAQ";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme as toggle } from "./store/authSlice";
 import Footer from "./components/Footer";
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
   const theme = useSelector((state) => state.auth.theme);
@@ -47,6 +48,7 @@ function App() {
             path="/edit-article/:id"
             element={<EditArticle loggedInUserId={loggedInUserId} />}
           />
+          <Route path="/forgot-password" element={<ForgotPassword theme={theme} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
