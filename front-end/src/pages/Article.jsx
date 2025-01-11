@@ -6,6 +6,7 @@ import CommentsList from '../components/CommentsList';
 import AddComment from '../components/AddComment';
 import { link } from '../components/Baselink';
 import LikeButton from '../components/LikeButton';
+import { AlertDialog } from '../components/AlertDialog'; // Update this path based on where you save the AlertDialog component
 
 const Article = ({ loggedInUserId }) => {
   const { name } = useParams();
@@ -13,6 +14,7 @@ const Article = ({ loggedInUserId }) => {
   const [error, setError] = useState(null);
   const [liked, setLiked] = useState(false);
   const [likedBy, setLikedBy] = useState([]);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const url = `${link}`;
 
   useEffect(() => {
@@ -25,8 +27,6 @@ const Article = ({ loggedInUserId }) => {
         console.log(data)
         console.log(localStorage.getItem("token"))
         console.log(localStorage.getItem('userId'))
-        // const decoded = jwt.verify(localStorage.getItem("token").split(" ")[1],"your_very_long_and_random_secret_key_here")
-        // console.log(decoded)
         if (data.name === name) {
           setArticle(data);
           setLiked(data.liked);
@@ -82,7 +82,7 @@ const Article = ({ loggedInUserId }) => {
                 Edit Article
               </button>
               <button
-                onClick={handleDelete}
+                onClick={() => setIsDeleteDialogOpen(true)}
                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ml-4"
               >
                 Delete Article
@@ -91,6 +91,16 @@ const Article = ({ loggedInUserId }) => {
           )}
         </div>
       </div>
+
+      <AlertDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        title="Are you sure you want to delete this article?"
+        description="This action cannot be undone. This will permanently delete your article."
+        confirmText="Yes, Delete"
+        cancelText="No, Cancel"
+      />
 
       <div className="prose prose-sm sm:prose-lg mx-auto dark:prose-invert">
         {article.content &&
@@ -121,4 +131,3 @@ const Article = ({ loggedInUserId }) => {
 };
 
 export default Article;
-
