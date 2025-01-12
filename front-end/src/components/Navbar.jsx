@@ -414,6 +414,27 @@ const Navbar = ({ theme, toggleTheme }) => {
                 Login / Register
               </button>
             )}
+
+            {/*Add toggleTheme button for mobile view */}
+            <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={toggleTheme}
+                className={`w-full flex items-center ${linkClass}`}
+              >
+                {theme === 'light' ? (
+                  <>
+                    <BsSun className="w-5 h-5 mr-2" />
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <BsMoon className="w-5 h-5 mr-2" />
+                    <span>Dark Mode</span>
+                  </>
+                )}
+              </button>
+            </div>
+            
           </div>
         </div>
       </nav>
