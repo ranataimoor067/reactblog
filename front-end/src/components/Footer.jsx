@@ -2,6 +2,7 @@ import React from "react";
 import facebook from "../assets/facebook.svg";
 import instagram from "../assets/instagram.svg";
 import twitter from "../assets/twitter.svg";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -44,12 +45,11 @@ function Footer() {
               </a>
             </li>
             <li className="mt-2">
-              <a
-                href="https://github.com/OkenHaha/react-blog/graphs/contributors"
+              <Link to="/contributors"
                 className="hover:underline hover:text-gray-300"
               >
                 Contributors
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
