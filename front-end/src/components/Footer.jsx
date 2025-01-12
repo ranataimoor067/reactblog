@@ -1,5 +1,7 @@
 import React from "react";
 import github from "../assets/github.svg";
+import { Link } from "react-router-dom";
+
 
 function Footer() {
   return (
@@ -39,12 +41,11 @@ function Footer() {
               </a>
             </li>
             <li>
-              <a
-                href="https://github.com/OkenHaha/react-blog/graphs/contributors"
+              <Link to="/contributors"
                 className="text-lg hover:text-yellow-400 dark:hover:text-yellow-300 transition duration-200"
               >
                 Contributors
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -84,7 +85,7 @@ function Footer() {
       <div className="text-center mt-6 text-sm border-t border-yellow-500 pt-4 opacity-70 dark:border-yellow-600">
         © 2025 React Blog. All Rights Reserved.
       </div>
-    </footer>
+    </footer >
   );
 }
 
