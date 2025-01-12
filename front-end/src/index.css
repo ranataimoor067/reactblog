@@ -5,17 +5,24 @@
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
+    --cursor-color: #2563eb;
   }
   
   .dark {
     --bg-color: #2e2e2e;
     --text-color: rgb(247, 226, 226);
+    --cursor-color: #ffd700; 
+  }
+  
+  .light {
+    --cursor-color: #2563eb;
   }
   
   body{
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.5s, color 0.5s;
+    cursor: none;
   }
   
   .theme-toggler {
@@ -31,5 +38,15 @@
   }
   .theme-toggler:hover {
     transform: scale(1.2);
+  }
+  
+  /* Hide default cursor */
+  body {
+    cursor: none;
+  }
+  
+  /* Show default cursor for interactive elements */
+  a, button, input, textarea, select {
+    cursor: none;
   }
   
