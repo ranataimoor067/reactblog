@@ -4,6 +4,7 @@ import axios from 'axios';
 import { link } from '../components/Baselink';
 
 const EditProfilePage = () => {
+    const [updating, setUpdating] = useState(false)
     const navigate = useNavigate();
     // const url = "https://react-blog-server-gamma.vercel.app/";
     const url = link
@@ -83,47 +84,61 @@ const EditProfilePage = () => {
         return true;
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateForm()) return;
-
-        setIsLoading(true);
-        try {
-            const token = localStorage.getItem('token');
-            const updateData = {
-                username: formData.username,
-                email: formData.email,
-                name: formData.name,
-                location: formData.location,
-                picture: formData.picture,
-                dob: formData.dob
-            };
-
-            // Only include password fields if user is trying to change password
-            if (formData.currentPassword && formData.newPassword) {
-                updateData.currentPassword = formData.currentPassword;
-                updateData.newPassword = formData.newPassword;
-            }
-
-            await axios.put(url + '/api/auth/editProfile', updateData, {
-                headers: { Authorization: token }
-            }).then(() => {
-                setSuccess('Profile updated successfully!');
-            }).then(() =>
-                navigate('/profile'));
-        } catch (error) {
-            if (error.response?.status === 401) {
-                setError('Current password is incorrect');
-            } else if (error.response?.status === 409) {
-                setError('Email or username already in use');
-            } else {
-                setError('Failed to update profile. Please try again.');
-            }
-        } finally {
-            setIsLoading(false);
-        }
+    const validateFileSize = (file) => {
+      const maxFileSize = 500 * 1024; // 500KB in bytes
+      if (file.size > maxFileSize) {
+        setError('Profile picture must be smaller than 500KB.');
+        return false;
+      }
+      return true;
     };
 
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      setIsLoading(true);
+      try {
+          const token = localStorage.getItem('token');
+          const updateData = {
+              username: formData.username,
+              email: formData.email,
+              name: formData.name,
+              location: formData.location,
+              picture: formData.picture,
+              dob: formData.dob
+          };
+
+          console.log(formData)
+          console.log(updateData)
+
+          // Only include password fields if user is trying to change password
+          if (formData.currentPassword && formData.newPassword) {
+              updateData.currentPassword = formData.currentPassword;
+              updateData.newPassword = formData.newPassword;
+          }
+          setUpdating(true)
+          axios.post(url + '/api/auth/editProfile', updateData, {
+              headers: { Authorization: token, 'Content-Type': 'multipart/form-data' }
+          }).then(() => {
+              setSuccess('Profile updated successfully!');
+              setUpdating(false)
+          }).then((response) =>
+              navigate('/profile'));
+              setUpdating(false)
+              // console.log(response))
+      } catch (error) {
+          if (error.response?.status === 401) {
+              setError('Current password is incorrect');
+          } else if (error.response?.status === 409) {
+              setError('Email or username already in use');
+          } else {
+              setError('Failed to update profile. Please try again.');
+          }
+      } finally {
+          setIsLoading(false);
+      }
+  };
     return (
         <div className={`w-screen ${theme === 'dark' ? 'bg-slate-700':'bg-gradient-to-b from-blue-100 via-white to-blue-200'}`}>
             <div className={`max-w-2xl mx-auto p-6 pt-20 ${theme === 'dark' ? 'text-slate-100' : 'text-gray-900'}`}>
@@ -164,7 +179,7 @@ const EditProfilePage = () => {
         </div>
 
         {/* Input fields with animations */}
-        {['name', 'location', 'picture', 'dob'].map((field) => (
+        {['name', 'location',  'dob'].map((field) => (
           <div key={field}>
             <label className="block text-sm font-medium mb-1 capitalize">{field.replace('_', ' ')}</label>
             <input
@@ -177,6 +192,34 @@ const EditProfilePage = () => {
           </div>
         ))}
       </div>
+      
+{/* Picture Upload Section */}
+<div>
+  <label className="block text-sm font-medium mb-1">Upload Profile Picture (Max: 500KB)</label>
+  <input
+    type="file"
+    name="picture"
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files[0];
+      if (file) {
+        if (file.size > 500 * 1024) {
+          alert("File size exceeds the 500 KB limit. Please choose a smaller file.");
+          return;
+        }
+        setFormData(prevData => ({
+          ...prevData,
+          picture: file,
+        }));
+      }
+    }}
+    className={`block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r from-purple-500 to-blue-500 file:text-white hover:file:from-purple-600 hover:file:to-blue-600 ${
+      theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
+    }`}
+  />
+</div>
+
+
 
       {/* Password Change Section */}
       <div className={`border-t pt-6 mt-6 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -232,7 +275,10 @@ const EditProfilePage = () => {
           className={`bg-gradient-to-r relative group  from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-2 rounded-lg transition-transform transform hover:scale-105 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           {/* {isLoading ? 'Saving...' : 'Save Changes'}  */}
-          <span className="relative z-10">{isLoading ? 'Saving...' : 'Save Changes'}</span>
+          {/* <span className="relative z-10">{isLoading ? 'Saving...' : 'Save Changes'}</span> */}
+          {console.log(updating)}
+          <span className="relative z-10">{updating ? 'Saving...' : 'Save Changes'}</span>
+
           <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
         </button>
       </div>
