@@ -3,6 +3,7 @@ import Articles from '../components/Articles';
 import AddArticleModal from './AddArticle';
 import LikeButton from '../components/LikeButton';
 import { link } from '../components/Baselink';
+import NoarticleImage from '../assets/noarticle.png'
 import axios from 'axios';
 
 const ArticleList = () => {
@@ -29,7 +30,8 @@ const ArticleList = () => {
           setFilteredArticles(sortArticles(fetchedArticles, sortBy));
         }
       } catch (err) {
-        setError('Error fetching articles: ' + err.message);
+        setError(response.data.status === 404 ? null : err.message);
+        console.log(error)
       } finally {
         setLoading(false);
       }
@@ -188,8 +190,20 @@ const ArticleList = () => {
 
         {/* No Articles Found */}
         {!loading && !error && filteredArticles.length === 0 && (
-          <div className="text-center text-lg text-gray-500">
-            No articles found. Try a different search.
+          <div className="text-center">
+            <img 
+              src={NoarticleImage}
+              alt="No articles found" 
+              className="mx-auto w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96 animate-float"
+            />  
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 animate-fadeIn">
+                <span className="block font-semibold text-indigo-600 mb-2 hover:text-indigo-800 transition-colors duration-300">
+                  Oops! No articles found.
+                </span>
+                <span className="block text-gray-500 hover:text-gray-700 transition-colors duration-300"> 
+                  Please check back later or add a new article!
+                </span>
+              </p>  
           </div>
         )}
 
