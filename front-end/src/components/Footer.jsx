@@ -72,10 +72,10 @@ function Footer() {
               Have questions? Reach out to us via email:
             </p>
             <a
-              href="mailto:support@reactblog.com"
+              href="mailto:reactblogswoc@gmail.com"
               className="text-lg text-yellow-300 hover:text-yellow-400 dark:text-yellow-400 dark:hover:text-yellow-500"
             >
-              support@reactblog.com
+              reactblogswoc@gmail.com
             </a>
           </div>
         </div>
