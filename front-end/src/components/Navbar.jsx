@@ -299,11 +299,6 @@ const Navbar = ({ theme, toggleTheme }) => {
                 <span>Articles</span>
                 <div className={getUnderlineClass('/article-list')} />
               </Link>
-              <Link to="/search" className={getLinkClass('/search')}>
-              <LuSearch className="w-5 h-5 mr-2" />
-              <span>Search</span>
-              <div className={getUnderlineClass('/search')} />
-             </Link>
 
 
               <div className="flex items-center space-x-4">
@@ -318,7 +313,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                         }`}
                     >
                       <HiUser className="w-5 h-5" />
-                      <span>{user}</span>
+                      <span>{loginCredential}</span>
                     </button>
                     <button
                       onClick={logout}
@@ -403,7 +398,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                   className={`w-full text-left ${linkClass}`}
                 >
                   <HiUser className="w-5 h-5 mr-2" />
-                  <span>{user}</span>
+                  <span>{loginCredential}</span>
                 </button>
                 <button
                   onClick={logout}
