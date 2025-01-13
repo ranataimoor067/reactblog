@@ -9,7 +9,6 @@ import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
 import EditArticle from "./pages/EditArticle";
-import SearchPage from "./pages/SearchPage";
 import FAQ from "./pages/FAQ";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme as toggle } from "./store/authSlice";
@@ -52,7 +51,6 @@ function App() {
             element={<EditArticle loggedInUserId={loggedInUserId} />}
           />
           <Route path="/forgot-password" element={<ForgotPassword theme={theme} />} />
-          <Route path="/search" element={<SearchPage />}/>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
