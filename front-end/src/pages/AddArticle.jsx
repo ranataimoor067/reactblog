@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { link } from '../components/Baselink';
+import { CreatingArticleLoader } from '../Utils/loader';
 
 const AddArticleModal = ({ onClose, onSuccess }) => {
     const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
         thumbnail: '',
     });
     const [error, setError] = useState(null);
+    const [loading, setloading] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,6 +26,7 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setloading(true);
         try {
             const token = localStorage.getItem('token');
             const data = new FormData();
@@ -47,7 +50,12 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
         } catch (err) {
             setError(err.response?.data?.error || 'Error creating article');
         }
+        setloading(false);
     };
+
+    if (loading) {
+        return <CreatingArticleLoader />
+    }
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 transition-opacity duration-300">
