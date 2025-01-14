@@ -83,29 +83,104 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container min-h-screen p-8 pt-20 bg-gradient-to-b from-blue-100 via-white to-blue-200" style={{ color: 'var(--text-color)' }}>
-      <div className="profile-header text-center mb-8">
+      <div className="profile-header text-center mb-8 mt-5">
         <h1 className="text-5xl font-extrabold text-indigo-800 drop-shadow-lg">Profile</h1>
-        <p className="text-lg text-gray-700 mt-2 italic">View and update your personal information</p>
+        {/* <p className="text-lg text-gray-700 mt-2 italic">View and update your personal information</p> */}
       </div>
 
       <div className="profile-card max-w-lg mx-auto p-8 rounded-2xl shadow-2xl mb-12 bg-white border-4 border-indigo-300 transform hover:scale-105 transition-all duration-300">
         <div className="profile-header flex justify-center mb-6">
-          <img
-            src={user.picture || 'https://via.placeholder.com/150'}
-            alt="Profile"
-            className="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 transform transition-transform duration-300 hover:scale-110 shadow-lg"
-          />
+          {user.picture ? (
+              <img
+                src={user.picture}
+                alt="Profile"
+                className="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 transform transition-transform duration-300 hover:scale-110 shadow-lg"
+              />
+            ) : (
+              <div className="w-40 h-40 rounded-full bg-indigo-200 flex items-center justify-center border-4 border-indigo-500 shadow-lg">
+                <span className="text-indigo-700 text-2xl font-semibold">
+                  {user.name
+                    ? user.name
+                        .split(' ')
+                        .map((word) => word[0])
+                        .join('')
+                    : 'N/A'}
+                </span>
+              </div>
+            )}
         </div>
 
         <div className="profile-details space-y-6">
           <div className="profile-info">
-            <p><strong className="text-indigo-700">Username:</strong> {user.username}</p>
-            <p><strong className="text-indigo-700">Email:</strong> {user.email}</p>
-            <p><strong className="text-indigo-700">Full Name:</strong> {user.name}</p>
-            <p><strong className="text-indigo-700">Location:</strong> {user.location}</p>
-            <p><strong className="text-indigo-700">Date of Birth:</strong> {user.dob}</p>
-            <p><strong className="text-indigo-700">Account Created On:</strong> {new Date(user.accountCreated).toLocaleDateString()}</p>
-            <p><strong className="text-indigo-700">Articles Published:</strong> {userArticles.length}</p>
+            <p className="text-2xl font-bold text-indigo-800 text-center">{user.name}</p>
+
+            <div className="flex flex-col gap-3 mt-5 border border-indigo-700 py-4">
+              {/* Header */}
+              <h2 className="text-indigo-700 font-semibold text-lg ml-5">Basic Information</h2>            
+              {/* Content */}
+              <div className="flex flex-col gap-3 ml-5 mr-5">
+                {/* First Line: Username and Email */}
+                <div className="flex justify-between gap-8">
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-500">Username</span>
+                    <span className="text-gray-700 font-medium min-w-[120px] text-left">{user.username}</span>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-500">Email</span>
+                    <span className="text-gray-700 font-medium min-w-[190px] text-left">{user.email}</span>
+                  </div>
+                </div>
+                <div className='border-t border-gray-300'></div>
+
+                {/* Second Line: Location and DOB */}
+                <div className="flex justify-between gap-8">
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-500">Location</span>
+                    <span className="text-gray-700 font-medium min-w-[100px] text-left">{user.location ? user.location : "-"}</span>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-500">DOB</span>
+                    <span className="text-gray-700 font-medium min-w-[190px] text-left">
+                    {user.dob ? new Date(user.dob).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    }).replace(/ /g, '-') : "-"}
+                    </span>
+                  </div>
+                </div>
+                <div className='border-t border-gray-300'></div>
+
+                {/* Third Line: Account created  */}
+                <div className="flex justify-between gap-2">
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-500">Account Created</span>
+                    <span className="text-gray-700 font-medium">
+                    {user.accountCreated ? new Date(user.accountCreated).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    }).replace(/ /g, '-') : '-'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Article Liked and Article Commented for future purpose */}
+            <div className="grid grid-cols-3 gap-4 text-center mt-6 border-t border-b border-indigo-700 py-4">
+              <div className='border-r border-gray-300'>
+                <p className="text-2xl font-extrabold text-indigo-700">{userArticles.length}</p>
+                <p className="text-sm text-gray-500">Articles Published</p>
+              </div>
+              <div className='border-r border-gray-300'>
+                <p className="text-2xl font-extrabold text-indigo-700">{"-"}</p>
+                <p className="text-sm text-gray-500">Articles Liked</p>
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-indigo-700">{"-"}</p>
+                <p className="text-sm text-gray-500">Articles Commented</p>
+              </div>
+            </div>
           </div>
         </div>
 

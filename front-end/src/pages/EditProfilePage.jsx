@@ -154,11 +154,24 @@ const EditProfilePage = () => {
       {/* Profile Picture Preview */}
       <div className="flex justify-center mb-6">
         <div className="relative">
-          <img
-            src={formData.picture || 'https://via.placeholder.com/150'}
-            alt="Profile"
-            className="w-32 h-32 rounded-full object-cover border-4 border-purple-400 z-1 transition-transform transform hover:scale-110"
-          />
+          {formData.picture ? (
+              <img
+                src={formData.picture}
+                alt="Profile"
+                className="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 transform transition-transform duration-300 hover:scale-110 shadow-lg"
+              />
+            ) : (
+              <div className="w-40 h-40 rounded-full bg-indigo-200 flex items-center justify-center border-4 border-indigo-500 shadow-lg">
+                <span className="text-indigo-700 text-2xl font-semibold">
+                  {formData.name
+                    ? formData.name
+                        .split(' ')
+                        .map((word) => word[0])
+                        .join('')
+                    : 'N/A'}
+                </span>
+              </div>
+            )}
         </div>
       </div>
 
