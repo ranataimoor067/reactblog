@@ -1,6 +1,6 @@
 ![swoc2024 Banner](./swoc.jpg)
 
-# React Blog - Social Winter of Code 2024 🌟
+# React Blog - Social Winter of Code 2025 🌟
 
 Welcome to **React Blog**, an exciting application selected for **Social Winter of Code 2025** (SWOC-2025)!
 
@@ -80,7 +80,6 @@ Ensure you have the following installed:
      MAIL_USER="test@example.com"
      MAIL_PASS="test-passkey"
      ```
-   - Additionally add the other environments variables mentioned in `envexample.txt` inside back-end directory
 
 5. Change the baselink for the server
    - Navigate to the **components** directory inside **src** under the front-end folder
