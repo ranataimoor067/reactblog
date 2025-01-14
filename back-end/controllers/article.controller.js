@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { Article } from '../models/article.model.js';
+import { Article, Comment } from '../models/article.model.js';
 import { User } from '../models/user.model.js';
 import { upload_on_cloudinary } from '../utils/cloudinary.js';
 
@@ -177,7 +177,7 @@ const getarticles = async (req, res) => {
     try {
         const { articleName } = req.body;
         console.log(articleName)
-        const articleInfo = await Article.findOne({ name: articleName });
+        const articleInfo = await Article.findOne({ name: articleName }).populate('comments', 'username text createdAt');
         if (!articleInfo) {
             return res.status(404).json({ error: 'Article not found' });
         }
@@ -189,23 +189,49 @@ const getarticles = async (req, res) => {
 };
 
 const addcomments = async (req, res) => {
-    const { username, text } = req.body;
-    const { articleName } = req.body;
-    console.log(articleName);
     try {
-        const articleInfo = await Article.findOne({ name: articleName }); // Using name field
+        const { name, comment } = req.body;
+        const userid = req.headers.userid;
+        console.log(userid)
 
-        if (!articleInfo) {
-            return res.status(404).json({ error: 'Article not found' });
+        // Validate input
+        if (!name || !comment || !comment.trim()) {
+            return res.status(400).send({ success: false, message: "Article name and comment are required." });
         }
 
-        articleInfo.comments.push({ username, text });
-        const updatedArticleInfo = await articleInfo.save();
+        // Validate user existence
+        const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).send({ success: false, message: "User not found." });
+        }
 
-        res.status(200).json(updatedArticleInfo);
+        // Validate article existence
+        const fetchedArticle = await Article.findOne({ name });
+        if (!fetchedArticle) {
+            return res.status(404).send({ success: false, message: "Article not found." });
+        }
+
+        // Create and save the new comment
+        const newComment = new Comment({
+            username: user.username,
+            text: comment,
+            article: fetchedArticle._id,
+            user: userid,
+        });
+
+        await newComment.save();
+
+        // Add comment reference to article and save
+        fetchedArticle.comments.push(newComment);
+        await fetchedArticle.save();
+
+        // Fetch updated article with populated comments
+        const updatedArticle = await Article.findOne({ name }).populate('comments', 'username text createdAt').populate('author', 'username');
+
+        res.status(200).send({ success: true, article: updatedArticle });
     } catch (error) {
-        console.error('Error adding comment:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error("Error adding comment:", error);
+        res.status(500).send({ success: false, message: "An error occurred while adding the comment." });
     }
 };
 

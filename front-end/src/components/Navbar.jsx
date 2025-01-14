@@ -6,6 +6,7 @@ import closeIcon from "../assets/close.svg";
 import { link } from "./Baselink";
 import { BsMoon, BsSun } from "react-icons/bs";  // You can import icons from react-icons
 import { HiHome, HiInformationCircle, HiNewspaper, HiUser, HiMenu, HiX } from 'react-icons/hi';
+import { LuSearch } from "react-icons/lu";
 import { login as authLogin, logout as authLogout } from "../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -299,6 +300,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                 <div className={getUnderlineClass('/article-list')} />
               </Link>
 
+
               <div className="flex items-center space-x-4">
                 {isLoggedIn ? (
                   <div className="flex items-center space-x-3">
@@ -311,7 +313,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                         }`}
                     >
                       <HiUser className="w-5 h-5" />
-                      <span>{user}</span>
+                      <span>{loginCredential}</span>
                     </button>
                     <button
                       onClick={logout}
@@ -396,7 +398,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                   className={`w-full text-left ${linkClass}`}
                 >
                   <HiUser className="w-5 h-5 mr-2" />
-                  <span>{user}</span>
+                  <span>{loginCredential}</span>
                 </button>
                 <button
                   onClick={logout}
@@ -414,6 +416,27 @@ const Navbar = ({ theme, toggleTheme }) => {
                 Login / Register
               </button>
             )}
+
+            {/*Add toggleTheme button for mobile view */}
+            <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={toggleTheme}
+                className={`w-full flex items-center ${linkClass}`}
+              >
+                {theme === 'light' ? (
+                  <>
+                    <BsSun className="w-5 h-5 mr-2" />
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <BsMoon className="w-5 h-5 mr-2" />
+                    <span>Dark Mode</span>
+                  </>
+                )}
+              </button>
+            </div>
+            
           </div>
         </div>
       </nav>
@@ -535,6 +558,17 @@ const Navbar = ({ theme, toggleTheme }) => {
                   <button type="submit" className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-lg transition-transform transform hover:scale-105 shadow-lg">Submit</button>
                 )
               }
+              {isLogin && (
+                <div className="text-center mt-2">
+                  <Link
+                    to="/forgot-password"
+                    onClick={handleClose}
+                    className="text-sm text-blue-500 hover:text-blue-700"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+              )}
             </form>
           </div>
         </div>

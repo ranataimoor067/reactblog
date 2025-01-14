@@ -56,16 +56,29 @@ Ensure you have the following installed:
    npm install
    ```
 
-4. Set up the database connection:
-   - Copy your MongoDB connection URL.
-   - Create a `.env` file in the `back-end` directory.
-   - Add the following line to the `.env` file:
+4. Set up the `.env` file:
+   - Navigate to the `back-end` directory.
+   - Create a `.env` file.
+   - Add the following environment variables to the `.env` file:
      ```env
      CONNECTION_URL="your-mongodb-connection-url"
+     PORT=8080
+     JWT_SECRET="your-jwt-secret"
+     SECRET_KEY="your-secret-key"
+     MAIL_HOST="smtp.gmail.com"
+     MAIL_USER="your-email@example.com"
+     MAIL_PASS="your-email-passkey"
      ```
-     Example for local testing:
+
+   - Example for local testing:
      ```env
      CONNECTION_URL="mongodb://localhost:27017"
+     PORT=8080
+     JWT_SECRET="test-secret"
+     SECRET_KEY="test-secret-key"
+     MAIL_HOST="smtp.gmail.com"
+     MAIL_USER="test@example.com"
+     MAIL_PASS="test-passkey"
      ```
    - Additionally add the other environments variables mentioned in `envexample.txt` inside back-end directory
 
@@ -128,3 +141,13 @@ My label system might look hard but this is to make sure that my contributors to
 <a href="https://github.com/OkenHaha/react-blog/graphs/contributors">
 <img src="https://contributors-img.web.app/image?repo=OkenHaha/react-blog"/>
 
+## Repo Stared By:
+
+
+[![Stargazers repo roster for @OkenHaha/react-blog](https://reporoster.com/stars/dark/OkenHaha/react-blog)](https://github.com/OkenHaha/react-blog/stargazers)
+
+
+## Repo Forked By:
+
+
+[![Forkers repo roster for @OkenHaha/react-blog](https://reporoster.com/forks/dark/OkenHaha/react-blog)](https://github.com/OkenHaha/react-blog/network/members)

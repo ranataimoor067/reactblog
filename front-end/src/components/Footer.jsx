@@ -1,96 +1,91 @@
 import React from "react";
-import facebook from "../assets/facebook.svg";
-import instagram from "../assets/instagram.svg";
-import twitter from "../assets/twitter.svg";
+import github from "../assets/github.svg";
+import { Link } from "react-router-dom";
+
 
 function Footer() {
   return (
-    <footer className="bg-indigo-500 text-white p-6 mt-8 w-full">
-      <div className="container mx-auto flex flex-wrap justify-between">
+    <footer className="p-8 mt-8 w-full bg-gradient-to-r from-[#001f3d] to-[#004d67] dark:from-[#004d67] dark:to-[#001f3d] text-white">
+      <div className="container mx-auto flex flex-wrap justify-between space-y-8 md:space-y-0 md:flex-row">
+
         {/* About Section */}
-        <div className="w-full md:w-1/3 mb-6">
-          <h3 className="font-bold text-lg">React Blog</h3>
-          <p className="text-sm mt-2">
-            Share your story, inspire the world. A platform for bloggers and
-            readers.
+        <div className="w-full md:w-1/3 mb-6 text-center md:text-left">
+          <a href="/" className="text-2xl font-bold">React Blog</a>
+          <p className="text-lg mt-2 opacity-80">
+            Share your story, inspire the world. A platform for bloggers and readers.
           </p>
         </div>
 
         {/* Quick Links Section */}
-        <div className="w-full md:w-1/3 mb-6">
-          <h3 className="font-bold text-lg">Quick Links</h3>
-          <ul className="text-sm mt-2">
-            <li className="mt-2">
-              <a href="/" className="hover:underline hover:text-gray-300">
+        <div className="w-full md:w-1/3 mb-6 text-center md:text-left">
+          <h3 className="text-2xl font-bold">Quick Links</h3>
+          <ul className="mt-4 space-y-2">
+            <li>
+              <a href="/" className="text-lg hover:text-yellow-400 dark:hover:text-yellow-300 transition duration-200">
                 Home
               </a>
             </li>
-            <li className="mt-2">
-              <a href="/about" className="hover:underline hover:text-gray-300">
+            <li>
+              <a href="/about" className="text-lg hover:text-yellow-400 dark:hover:text-yellow-300 transition duration-200">
                 About
               </a>
             </li>
-            <li className="mt-2">
-              <a
-                href="/article-list"
-                className="hover:underline hover:text-gray-300"
-              >
+            <li>
+              <a href="/article-list" className="text-lg hover:text-yellow-400 dark:hover:text-yellow-300 transition duration-200">
                 Articles
               </a>
             </li>
-            <li className="mt-2">
-              <a href="/faq" className="hover:underline hover:text-gray-300">
+            <li>
+              <a href="/faq" className="text-lg hover:text-yellow-400 dark:hover:text-yellow-300 transition duration-200">
                 FAQ's
               </a>
             </li>
-            <li className="mt-2">
-              <a
-                href="https://github.com/OkenHaha/react-blog/graphs/contributors"
-                className="hover:underline hover:text-gray-300"
+            <li>
+              <Link to="/contributors"
+                className="text-lg hover:text-yellow-400 dark:hover:text-yellow-300 transition duration-200"
               >
                 Contributors
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
 
-        {/* Social Media Section */}
-        <div className="w-full md:w-1/3 mb-6">
-          <h3 className="font-bold text-lg">Follow Us</h3>
-          <div className="flex mt-4 space-x-4">
+        {/* Social Media and Contact Section */}
+        <div className="w-full md:w-1/3 mb-6 text-center md:text-left">
+          <h3 className="text-2xl font-bold">Follow Us on GitHub</h3>
+          <div className="flex justify-center md:justify-start mt-4">
             <a
-              href="https://www.facebook.com/"
-              aria-label="Follow us on Facebook"
+              href="https://github.com/OkenHaha/react-blog"
+              aria-label="Follow us on GitHub"
               target="_blank"
               rel="noopener noreferrer"
+              className="hover:scale-110 transition-transform duration-300 mx-2"
             >
-              <img src={facebook} alt="Facebook" className="w-6 h-6" />
+              <img src={github} alt="GitHub" className="w-8 h-8" />
             </a>
+          </div>
+
+          {/* Contact Section */}
+          <div className="mt-6">
+            <h3 className="text-xl font-bold">Contact Us</h3>
+            <p className="text-lg mt-2 opacity-80">
+              Have questions? Reach out to us via email:
+            </p>
             <a
-              href="https://x.com/"
-              aria-label="Follow us on Twitter"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:reactblogswoc@gmail.com"
+              className="text-lg text-yellow-300 hover:text-yellow-400 dark:text-yellow-400 dark:hover:text-yellow-500"
             >
-              <img src={twitter} alt="Twitter" className="w-6 h-6" />
-            </a>
-            <a
-              href="https://www.instagram.com/"
-              aria-label="Follow us on Instagram"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src={instagram} alt="Instagram" className="w-6 h-6" />
+              reactblogswoc@gmail.com
             </a>
           </div>
         </div>
       </div>
 
       {/* Footer Bottom */}
-      <div className="text-center mt-6 text-sm border-t border-indigo-500 pt-4">
+      <div className="text-center mt-6 text-sm border-t border-yellow-500 pt-4 opacity-70 dark:border-yellow-600">
         © 2025 React Blog. All Rights Reserved.
       </div>
-    </footer>
+    </footer >
   );
 }
 
