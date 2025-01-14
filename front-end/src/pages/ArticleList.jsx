@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Articles from '../components/Articles';
 import AddArticleModal from './AddArticle';
 import LikeButton from '../components/LikeButton';
@@ -11,6 +12,7 @@ const ArticleList = () => {
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest'); // State for sorting
+  const [tagby, setTagby] = useState(null)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -77,6 +79,20 @@ const ArticleList = () => {
     setFilteredArticles(sortArticles(filteredArticles, e.target.value));
   };
 
+  const handletagchange=async(e)=>{
+    setTagby(e.target.value)
+    console.log(e.target.value)
+    const resp = await axios.post(`${url}/api/article/getarticlebytag`, { tag: e.target.value })
+    // console.log(resp.data.articles)
+    console.log(resp.data)
+    if (resp.data.success) {
+      setArticles(resp.data.articles)
+    }else{
+      setArticles([])
+    }
+    // setArticles(resp.data.articles)
+  }
+
   const handleModalClose = () => setShowModal(false);
 
   const handleArticleSuccess = (newArticle) => {
@@ -86,6 +102,12 @@ const ArticleList = () => {
       sortArticles([...filteredArticles, newArticle], sortBy)
     );
   };
+
+  const handleTagclick = async (tag) => {
+    const resp = await axios.post(`${url}/api/article/getarticlebytag`, { tag: tag })
+    console.log(resp.data)
+    setArticles(resp.data.articles)
+  }
 
   const userId = localStorage.getItem('userId');
 
@@ -105,14 +127,28 @@ const ArticleList = () => {
             onChange={handleSearch}
             className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
           />
-          <select
-            value={sortBy}
-            onChange={handleSortChange}
-            className="ml-4 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-          </select>
+
+          <div>
+            <select
+              className="ml-4 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
+              value={tagby}
+              onChange={handletagchange}
+            >
+              <option value="Tech">Technology</option>
+              <option value="Music">Music</option>
+              <option value="Game">Gaming</option>
+              <option value="Movies">Movies</option>
+            </select>
+
+            <select
+              value={sortBy}
+              onChange={handleSortChange}
+              className="ml-4 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+          </div>
         </div>
         {/* Add New Article Button */}
         {isLoggedIn && (
@@ -158,7 +194,10 @@ const ArticleList = () => {
                     className="w-full h-48 object-cover rounded-t-lg mb-4 transform transition-transform duration-300 hover:scale-110"
                   />
                 )}
-
+                {/* tag */}
+                <div className={`w-fit mx-auto text-xs ${article.tag ? "bg-blue-400 px-3 py-2 rounded-2xl" : ""}`}  >
+                  <button onClick={() => handleTagclick(article.tag)} >{article.tag ? article.tag : ""}</button>
+                </div>
                 {/* Article Content */}
                 <h3 className="font-bold text-lg text-indigo-600 mb-3">{article.title}</h3>
                 <p className="text-sm text-gray-600 mb-6">
@@ -191,19 +230,19 @@ const ArticleList = () => {
         {/* No Articles Found */}
         {!loading && !error && filteredArticles.length === 0 && (
           <div className="text-center">
-            <img 
+            <img
               src={NoarticleImage}
-              alt="No articles found" 
+              alt="No articles found"
               className="mx-auto w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96 animate-float"
-            />  
+            />
             <p className="text-base sm:text-lg md:text-xl text-gray-600 animate-fadeIn">
-                <span className="block font-semibold text-indigo-600 mb-2 hover:text-indigo-800 transition-colors duration-300">
-                  Oops! No articles found.
-                </span>
-                <span className="block text-gray-500 hover:text-gray-700 transition-colors duration-300"> 
-                  Please check back later or add a new article!
-                </span>
-              </p>  
+              <span className="block font-semibold text-indigo-600 mb-2 hover:text-indigo-800 transition-colors duration-300">
+                Oops! No articles found.
+              </span>
+              <span className="block text-gray-500 hover:text-gray-700 transition-colors duration-300">
+                Please check back later or add a new article!
+              </span>
+            </p>
           </div>
         )}
 
