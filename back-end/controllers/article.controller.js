@@ -82,13 +82,14 @@ const secretKey = process.env.SECRET_KEY;
 
 const addArticle = async (req, res) => {
     try {
-        const { title, content } = req.body;
+        const { title, content, tag } = req.body;
+        console.log(tag)
         const filebuffer = req.file ? req.file.buffer : null
         console.log(filebuffer)
         console.log("addArticle called");
 
-        if (!title || !content) {
-            return res.status(400).json({ error: "Title, content, and thumbnail are required." });
+        if (!title || !content || !tag) {
+            return res.status(400).json({ error: "Title, content, and tag are required." });
         }
 
         if (!filebuffer) {
@@ -150,6 +151,7 @@ const addArticle = async (req, res) => {
             name,
             title,
             content,
+            tag,
             thumbnail: upload_image_url,
             author: userId,
             authorName: user.username,
@@ -495,6 +497,33 @@ const getarticlesbyuser = async (req, res) => {
     }
 };
 
+const getArticleByTag = async (req, res) => {
+    try {
+      // Destructure and validate the tag from the request body
+      const { tag } = req.body;
+  
+      // Check if the tag is provided
+      if (!tag || typeof tag !== 'string') {
+        return res.status(400).json({ success: false, message: "Invalid or missing tag parameter" });
+      }
+  
+      // Fetch articles by tag
+      const fetchedArticles = await Article.find({ tag: tag.trim() });
+  
+      // Check if any articles were found
+      if (fetchedArticles.length === 0) {
+        return res.status(200).json({ success: false, message: "No articles found for the given tag" });
+      }
+  
+      // Respond with the fetched articles
+      return res.status(200).json({ success: true, message: "Articles fetched successfully", articles: fetchedArticles });
+  
+    } catch (error) {
+      console.error("Error fetching articles by tag:", error);
+      return res.status(500).json({ success: false, message: "Server error", error: error.message });
+    }
+  };
+
 export {
     addArticle,
     getarticles,
@@ -504,5 +533,6 @@ export {
     getarticlebyid,
     deleteArticle,
     getarticlesbyuser,
-    likeArticle
+    likeArticle,
+    getArticleByTag
 }

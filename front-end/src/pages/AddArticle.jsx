@@ -8,11 +8,14 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
         title: '',
         content: '',
         thumbnail: '',
+        tag: ''
     });
     const [error, setError] = useState(null);
     const [loading, setloading] = useState(false)
 
     const handleChange = (e) => {
+        // console.log(formData)
+
         const { name, value } = e.target;
 
         if (name === 'thumbnail') {
@@ -33,6 +36,7 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
             data.append('title', formData.title);
             data.append('content', formData.content);
             data.append('thumbnail', formData.thumbnail);
+            data.append('tag', formData.tag);
 
             const response = await axios.post(
                 `${url}/api/article/addarticle`,
@@ -110,18 +114,29 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-100 mb-1">
-                                Thumbnail
-                            </label>
-                            <input
-                                type="file"
-                                name="thumbnail"
-                                accept="image/*"
-                                onChange={handleChange}
-                                required
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
-                            />
+                        <div className='flex flex-row' >
+                            <div>
+                                <label className="block text-sm font-medium text-gray-100 mb-1">
+                                    Thumbnail
+                                </label>
+                                <input
+                                    type="file"
+                                    name="thumbnail"
+                                    accept="image/*"
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
+                                />
+                            </div>
+                        </div>
+                        <div className='w-full flex justify-center'>
+                            <select value={formData.tag} onChange={handleChange}  className='p-2 text-black rounded-lg' name="tag" id="">
+                                {/* <option value="">Select Tag</option> */}
+                                <option value="Tech">Technology</option>
+                                <option value="Music">Music</option>
+                                <option value="Game">Gaming</option>
+                                <option value="Movies">Movies</option>
+                            </select>
                         </div>
 
                         <div className="flex space-x-4 pt-4">

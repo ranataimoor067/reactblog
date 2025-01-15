@@ -17,6 +17,7 @@ if (!secretKey) {
 }
 
 const registerUser = async (req, res) => {
+  console.log("register hit")
   try {
     const { username, email, password, name, location, picture, dob, otp } = req.body;
     console.log(req.body);
@@ -85,6 +86,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  console.log("login hit")
   try {
     const { credential, password } = req.body;
 

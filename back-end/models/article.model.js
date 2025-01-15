@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
-
+/*
+Predefined Tags
+Technology
+Gaming
+Music
+Movies
+*/
 const commentSchema = new mongoose.Schema({
   username: { type: String, required: true },
   text: { type: String, required: true },
@@ -21,6 +27,7 @@ const articleSchema = new mongoose.Schema({
   ],
   likes: { type: Number, default: 0 },
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  tag:{type:String}
 },{timestamps:true});
 
 const Article = mongoose.model('Article', articleSchema);
