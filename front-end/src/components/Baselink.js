@@ -1,3 +1,5 @@
-// const link = "https://react-blog-server-gamma.vercel.app"
-const link = "http://localhost:3000"
+
+const link = import.meta.env.VITE_LINK
+
+//const link = "http://localhost:8080"
 export {link}
