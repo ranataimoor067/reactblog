@@ -51,6 +51,7 @@ const Article = ({ loggedInUserId }) => {
       console.error('Error deleting article:', err.message);
       setError('Failed to delete the article.');
     }
+    setIsDeleteDialogOpen(false);
   };
 
   const handleAddComment = async () => {
@@ -94,7 +95,7 @@ const Article = ({ loggedInUserId }) => {
             initialLikedState={likedBy?.includes(userId)}
           />
           {isAuthor && (
-            <div className="flex  gap-4 mt-4 sm:mt-0">
+            <div className="flex gap-4 mt-4 sm:mt-0">
               <button
                 onClick={() => window.location.href = `/edit-article/${article._id}`}
                 className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-4 py-2 rounded shadow-lg transform hover:scale-105 transition-all duration-300"
@@ -148,7 +149,6 @@ const Article = ({ loggedInUserId }) => {
         )}
       </div>
 
-
       <button
         className="fixed bottom-8 right-8 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
         onClick={() => setIsCommentModalOpen(true)}
@@ -156,6 +156,33 @@ const Article = ({ loggedInUserId }) => {
         Add Comment
       </button>
 
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteDialogOpen}
+        onRequestClose={() => setIsDeleteDialogOpen(false)}
+        contentLabel="Delete Confirmation Modal"
+        className="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg outline-none"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      >
+        <h2 className="text-xl font-semibold mb-4 text-gray-900">Delete Confirmation</h2>
+        <p className="text-gray-600 mb-6">Do you want to delete this article?</p>
+        <div className="flex justify-end gap-4">
+          <button
+            className="bg-gray-700 px-6 py-2 rounded hover:bg-gray-900 transition-colors"
+            onClick={() => setIsDeleteDialogOpen(false)}
+          >
+            No
+          </button>
+          <button
+            className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition-colors"
+            onClick={handleDelete}
+          >
+            Yes
+          </button>
+        </div>
+      </Modal>
+
+      {/* Comment Modal */}
       <Modal
         isOpen={isCommentModalOpen}
         onRequestClose={() => setIsCommentModalOpen(false)}
