@@ -140,10 +140,12 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                                 <option value="Food">Food</option>
                                 <option value="Travel">Travel</option>
                                 <option value="Fashion">Fashion</option>
+                                <option value="Health">Health</option> 
                                 <option value="Sports">Sports</option>
                                 <option value="Sci-Fi">Sci-Fi</option>
                                 <option value="Finance">Finance</option>
                                 <option value="Politics">Politics</option>
+                                <option value="Narratives">Narratives</option>
                                 <option value="Trending-Topics">Trending-Topics</option>
                             </select>
                         </div>
