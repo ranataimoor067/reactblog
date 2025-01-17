@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import ForgotPassword from './components/ForgotPassword';
 import Contributors from "./pages/Contributors";
 
+
 function App() {
   const theme = useSelector((state) => state.auth.theme);
   const loggedInUser = useSelector((state) => state.auth.user); // Get the logged-in user's data

@@ -20,8 +20,6 @@ const EditProfilePage = () => {
         confirmPassword: ''
     });
 
-    const theme = localStorage.getItem('theme') || 'light';
-
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -140,165 +138,168 @@ const EditProfilePage = () => {
       }
   };
     return (
-        <div className={`w-screen ${theme === 'dark' ? 'bg-slate-700':'bg-gradient-to-b from-blue-100 via-white to-blue-200'}`}>
-            <div className={`max-w-2xl mx-auto p-6 pt-20 ${theme === 'dark' ? 'text-slate-100' : 'text-gray-900'}`}>
-  <div className={`shadow-xl rounded-lg p-6 ${theme === 'dark' ? 'bg-gradient-to-br from-gray-800 via-gray-600 to-gray-500' : ' mt-10 shadow-sm hover:shadow-2xl hover:scale-105 border-4 border-purple-500 bg-white'} transition-all duration-500`}>
-    <div className="text-center mb-8">
-      <h1 className="text-4xl font-bold bg-white to-white bg-clip-text text-transparent ">
-        Edit Profile
-      </h1>
-      <p className="text-xl mt-2 opacity-90">Update your personal information</p>
-    </div>
+      <div className="profile-container min-h-screen p-8 pt-20 bg-gradient-to-b from-blue-100 via-white to-blue-200 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800" style={{ color: 'var(--text-color)' }}>
+        <div className="profile-header text-center mb-8 mt-5">
+          <h1 className="text-5xl font-extrabold text-indigo-800 dark:text-indigo-400 drop-shadow-lg">Edit Profile</h1>
+        </div>
+        {/* Profile Card */}
+        <div className="profile-card max-w-4xl mx-auto p-8 rounded-2xl shadow-2xl mb-12 bg-white dark:bg-gray-800 border-4 border-indigo-300 dark:border-indigo-600 transform hover:scale-105 transition-all duration-300">
+          <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
+            {/* Profile Picture Preview */}
+            
+            <div className="flex justify-center mb-6">
+              <div className="relative group">
+                {formData.picture ? (
+                  <img
+                    src={formData.picture}
+                    alt="Profile"
+                    className="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 transform transition-transform duration-300 hover:scale-110 shadow-lg"
+                  />
+                ) : (
+                  <div className="w-40 h-40 rounded-full bg-indigo-200 flex items-center justify-center border-4 border-indigo-500 shadow-lg">
+                    <span className="text-indigo-700 text-2xl font-semibold">
+                      {formData.name
+                        ? formData.name
+                            .split(' ')
+                            .map((word) => word[0])
+                            .join('')
+                        : 'N/A'}
+                    </span>
+                  </div>
+                )}
+                {/* Hover overlay for "Change Picture" */}
+                <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="text-white text-sm font-medium">Change Picture</span>
+                </div>
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  name="picture"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      if (file.size > 500 * 1024) {
+                        alert('File size exceeds the 500 KB limit. Please choose a smaller file.');
+                        return;
+                      }
+                      setFormData((prevData) => ({
+                        ...prevData,
+                        picture: file,
+                      }));
+                    }
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+              </div>
+            </div>
 
-    <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
-      {/* Profile Picture Preview */}
-      <div className="flex justify-center mb-6">
-        <div className="relative">
-          {formData.picture ? (
-              <img
-                src={formData.picture}
-                alt="Profile"
-                className="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 transform transition-transform duration-300 hover:scale-110 shadow-lg"
-              />
-            ) : (
-              <div className="w-40 h-40 rounded-full bg-indigo-200 flex items-center justify-center border-4 border-indigo-500 shadow-lg">
-                <span className="text-indigo-700 text-2xl font-semibold">
-                  {formData.name
-                    ? formData.name
-                        .split(' ')
-                        .map((word) => word[0])
-                        .join('')
-                    : 'N/A'}
-                </span>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="flex flex-col h-full lg:col-span-2">
+                {/* Basic Information */}
+                <h2 className="text-indigo-700 dark:text-indigo-300 font-semibold text-lg mb-4">Personal Information</h2>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 border border-indigo-700 dark:border-indigo-500 p-6 flex-grow">
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Username</label>
+                    {/* <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gradient-to-r from-gray-700 to-gray-800' : 'bg-gradient-to-r from-gray-100 to-white'}`}> */}
+                    <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-500 border border-gray-300 dark:border-gray-700 cursor-not-allowed">
+                      {formData.username}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Email</label>                  
+                    <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-500 border border-gray-300 dark:border-gray-700 cursor-not-allowed">
+                      {formData.email}
+                    </div>
+                  </div>
+
+                  {/* Input fields with animations */}
+                  {['name', 'location',  'dob'].map((field) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium mb-1 capitalize text-gray-500 dark:text-gray-400">{field.replace('_', ' ')}</label>
+                      <input
+                        type={field === 'dob' ? 'date' : 'text'}
+                        name={field}
+                        value={formData[field]}
+                        onChange={handleChange}
+                        className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500 focus:outline-none transform transition-transform hover:scale-105 
+                          ${formData[field] ? 'border-green-500' : 'border-gray-300'} 
+                          bg-white dark:bg-gray-700 
+                          text-gray-700 dark:text-white`}
+                        
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                {/* Password Change Section */}
+                <div className="flex flex-col h-full">
+                  <h3 className="text-indigo-700 dark:text-indigo-300 font-semibold text-lg mb-4">Change Password</h3>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 border border-indigo-700 dark:border-indigo-500 p-6 flex-grow">
+                    {['currentPassword', 'newPassword', 'confirmPassword'].map((passwordField) => (
+                      <div key={passwordField}>
+                        <label className="block text-sm font-medium mb-1 capitalize text-gray-500 dark:text-gray-400">{passwordField.replace('Password', ' Password')}</label>
+                        <input
+                          type="password"
+                          name={passwordField}
+                          value={formData[passwordField]}
+                          onChange={handleChange}                                
+                          className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500 focus:outline-none transform transition-transform hover:scale-105 
+                            bg-white dark:bg-gray-700 
+                            text-gray-700 dark:text-white 
+                            ${formData[passwordField] ? 'border-green-500' : 'border-gray-300'}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Error and Success Messages */}
+            {error && (
+              <div className="bg-red-100 border-l-4 border-red-400 p-4 text-red-700 animate-bounce">
+                <p>{error}</p>
               </div>
             )}
-        </div>
-      </div>
 
-      {/* Basic Information */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium mb-1">Username</label>
-          <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gradient-to-r from-gray-700 to-gray-800' : 'bg-gradient-to-r from-gray-100 to-white'}`}>
-            {formData.username}
-          </div>
-        </div>
+            {success && (
+              <div className="bg-green-100 border-l-4 border-green-400 p-4 text-green-700 animate-fadeIn">
+                <p>{success}</p>
+              </div>
+            )}
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gradient-to-r from-gray-700 to-gray-800' : 'bg-gradient-to-r from-gray-100 to-white'}`}>
-            {formData.email}
-          </div>
-        </div>
-
-        {/* Input fields with animations */}
-        {['name', 'location',  'dob'].map((field) => (
-          <div key={field}>
-            <label className="block text-sm font-medium mb-1 capitalize">{field.replace('_', ' ')}</label>
-            <input
-              type={field === 'dob' ? 'date' : 'text'}
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500 focus:outline-none transform transition-transform hover:scale-105 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'} ${formData[field] ? 'border-green-500' : 'border-gray-300'}`}
-            />
-          </div>
-        ))}
-      </div>
-      
-{/* Picture Upload Section */}
-<div>
-  <label className="block text-sm font-medium mb-1">Upload Profile Picture (Max: 500KB)</label>
-  <input
-    type="file"
-    name="picture"
-    accept="image/*"
-    onChange={(e) => {
-      const file = e.target.files[0];
-      if (file) {
-        if (file.size > 500 * 1024) {
-          alert("File size exceeds the 500 KB limit. Please choose a smaller file.");
-          return;
-        }
-        setFormData(prevData => ({
-          ...prevData,
-          picture: file,
-        }));
-      }
-    }}
-    className={`block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r from-purple-500 to-blue-500 file:text-white hover:file:from-purple-600 hover:file:to-blue-600 ${
-      theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'
-    }`}
-  />
-</div>
-
-
-
-      {/* Password Change Section */}
-      <div className={`border-t pt-6 mt-6 ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
-        <h3 className="text-lg font-medium mb-4 bg-gradient-to-r from-purple-500 via-blue-500 to-white bg-clip-text text-transparent animate-pulse">Change Password</h3>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {['currentPassword', 'newPassword', 'confirmPassword'].map((passwordField) => (
-            <div key={passwordField}>
-              <label className="block text-sm font-medium mb-1 capitalize">{passwordField.replace('Password', ' Password')}</label>
-              <input
-                type="password"
-                name={passwordField}
-                value={formData[passwordField]}
-                onChange={handleChange}
-                className={`w-full p-3 rounded-lg border focus:ring-2 focus:ring-green-500 focus:outline-none transform transition-transform hover:scale-105 ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-700'} ${formData[passwordField] ? 'border-green-500' : 'border-gray-300'}`}
-              />
+            {/* Action Buttons */}
+            <div className="flex justify-end space-x-4">
+              {/* <button
+                type="button"
+                onClick={() => navigate('/profile')}
+                className={`px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white transform transition-transform hover:scale-105`}
+              >
+                Cancel
+              </button> */}
+              <button
+                    className="relative rounded-lg bg-gradient-to-r from-purple-500 to-red-500 hover:from-purple-600 hover:to-red-600 text-white px-4 hover:scale-105"
+                    onClick={() => navigate('/profile')}
+                  >
+                    <span className="relative z-10">Cancel</span>
+                  </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`bg-gradient-to-r relative from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-2 rounded-lg transform hover:scale-105 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {/* {isLoading ? 'Saving...' : 'Save Changes'}  */}
+                {/* <span className="relative z-10">{isLoading ? 'Saving...' : 'Save Changes'}</span> */}
+                {console.log(updating)}
+                <span className="relative z-10">{updating ? 'Saving...' : 'Save Changes'}</span>
+              </button>
             </div>
-          ))}
+          </form>
         </div>
       </div>
-
-      {/* Error and Success Messages */}
-      {error && (
-        <div className="bg-red-100 border-l-4 border-red-400 p-4 text-red-700 animate-bounce">
-          <p>{error}</p>
-        </div>
-      )}
-
-      {success && (
-        <div className="bg-green-100 border-l-4 border-green-400 p-4 text-green-700 animate-fadeIn">
-          <p>{success}</p>
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="flex justify-end space-x-4">
-        {/* <button
-          type="button"
-          onClick={() => navigate('/profile')}
-          className={`px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white transform transition-transform hover:scale-105`}
-        >
-          Cancel
-        </button> */}
-        <button
-              className="relative rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white transform transition-transform hover:scale-105 px-4 group"
-              onClick={() => navigate('/profile')}
-            >
-              <span className="relative z-10">Cancel</span>
-              <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
-            </button>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={`bg-gradient-to-r relative group  from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-2 rounded-lg transition-transform transform hover:scale-105 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {/* {isLoading ? 'Saving...' : 'Save Changes'}  */}
-          {/* <span className="relative z-10">{isLoading ? 'Saving...' : 'Save Changes'}</span> */}
-          {console.log(updating)}
-          <span className="relative z-10">{updating ? 'Saving...' : 'Save Changes'}</span>
-
-          <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-gray-300 transition-all duration-300 group-hover:w-full"></span>
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-        </div>
 
 
     );

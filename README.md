@@ -1,8 +1,8 @@
 ![swoc2024 Banner](./swoc.jpg)
 
-# React Blog - Social Winter of Code 2024 🌟
+# React Blog - Social Winter of Code 2025 🌟
 
-Welcome to **React Blog**, an exciting application selected for **Social Winter of Code 2024** (SWOC-2024)!
+Welcome to **React Blog**, an exciting application selected for **Social Winter of Code 2025** (SWOC-2025)!
 
 This project is an open-source initiative aimed at building a robust and feature-rich blogging platform. We welcome contributors from all backgrounds to collaborate and make this project a success. If you like what you see, please consider giving this repository a **star**! 💥
 
@@ -24,6 +24,7 @@ This project is an open-source initiative aimed at building a robust and feature
 | ReactJS        | 
 | MongoDB        | 
 | NodeJS         | 
+| Vite           | 
 
 ---
 
@@ -80,39 +81,60 @@ Ensure you have the following installed:
      MAIL_PASS="test-passkey"
      ```
 
-5. Start the development server:
+5. Change the baselink for the server
+   - Navigate to the **components** directory inside **src** under the front-end folder
+   - edit the `baselink.js` file
+   - change the backend link to `http://localhost:8080`
+
+6. Start the development server and also for the frontend:
    ```bash
    cd back-end
    npm run dev
    ```
-   This command uses **concurrently** to run both frontend and backend servers simultaneously.
 
-6. Open the application in your browser:
-   - Frontend: `http://localhost:3000`
-   - Backend: `http://localhost:5000`
+   ```bash
+   cd front-end
+   npm run dev
+   ```
+
+7. Open the application in your browser:
+   - Frontend: `http://127.0.0.1:5173/`
+   - Backend: `http://localhost:8080`
 
 ---
 
 ## Contribution Guidelines 🔧
 We’re thrilled to have you contribute to this project! Please follow these steps to get started:
 
-1. Fork the repository and clone it locally.
-2. Create a new branch for your feature or bugfix:
+1. Star the repo
+2. Fork the repository and clone it locally.
+3. Create a new branch for your feature or bugfix:
    ```bash
    git checkout -b your-branch-name
    ```
-3. Make your changes and commit them with clear and concise commit messages.
-4. Push your changes to your forked repository:
+4. Make your changes and commit them with clear and concise commit messages.
+5. Push your changes to your forked repository:
    ```bash
    git push origin your-branch-name
    ```
-5. Create a pull request (PR) from your branch to the `main` branch of this repository.
-6. Wait for review and feedback.
+6. Make sure the Fork isn't behind any latest commit. (This is to make sure it doesn't have merge conflict and remove new commits being made)
+7. Create a pull request (PR) from your branch to the `main` branch of this repository.
+8. Wait for review and feedback.
 
 ### Pro Tips 💡
 - Follow the code style and standards outlined in the repository.
 - Check the `CONTRIBUTING.md` file for detailed contribution rules.
 - Join discussions on issues and share your ideas!
+
+### Labels
+Currently there are few labels being used for SWOC2025 and new commers to this repo needs help in explaining the labels and how they are assigned:-
+- `level 1` This label is assigned for issues that mostly handle with frontend and API calls
+- `level 2` This label is assigned for issues that requires CRUD operations to be made (e.g. adding new database schema, adding GET, POST, DELETE, etc. request to the database)
+- `level 3` This label is assigned for issues that requires system design, understanding the code architecture, etc. This is for high level issue that understands the whole code structure of the project.
+- `SWOC` This label is used to track for SWOC2025 contributions being made
+- `bug` `enhancement` `documentation` `good first issue` `duplicate` `help wanted` `wontfix` `invalid` are common labels issued by GitHub which will be used according to their label names
+
+My label system might look hard but this is to make sure that my contributors to this project learn and get skilled enough that they will get a well paid job for their careers. I hope this encourages you to learn more, contribute meaningful contribution for yourself and not feel discouraged by others. I'm looking forward to what amazing and exiciting contribution you can make. Cheers!
 
 <h3>Project Contributers❤️: <h3>
 <a href="https://github.com/OkenHaha/react-blog/graphs/contributors">

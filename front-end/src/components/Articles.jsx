@@ -41,6 +41,11 @@ const Articles = ({ articles }) => {
           <p className="text-xs text-green-600">
             Author ID: {article.authorName ? article.authorName : article.author}
           </p>
+
+          {/* tag */}
+          <p>
+            Tag: <Link>{article.tag ? article.tag : none }</Link>
+          </p>
         </Link>
       ))}
     </div>
