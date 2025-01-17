@@ -189,6 +189,42 @@ function Centre() {
           </div>
         </div>
       </section>
+
+      <section className="relative py-16 overflow-hidden">
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2
+              className="text-4xl font-bold mb-8 text-blue-800 dark:text-yellow-400 
+                       bg-clip-text bg-gradient-to-r from-blue-800 to-blue-600 
+                       dark:from-yellow-400 dark:to-yellow-300"
+            >
+              How to Get Started?
+            </h2>
+
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
+              1.<span className="text-blue-800 dark:text-yellow-400 font-semibold">
+                {" "}Login
+              </span>{" "} or <span className="text-blue-800 dark:text-yellow-400 font-semibold">
+                Register 
+              </span>{" "} onto the website.
+              {" "}
+              <br/>
+              <br/>
+              2. Once logged in, {" "}Select the button onto which you are interested to. 
+              <span className="text-blue-800 dark:text-yellow-400 font-semibold">{" "}
+                Read or Write. 
+                </span>{" "}
+              <br/>
+              <br/>
+              3.{" "}Once done with writing {" "}
+              <span className="text-blue-800 dark:text-yellow-400 font-semibold">
+                click submit. 
+                </span>{" "}
+                Thanks for contributing to our website.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
