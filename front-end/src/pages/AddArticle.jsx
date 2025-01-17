@@ -136,6 +136,15 @@ const AddArticleModal = ({ onClose, onSuccess }) => {
                                 <option value="Music">Music</option>
                                 <option value="Game">Gaming</option>
                                 <option value="Movies">Movies</option>
+                                <option value="Books">Books</option>
+                                <option value="Food">Food</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Fashion">Fashion</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Sci-Fi">Sci-Fi</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Politics">Politics</option>
+                                <option value="Trending-Topics">Trending-Topics</option>
                             </select>
                         </div>
 
