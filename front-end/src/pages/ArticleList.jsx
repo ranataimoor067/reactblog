@@ -138,6 +138,18 @@ const ArticleList = () => {
               <option value="Music">Music</option>
               <option value="Game">Gaming</option>
               <option value="Movies">Movies</option>
+              <option value="Books">Books</option>
+              <option value="Food">Food</option>
+              <option value="Travel">Travel</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Health">Health</option>
+              <option value="Sports">Sports</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Finance">Finance</option>
+              <option value="Politics">Politics</option>
+              <option value="Narratives">Narratives</option>
+              <option value="Trending-Topics">Trending-Topics</option>
+
             </select>
 
             <select
@@ -147,6 +159,10 @@ const ArticleList = () => {
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
+              <option value="more than 500 words">More than 500 words</option>
+              <option value="less than 500 words">Less than 500 words</option>
+              <option value="more than 1000 words">More than 1000 words</option>
+              <option value="less than 1000 words">Less than 1000 words</option>
             </select>
           </div>
         </div>
