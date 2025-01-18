@@ -183,12 +183,19 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <div className="flex justify-between mt-8">
+        <div className="flex gap-5 justify-between mt-8">
           <button
             onClick={() => navigate('/edit-profile')}
             className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
           >
             Edit Profile
+          </button>
+          
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="bg-gradient-to-r from-purple-600 to-red-600 dark:from-purple-500 dark:to-red-500 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
+          >
+            Dashboard
           </button>
 
           <button

@@ -15,6 +15,7 @@ import { toggleTheme as toggle } from "./store/authSlice";
 import Footer from "./components/Footer";
 import ForgotPassword from './components/ForgotPassword';
 import Contributors from "./pages/Contributors";
+import Dashboard from "./pages/Dashboard";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
           />
           <Route path="/forgot-password" element={<ForgotPassword theme={theme} />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/dashboard" element={<Dashboard/>} />
         </Routes>
       </div>
       <Footer />
