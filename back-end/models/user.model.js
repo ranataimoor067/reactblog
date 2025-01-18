@@ -58,6 +58,7 @@ const userSchema = new Schema(
             default: false
         },
         likedArticles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
+        commentedArticles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
     }
 );
 

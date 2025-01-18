@@ -244,6 +244,12 @@ const addcomments = async (req, res) => {
 
         await newComment.save();
 
+        // Add article to user's commentedArticles if not already present
+        if (!user.commentedArticles.includes(article._id)) {
+            user.commentedArticles.push(article._id);
+            await user.save();
+        }
+
         article.comments.push(newComment._id);
         await article.save();
 
