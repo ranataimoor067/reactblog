@@ -6,6 +6,7 @@ import { link } from '../components/Baselink';
 import LikeButton from '../components/LikeButton';
 import Modal from 'react-modal';
 import AddComment from './AddComment';
+import { GettingArticle } from '../Utils/loader';
 
 Modal.setAppElement('#root');
 
@@ -15,6 +16,7 @@ const Article = ({ loggedInUserId }) => {
   const [error, setError] = useState(null);
   const [liked, setLiked] = useState(false);
   const [likedBy, setLikedBy] = useState([]);
+  const [loading, setLoading] = useState(true); 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [newComment, setNewComment] = useState('');
@@ -22,6 +24,7 @@ const Article = ({ loggedInUserId }) => {
 
   useEffect(() => {
     const fetchArticleData = async () => {
+      setLoading(true); 
       try {
         const { data } = await axios.post(
           url + '/api/article/getarticle',
@@ -39,6 +42,7 @@ const Article = ({ loggedInUserId }) => {
         console.error('Error fetching article data:', err.message);
         setError(err.message);
       }
+      setLoading(false); 
     };
 
     fetchArticleData();
@@ -92,6 +96,10 @@ const Article = ({ loggedInUserId }) => {
       alert(error.response?.data?.error || 'Failed to add comment');
     }
   };
+
+  if(loading){
+    return <GettingArticle/>
+  }
 
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   if (!article) return <NotFound />;
