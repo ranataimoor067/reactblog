@@ -5,6 +5,7 @@ import NotFound from './NotFound';
 import { link } from '../components/Baselink';
 import LikeButton from '../components/LikeButton';
 import Modal from 'react-modal';
+import AddComment from './AddComment';
 
 Modal.setAppElement('#root');
 
@@ -55,15 +56,41 @@ const Article = ({ loggedInUserId }) => {
   };
 
   const handleAddComment = async () => {
-    const headers = {
-      'userid': localStorage.getItem("userId")
+    try {
+      if (!newComment.trim()) {
+        alert('Please enter a comment');
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please login to add a comment');
+        return;
+      }
+
+
+      const response = await axios.post(
+        url + '/api/article/addcomment',
+        {
+          articleId: article._id,
+          comment: newComment,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.data.success) {
+        setArticle(response.data.article);
+        setNewComment('');
+        setIsCommentModalOpen(false);
+      }
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      alert(error.response?.data?.error || 'Failed to add comment');
     }
-    console.log(localStorage.getItem("userId"))
-    const resp = await axios.post(url + `/api/article/addcomment`, {
-      name: name,
-      comment: newComment
-    }, { headers: headers })
-    console.log(resp.data.article.comments)
   };
 
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
@@ -150,11 +177,25 @@ const Article = ({ loggedInUserId }) => {
       </div>
 
       <button
-        className="fixed bottom-8 right-8 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        onClick={() => setIsCommentModalOpen(true)}
+        className="fixed bottom-8 right-8 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
+        onClick={() => {
+          if (!localStorage.getItem('token')) {
+            alert('Please login to add a comment');
+            return;
+          }
+          setIsCommentModalOpen(true);
+        }}
       >
         Add Comment
       </button>
+
+      <AddComment
+        isOpen={isCommentModalOpen}
+        onClose={() => setIsCommentModalOpen(false)}
+        onSubmit={handleAddComment}
+        comment={newComment}
+        setComment={setNewComment}
+      />
 
       {/* Delete Confirmation Modal */}
       <Modal
@@ -178,38 +219,6 @@ const Article = ({ loggedInUserId }) => {
             onClick={handleDelete}
           >
             Yes
-          </button>
-        </div>
-      </Modal>
-
-      {/* Comment Modal */}
-      <Modal
-        isOpen={isCommentModalOpen}
-        onRequestClose={() => setIsCommentModalOpen(false)}
-        contentLabel="Add Comment Modal"
-        className="bg-white rounded-lg p-6 max-w-md mx-auto mt-24 shadow-lg outline-none"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-      >
-        <h2 className="text-lg font-semibold mb-4">Add a Comment</h2>
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Write your comment here..."
-          className="w-full border rounded p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          rows={4}
-        />
-        <div className="flex justify-end gap-4">
-          <button
-            className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-            onClick={() => setIsCommentModalOpen(false)}
-          >
-            Cancel
-          </button>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={handleAddComment}
-          >
-            Submit
           </button>
         </div>
       </Modal>

@@ -192,48 +192,88 @@ const getarticles = async (req, res) => {
 
 const addcomments = async (req, res) => {
     try {
-        const { name, comment } = req.body;
-        const userid = req.headers.userid;
-        console.log(userid)
+        const { articleId, comment } = req.body;
 
-        // Validate input
-        if (!name || !comment || !comment.trim()) {
-            return res.status(400).send({ success: false, message: "Article name and comment are required." });
+        if (!comment || !comment.trim()) {
+            return res.status(400).json({ 
+                success: false, 
+                error: "comment are required." 
+            });
         }
 
-        // Validate user existence
-        const user = await User.findById(userid);
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ 
+                success: false, 
+                error: "No token provided." 
+            });
+        }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ 
+                success: false, 
+                error: "Invalid token format." 
+            });
+        }
+
+        const decoded = jwt.verify(token, secretKey);
+        const user = await User.findById(decoded.userId);
         if (!user) {
-            return res.status(404).send({ success: false, message: "User not found." });
+            return res.status(404).json({ 
+                success: false, 
+                error: "User not found." 
+            });
         }
 
         // Validate article existence
-        const fetchedArticle = await Article.findOne({ name });
-        if (!fetchedArticle) {
-            return res.status(404).send({ success: false, message: "Article not found." });
+        const article = await Article.findById(articleId);
+        if (!article) {
+            return res.status(404).json({ 
+                success: false, 
+                error: "Article not found." 
+            });
         }
 
-        // Create and save the new comment
         const newComment = new Comment({
-            username: user.username,
-            text: comment,
-            article: fetchedArticle._id,
-            user: userid,
+            username: user.username, 
+            text: comment.trim(),
+            article: article._id,
+            user: user._id
         });
 
         await newComment.save();
 
-        // Add comment reference to article and save
-        fetchedArticle.comments.push(newComment);
-        await fetchedArticle.save();
+        article.comments.push(newComment._id);
+        await article.save();
 
-        // Fetch updated article with populated comments
-        const updatedArticle = await Article.findOne({ name }).populate('comments', 'username text createdAt').populate('author', 'username');
+        const updatedArticle = await Article.findById(articleId)
+            .populate({
+                path: 'comments',
+                select: 'username text createdAt',
+                options: { sort: { 'createdAt': -1 } }
+            });
 
-        res.status(200).send({ success: true, article: updatedArticle });
+        return res.status(200).json({
+            success: true,
+            message: "Comment added successfully",
+            article: updatedArticle
+        });
+
     } catch (error) {
         console.error("Error adding comment:", error);
-        res.status(500).send({ success: false, message: "An error occurred while adding the comment." });
+        
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ 
+                success: false, 
+                error: "Invalid token." 
+            });
+        }
+
+        return res.status(500).json({ 
+            success: false, 
+            error: "An error occurred while adding the comment." 
+        });
     }
 };
 
