@@ -70,83 +70,99 @@ const EditArticle = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
-            <div className="w-full max-w-4xl bg-white shadow-xl rounded-lg p-10">
-                <h1 className="text-4xl font-extrabold text-gray-800 mb-8 text-center">
-                    Edit Article
-                </h1>
+        <div className="h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-2 sm:p-4 md:p-6 flex items-center justify-center perspective-1000">
+            <div className="w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl shadow-[0_8px_30px_rgba(8,_112,_184,_0.2)] overflow-hidden max-h-[98vh] sm:max-h-[90vh] flex flex-col transition-all duration-300 ease-out">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-3 sm:px-6 py-3 sm:py-4 animate-gradient-x">
+                    <h1 className="text-xl sm:text-2xl font-bold text-white transform hover:scale-105 transition-transform duration-200">Edit Article</h1>
+                    <p className="text-blue-100 text-xs sm:text-sm opacity-90 hover:opacity-100 transition-opacity duration-200">Update your article details below</p>
+                </div>
+                
                 {error && (
-                    <div className="text-red-600 text-center mb-4">
-                        {error}
+                    <div className="bg-red-50 border-l-4 border-red-500 p-2 mx-2 sm:mx-4 mt-2 transform transition-all duration-300 ease-in-out animate-slideIn">
+                        <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                                <svg className="h-3 w-3 sm:h-4 sm:w-4 text-red-500 animate-pulse" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div className="ml-2">
+                                <p className="text-xs text-red-700">{error}</p>
+                            </div>
+                        </div>
                     </div>
                 )}
-                <form
-                    className="space-y-8"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSave();
-                    }}
-                >
-                    <div>
-                        <label
-                            htmlFor="title"
-                            className="block text-xl font-semibold text-gray-700 mb-3"
-                        >
-                            Title
+
+                <form className="flex-1 p-3 sm:p-6 space-y-3 sm:space-y-4 overflow-y-auto" onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSave();
+                }}>
+                    <div className="transform transition-all duration-200 hover:translate-x-1">
+                        <label htmlFor="title" className="block text-xs sm:text-sm font-medium text-gray-700">
+                            Article Title
                         </label>
-                        <input
-                            id="title"
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Enter article title"
-                            className="block w-full px-6 py-4 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        />
+                        <div className="mt-1">
+                            <input
+                                id="title"
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Enter a compelling title"
+                                className="block w-full px-2 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-900 shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:shadow-md"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <label
-                            htmlFor="content"
-                            className="block text-xl font-semibold text-gray-700 mb-3"
-                        >
-                            Content
+
+                    <div className="transform transition-all duration-200 hover:translate-x-1">
+                        <label htmlFor="content" className="block text-xs sm:text-sm font-medium text-gray-700">
+                            Article Content
                         </label>
-                        <textarea
-                            id="content"
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            placeholder="Enter article content"
-                            rows="10"
-                            className="block w-full px-6 py-4 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
-                        />
+                        <div className="mt-1">
+                            <textarea
+                                id="content"
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder="Write your article content here..."
+                                rows={window.innerWidth < 640 ? "6" : "8"}
+                                className="block w-full px-2 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-900 resize-none shadow-sm transition-all duration-200 ease-in-out hover:shadow-md focus:shadow-md"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <label
-                            htmlFor="thumbnail"
-                            className="block text-xl font-semibold text-gray-700 mb-3"
-                        >
-                            Thumbnail
+
+                    <div className="transform transition-all duration-200 hover:translate-x-1">
+                        <label htmlFor="thumbnail" className="block text-xs sm:text-sm font-medium text-gray-700">
+                            Thumbnail Image
                         </label>
-                        <input
-                            id="thumbnail"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleThumbnailChange}
-                            className="block w-full text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        />
+                        <div className="mt-1">
+                            <input
+                                id="thumbnail"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleThumbnailChange}
+                                className="block w-full text-xs sm:text-sm text-gray-500 file:mr-2 sm:file:mr-4 file:py-1 sm:file:py-2 file:px-2 sm:file:px-4 file:rounded-md file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all duration-200 ease-in-out file:transition-all file:duration-200 file:shadow-sm"
+                            />
+                            {thumbnail && (
+                                <p className="mt-1 text-xs text-gray-500 animate-fadeIn">
+                                    Selected file: {thumbnail.name}
+                                </p>
+                            )}
+                        </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                        <button
-                            type="submit"
-                            className="bg-blue-600 text-white text-lg font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition-all"
-                        >
-                            Save Changes
-                        </button>
+
+                    <div className="flex items-center justify-between pt-4 space-x-2">
                         <button
                             type="button"
                             onClick={() => navigate("/articles")}
-                            className="text-gray-600 text-lg hover:text-gray-800 transition-all"
+                            className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-md text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
                         >
                             Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="px-4 sm:px-6 py-1.5 sm:py-2 border border-transparent rounded-md shadow-sm text-xs sm:text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+                        >
+                            Save Changes
                         </button>
                     </div>
                 </form>
