@@ -153,9 +153,24 @@ const Article = ({ loggedInUserId }) => {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-300 mb-4">
-          Comments
-        </h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-300">
+            Comments
+          </h2>
+          <button
+            className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 
+            text-white px-4 py-2 rounded shadow-lg transform hover:scale-105 transition-all duration-300"
+            onClick={() => {
+              if (!localStorage.getItem('token')) {
+                alert('Please login to add a comment');
+                return;
+              }
+              setIsCommentModalOpen(true);
+            }}
+          >
+            Add Comment
+          </button>
+        </div>
         {article.comments && article.comments.length > 0 ? (
           article.comments.map((comment, index) => (
             <div
@@ -175,19 +190,6 @@ const Article = ({ loggedInUserId }) => {
           <p className="text-gray-600 dark:text-gray-400">No comments available.</p>
         )}
       </div>
-
-      <button
-        className="fixed bottom-8 right-8 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors"
-        onClick={() => {
-          if (!localStorage.getItem('token')) {
-            alert('Please login to add a comment');
-            return;
-          }
-          setIsCommentModalOpen(true);
-        }}
-      >
-        Add Comment
-      </button>
 
       <AddComment
         isOpen={isCommentModalOpen}
