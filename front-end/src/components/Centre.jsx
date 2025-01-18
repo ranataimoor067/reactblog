@@ -99,11 +99,11 @@ function Centre() {
 
       <section id="mission-vision-values" className="py-12">
         <div className="max-w-screen-xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-6 text-blue-800 dark:text-yellow-400 hover:scale-105 transition duration-300 ease-in-out">
+          <h2 className="text-3xl font-bold mb-6 text-blue-800 dark:text-yellow-400">
             Our Mission, Vision & Values
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
-            <div className="bg-white dark:bg-gray-800 p-6 border-2 border-gray-800 dark:border-gray-700 rounded-lg hover:scale-105 transition duration-300 ease-in-out">
+            <div className="bg-white dark:bg-gray-800 p-6 border-2 border-gray-800 dark:border-gray-700 rounded-lg ">
               <img
                 src={mission}
                 alt="Our Mission"
@@ -121,7 +121,7 @@ function Centre() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 border-2 border-gray-800 dark:border-gray-700 rounded-lg hover:scale-105 transition duration-300 ease-in-out">
+            <div className="bg-white dark:bg-gray-800 p-6 border-2 border-gray-800 dark:border-gray-700 rounded-lg">
               <img
                 src={vision}
                 alt="Our Vision"
@@ -139,7 +139,7 @@ function Centre() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 border-2 border-gray-800 dark:border-gray-700 rounded-lg hover:scale-105 transition duration-300 ease-in-out">
+            <div className="bg-white dark:bg-gray-800 p-6 border-2 border-gray-800 dark:border-gray-700 rounded-lg ">
               <img
                 src={values}
                 alt="Our Values"
@@ -202,25 +202,30 @@ function Centre() {
             </h2>
 
             <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
-              1.<span className="text-blue-800 dark:text-yellow-400 font-semibold">
-                {" "}Login
-              </span>{" "} or <span className="text-blue-800 dark:text-yellow-400 font-semibold">
-                Register 
-              </span>{" "} onto the website.
-              {" "}
-              <br/>
-              <br/>
-              2. Once logged in, {" "}Select the button onto which you are interested to. 
-              <span className="text-blue-800 dark:text-yellow-400 font-semibold">{" "}
-                Read or Write. 
-                </span>{" "}
-              <br/>
-              <br/>
-              3.{" "}Once done with writing {" "}
+              1.
               <span className="text-blue-800 dark:text-yellow-400 font-semibold">
-                click submit. 
-                </span>{" "}
-                Thanks for contributing to our website.
+                {" "}
+                Login
+              </span>{" "}
+              or{" "}
+              <span className="text-blue-800 dark:text-yellow-400 font-semibold">
+                Register
+              </span>{" "}
+              onto the website. <br />
+              <br />
+              2. Once logged in, Select the button onto which you are interested
+              to.
+              <span className="text-blue-800 dark:text-yellow-400 font-semibold">
+                {" "}
+                Read or Write.
+              </span>{" "}
+              <br />
+              <br />
+              3. Once done with writing{" "}
+              <span className="text-blue-800 dark:text-yellow-400 font-semibold">
+                click submit.
+              </span>{" "}
+              Thanks for contributing to our website.
             </p>
           </div>
         </div>
