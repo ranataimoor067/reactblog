@@ -9,4 +9,13 @@ const CreatingArticleLoader = () => {
     );
 };
 
-export { CreatingArticleLoader };
+const GettingArticle = () => {
+    return (
+        <div className="creating-loader">
+            <div className="loader"></div>
+            <span className="loading creating-article-loader">Getting Article</span>
+        </div>
+    );
+}
+
+export { CreatingArticleLoader,GettingArticle };
