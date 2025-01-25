@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser, likeArticle, getArticleByTag } from "../controllers/article.controller.js";
+import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser, likeArticle, getArticleByTag, saveforlater, saveasdraft } from "../controllers/article.controller.js";
 import multer from 'multer'
 import { upload_on_cloudinary } from "../utils/cloudinary.js";
 
@@ -35,4 +35,10 @@ articleRouter.post('/like/:articleId', likeArticle);
 
 articleRouter.post('/getarticlebytag',getArticleByTag);
     
+
+//add to save for later
+articleRouter.post('/saveforlater', saveforlater)
+
+//save as draft
+articleRouter.post('/saveasdraft', upload.single('thumbnail') ,saveasdraft)
 export { articleRouter };
