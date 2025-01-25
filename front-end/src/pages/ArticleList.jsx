@@ -6,6 +6,7 @@ import LikeButton from '../components/LikeButton';
 import { link } from '../components/Baselink';
 import NoarticleImage from '../assets/noarticle.png'
 import axios from 'axios';
+import Markdown from 'react-markdown';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -171,7 +172,8 @@ const ArticleList = () => {
           <div className="flex justify-center mb-6">
             <button
               className="relative bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white rounded-lg shadow-lg px-4 py-2 transform transition-all duration-300 hover:scale-110 group"
-              onClick={() => setShowModal(true)}
+              // onClick={() => setShowModal(true)}
+              onClick={()=> window.location.href="/addarticle"}
             >
               <span className="relative z-10">Add New Article</span>
               <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-blue-800 dark:bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
@@ -216,13 +218,13 @@ const ArticleList = () => {
                 </div>
                 {/* Article Content */}
                 <h3 className="font-bold text-lg text-indigo-600 dark:text-indigo-300 mb-3">{article.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
+                <Markdown className="text-sm text-gray-600 dark:text-gray-300 mb-6">
                   {article.content
                     ? article.content.length > 100
                       ? `${article.content.substring(0, 100)}...`
                       : article.content
                     : 'No description available.'}
-                </p>
+                </Markdown>
                 <div className="flex justify-between items-center mt-4">
                   <button
                     onClick={() => (window.location.href = `/article/${article.name}`)}
