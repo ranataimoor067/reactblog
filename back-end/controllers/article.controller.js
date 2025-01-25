@@ -195,48 +195,48 @@ const addcomments = async (req, res) => {
         const { articleId, comment } = req.body;
 
         if (!comment || !comment.trim()) {
-            return res.status(400).json({ 
-                success: false, 
-                error: "comment are required." 
+            return res.status(400).json({
+                success: false,
+                error: "comment are required."
             });
         }
 
         const authHeader = req.headers.authorization;
         if (!authHeader) {
-            return res.status(401).json({ 
-                success: false, 
-                error: "No token provided." 
+            return res.status(401).json({
+                success: false,
+                error: "No token provided."
             });
         }
 
         const token = authHeader.split(' ')[1];
         if (!token) {
-            return res.status(401).json({ 
-                success: false, 
-                error: "Invalid token format." 
+            return res.status(401).json({
+                success: false,
+                error: "Invalid token format."
             });
         }
 
         const decoded = jwt.verify(token, secretKey);
         const user = await User.findById(decoded.userId);
         if (!user) {
-            return res.status(404).json({ 
-                success: false, 
-                error: "User not found." 
+            return res.status(404).json({
+                success: false,
+                error: "User not found."
             });
         }
 
         // Validate article existence
         const article = await Article.findById(articleId);
         if (!article) {
-            return res.status(404).json({ 
-                success: false, 
-                error: "Article not found." 
+            return res.status(404).json({
+                success: false,
+                error: "Article not found."
             });
         }
 
         const newComment = new Comment({
-            username: user.username, 
+            username: user.username,
             text: comment.trim(),
             article: article._id,
             user: user._id
@@ -268,17 +268,17 @@ const addcomments = async (req, res) => {
 
     } catch (error) {
         console.error("Error adding comment:", error);
-        
+
         if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ 
-                success: false, 
-                error: "Invalid token." 
+            return res.status(401).json({
+                success: false,
+                error: "Invalid token."
             });
         }
 
-        return res.status(500).json({ 
-            success: false, 
-            error: "An error occurred while adding the comment." 
+        return res.status(500).json({
+            success: false,
+            error: "An error occurred while adding the comment."
         });
     }
 };
@@ -545,30 +545,176 @@ const getarticlesbyuser = async (req, res) => {
 
 const getArticleByTag = async (req, res) => {
     try {
-      // Destructure and validate the tag from the request body
-      const { tag } = req.body;
-  
-      // Check if the tag is provided
-      if (!tag || typeof tag !== 'string') {
-        return res.status(400).json({ success: false, message: "Invalid or missing tag parameter" });
-      }
-  
-      // Fetch articles by tag
-      const fetchedArticles = await Article.find({ tag: tag.trim() });
-  
-      // Check if any articles were found
-      if (fetchedArticles.length === 0) {
-        return res.status(200).json({ success: false, message: "No articles found for the given tag" });
-      }
-  
-      // Respond with the fetched articles
-      return res.status(200).json({ success: true, message: "Articles fetched successfully", articles: fetchedArticles });
-  
+        // Destructure and validate the tag from the request body
+        const { tag } = req.body;
+
+        // Check if the tag is provided
+        if (!tag || typeof tag !== 'string') {
+            return res.status(400).json({ success: false, message: "Invalid or missing tag parameter" });
+        }
+
+        // Fetch articles by tag
+        const fetchedArticles = await Article.find({ tag: tag.trim() });
+
+        // Check if any articles were found
+        if (fetchedArticles.length === 0) {
+            return res.status(200).json({ success: false, message: "No articles found for the given tag" });
+        }
+
+        // Respond with the fetched articles
+        return res.status(200).json({ success: true, message: "Articles fetched successfully", articles: fetchedArticles });
+
     } catch (error) {
-      console.error("Error fetching articles by tag:", error);
-      return res.status(500).json({ success: false, message: "Server error", error: error.message });
+        console.error("Error fetching articles by tag:", error);
+        return res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
-  };
+};
+
+const saveforlater = async (req, res) => {
+    try {
+        const { id } = req.body
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            return res.status(401).json({ error: "No token provided." });
+        }
+
+        const token = authHeader.split(' ')[1];
+
+        if (!token) {
+            console.error("Bearer token is missing.");
+            return res.status(401).json({ error: "Invalid token format." });
+        }
+
+        const decoded = jwt.verify(token, secretKey);
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            console.error(`User not found for token with userId: ${decoded.userId}.`);
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        const article = await Article.findById(id);
+
+        if (!article) {
+            return res.status(404).json({ error: "Article not found." });
+        }
+
+        const saveforlaterindex = user.saveForLater.indexOf(article._id)
+        if (saveforlaterindex > -1) {
+            //article present in save for later
+            user.saveForLater.splice(saveforlaterindex,1)
+            await user.save()
+            return res.status(200).send({message:"article already in save for later so removed from savefor later", upatedUser: user})
+
+        } else {
+            //article not prosent in savefor later 
+            user.saveForLater.push(article._id)
+            await user.save()
+            return res.status(200).send({message:"article added to save for later", upatedUser: user})
+        }
+
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({error:"error while adding to save for later", errMessage: error.message})
+    }
+}
+
+const saveasdraft = async (req, res) => {
+    //two types 1. alll data first time 2. artcle id edited
+    //if first one then save it with boolean value
+    //if id provided then sreach and edit it 
+    const {title, content, tag, articleid} = req.body
+    const filebuffer = req.file ? req.file.buffer : null
+
+    const name = title;
+
+    const authHeader = req.headers.authorization;
+    console.log(authHeader);
+    if (!authHeader) {
+        console.error("Authorization header is missing.");
+        return res.status(401).json({ error: "No token provided." });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        console.error("Bearer token is missing.");
+        return res.status(401).json({ error: "Invalid token format." });
+    }
+
+    // Decode and Verify Token
+    let decoded;
+    try {
+        decoded = jwt.verify(token, secretKey);
+    } catch (err) {
+        console.error("Error decoding token:", err.message);
+        return res.status(401).json({ error: "Invalid or expired token." });
+    }
+
+    // Find the authenticated user
+    const userId = decoded.userId;
+    const user = await User.findById(userId);
+    console.log("this is user", user)
+    if (!user) {
+        console.error(`User with ID ${userId} not found.`);
+        return res.status(404).json({ error: "User not found." });
+    }
+
+    if (!articleid) {
+        // as no article create a new article
+        try {
+            const username = user.username
+
+            const newArticle= new Article()
+            newArticle.isDraft= true
+            newArticle.author = userId
+            newArticle.authorName = username
+            newArticle.name = name ? name :" "
+            newArticle.title = title ? title : " "
+            newArticle.content = content ? content : " "
+            newArticle.tag = tag
+
+            if (filebuffer) {
+                const uploadedurl = await upload_on_cloudinary(filebuffer)
+                newArticle.thumbnail= uploadedurl
+            }else{
+                newArticle.thumbnail = " "
+            }
+
+            await newArticle.save()
+
+            return res.status(200).send({success:"article saved as draft successfully (id not provideed new article is created)",savedArticle: newArticle})
+        } catch (error) {
+            console.log(error)
+            return res.status(500).send({error: "eror while saving as draft", errMessage: error.message})
+        }
+    }else{
+        try {
+            const fetchedArticle = await Article.findById(articleid)
+            if (!fetchedArticle) {
+                return res.status(400).send({error:"error while fetching or fetched article not found"})
+            }
+
+            fetchedArticle.isDraft= true
+
+            if(title) fetchedArticle.title = title
+            if(content) fetchedArticle.content = content
+            if(tag) fetchedArticle.tag = tag
+
+            if (filebuffer) {
+                const uploadedurl = await upload_on_cloudinary(filebuffer)
+                fetchedArticle.thumbnail= uploadedurl
+            }
+
+            await fetchedArticle.save()
+
+            return res.status(200).send({success:"article saved as draft successfully (id is provided and no new article is created)",savedArticle: fetchedArticle})
+        } catch (error) {
+            console.log(error)
+            return res.status(500).send({error:"error while saving as draft", errMessage: error.message})
+        }
+    }
+}
 
 export {
     addArticle,
@@ -580,5 +726,7 @@ export {
     deleteArticle,
     getarticlesbyuser,
     likeArticle,
-    getArticleByTag
+    getArticleByTag,
+    saveforlater,
+    saveasdraft
 }

@@ -59,6 +59,8 @@ const userSchema = new Schema(
         },
         likedArticles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
         commentedArticles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
+        saveForLater:[{type: mongoose.Schema.Types.ObjectId, ref: 'Article'}],
+        draftArticles:[{type: mongoose.Schema.Types.ObjectId, ref: 'Article'}]
     }
 );
 
