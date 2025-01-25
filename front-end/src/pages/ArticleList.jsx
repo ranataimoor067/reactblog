@@ -112,25 +112,25 @@ const ArticleList = () => {
   const userId = localStorage.getItem('userId');
 
   return (
-    <div className="bg-gradient-to-b from-indigo-100 via-purple-100 to-indigo-200 min-h-screen py-10 pt-24">
+    <div className="bg-gradient-to-b from-indigo-100 via-purple-100 to-indigo-200 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 min-h-screen py-10 pt-24">
       <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-4xl font-extrabold text-center text-indigo-800 mb-8 drop-shadow-lg transform transition-all duration-300 hover:scale-105">
+        <h1 className="text-4xl font-extrabold text-center text-indigo-800 dark:text-indigo-400 mb-8 drop-shadow-lg transform transition-all duration-300 hover:scale-105">
           Articles
         </h1>
 
-        {/* Search and Sort Controls */}
+        {/* Search and Sort Controls */}  
         <div className="flex justify-between items-center mb-6">
           <input
             type="text"
             placeholder="Search articles..."
             value={searchQuery}
             onChange={handleSearch}
-            className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
+            className="w-full max-w-md px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors dark:bg-gray-700 dark:text-gray-200"
           />
 
           <div>
             <select
-              className="ml-4 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
+              className="ml-4 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors dark:bg-gray-700 dark:text-gray-200"
               value={tagby}
               onChange={handletagchange}
             >
@@ -155,7 +155,7 @@ const ArticleList = () => {
             <select
               value={sortBy}
               onChange={handleSortChange}
-              className="ml-4 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors"
+              className="ml-4 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors dark:bg-gray-700 dark:text-gray-200"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
@@ -170,11 +170,11 @@ const ArticleList = () => {
         {isLoggedIn && (
           <div className="flex justify-center mb-6">
             <button
-              className="relative bg-gradient-to-r rounded-lg shadow-lg px-4 py-2 transform transition-all duration-300 hover:scale-110 group"
+              className="relative bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white rounded-lg shadow-lg px-4 py-2 transform transition-all duration-300 hover:scale-110 group"
               onClick={() => setShowModal(true)}
             >
               <span className="relative z-10">Add New Article</span>
-              <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-blue-800 transition-all duration-300 group-hover:w-full"></span>
+              <span className="rounded-3xl absolute bottom-0 left-0 w-0 h-1 bg-blue-800 dark:bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
             </button>
           </div>
         )}
@@ -182,7 +182,7 @@ const ArticleList = () => {
 
         {/* Error Handling */}
         {error && (
-          <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-6">
+          <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 p-4 rounded-lg mb-6">
             <p>{error}</p>
           </div>
         )}
@@ -200,7 +200,7 @@ const ArticleList = () => {
             {filteredArticles.map((article) => (
               <div
                 key={article._id}
-                className="article-card p-6 rounded-xl shadow-lg bg-white transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-indigo-400 border-2 border-transparent"
+                className="article-card p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-indigo-400 border-2 border-transparent"
               >
                 {/* Thumbnail */}
                 {article.thumbnail && (
@@ -211,12 +211,12 @@ const ArticleList = () => {
                   />
                 )}
                 {/* tag */}
-                <div className={`w-fit mx-auto text-xs ${article.tag ? "bg-blue-400 px-3 py-2 rounded-2xl" : ""}`}  >
-                  <button onClick={() => handleTagclick(article.tag)} >{article.tag ? article.tag : ""}</button>
+                <div className={`w-fit mx-auto text-xs ${article.tag ? "bg-blue-400 dark:bg-blue-600 px-3 py-2 rounded-2xl" : ""}`}>
+                  <button onClick={() => handleTagclick(article.tag)}>{article.tag ? article.tag : ""}</button>
                 </div>
                 {/* Article Content */}
-                <h3 className="font-bold text-lg text-indigo-600 mb-3">{article.title}</h3>
-                <p className="text-sm text-gray-600 mb-6">
+                <h3 className="font-bold text-lg text-indigo-600 dark:text-indigo-300 mb-3">{article.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
                   {article.content
                     ? article.content.length > 100
                       ? `${article.content.substring(0, 100)}...`
@@ -226,7 +226,7 @@ const ArticleList = () => {
                 <div className="flex justify-between items-center mt-4">
                   <button
                     onClick={() => (window.location.href = `/article/${article.name}`)}
-                    className="text-blue-500 underline transform transition-all duration-300 hover:scale-110 hover:text-indigo-600"
+                    className="text-blue-500 dark:text-blue-400 underline transform transition-all duration-300 hover:scale-110 hover:text-indigo-600 dark:hover:text-indigo-300"
                   >
                     Read More
                   </button>
@@ -251,11 +251,11 @@ const ArticleList = () => {
               alt="No articles found"
               className="mx-auto w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96 animate-float"
             />
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 animate-fadeIn">
-              <span className="block font-semibold text-indigo-600 mb-2 hover:text-indigo-800 transition-colors duration-300">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 animate-fadeIn">
+              <span className="block font-semibold text-indigo-600 dark:text-indigo-400 mb-2 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors duration-300">
                 Oops! No articles found.
               </span>
-              <span className="block text-gray-500 hover:text-gray-700 transition-colors duration-300">
+              <span className="block text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300">
                 Please check back later or add a new article!
               </span>
             </p>
