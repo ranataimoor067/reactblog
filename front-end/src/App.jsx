@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import ForgotPassword from './components/ForgotPassword';
 import Contributors from "./pages/Contributors";
 import Dashboard from "./pages/Dashboard";
+import AddarticlePage from "./pages/AddarticlePage";
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword theme={theme} />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/addarticle" element={<AddarticlePage/>} />
         </Routes>
       </div>
       <Footer />

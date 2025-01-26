@@ -7,6 +7,7 @@ import LikeButton from '../components/LikeButton';
 import Modal from 'react-modal';
 import AddComment from './AddComment';
 import { GettingArticle } from '../Utils/loader';
+import Markdown from 'react-markdown';
 
 Modal.setAppElement('#root');
 
@@ -202,13 +203,20 @@ const Article = ({ loggedInUserId }) => {
         {/* Enhanced Article Content */}
         <div className="prose prose-sm sm:prose-lg max-w-none mb-8 sm:mb-16">
           {article.content && article.content.split('\n').map((paragraph, index) => (
-            <p
+            // <p
+            //   key={index}
+            //   className="text-lg leading-relaxed text-gray-800 dark:text-gray-300 mb-8 animate-fadeIn hover:text-gray-900 dark:hover:text-gray-200 transition-colors duration-200"
+            //   style={{ animationDelay: `${index * 0.1}s` }}
+            // >
+            //   {paragraph}
+            // </p>
+            <Markdown
               key={index}
               className="text-lg leading-relaxed text-gray-800 dark:text-gray-300 mb-8 animate-fadeIn hover:text-gray-900 dark:hover:text-gray-200 transition-colors duration-200"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {paragraph}
-            </p>
+            </Markdown>
           ))}
         </div>
 
