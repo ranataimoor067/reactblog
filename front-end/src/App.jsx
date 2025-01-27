@@ -19,6 +19,7 @@ import Dashboard from "./pages/Dashboard";
 import AddarticlePage from "./pages/AddarticlePage";
 import Error404 from "./pages/Error404";
 import ScrollToTop from "./components/ScrollToTop";
+import PublicProfile from "./pages/PublicProfile";
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
           <Route path="*" element={<Error404 />} />
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/addarticle" element={<AddarticlePage/>} />
+          <Route path="/profile/:userId" element={<PublicProfile />} />
         </Routes>
         
       </div>

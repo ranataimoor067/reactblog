@@ -110,7 +110,10 @@ const Article = ({ loggedInUserId }) => {
           
           {/* Author Info with improved styling */}
           <div className="flex items-center mb-6 sm:mb-8 space-x-4 sm:space-x-6">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 dark:from-yellow-400 dark:to-orange-500 p-1">
+            <div 
+              className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 dark:from-yellow-400 dark:to-orange-500 p-1 cursor-pointer"
+              onClick={() => window.location.href = `/profile/${article.author}`}
+            >
               <div className="w-full h-full rounded-full bg-white dark:bg-gray-900 flex items-center justify-center">
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-yellow-400 dark:to-orange-500 text-transparent bg-clip-text">
                   {article.authorName?.charAt(0).toUpperCase()}
@@ -118,7 +121,10 @@ const Article = ({ loggedInUserId }) => {
               </div>
             </div>
             <div>
-              <p className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-yellow-400 dark:to-orange-500 text-transparent bg-clip-text">
+              <p 
+                className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-yellow-400 dark:to-orange-500 text-transparent bg-clip-text cursor-pointer hover:opacity-80"
+                onClick={() => window.location.href = `/profile/${article.author}`}
+              >
                 {article.authorName}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
