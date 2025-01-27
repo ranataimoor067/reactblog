@@ -17,6 +17,7 @@ import ForgotPassword from './components/ForgotPassword';
 import Contributors from "./pages/Contributors";
 import Dashboard from "./pages/Dashboard";
 import AddarticlePage from "./pages/AddarticlePage";
+import ScrollToTop from "./components/ScrollToTop";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <div className="w-full">
         <Routes>
@@ -58,6 +60,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/addarticle" element={<AddarticlePage/>} />
         </Routes>
+        
       </div>
       <Footer />
     </Router>
