@@ -17,6 +17,7 @@ import ForgotPassword from './components/ForgotPassword';
 import Contributors from "./pages/Contributors";
 import Dashboard from "./pages/Dashboard";
 import AddarticlePage from "./pages/AddarticlePage";
+import Error404 from "./pages/Error404";
 import ScrollToTop from "./components/ScrollToTop";
 
 
@@ -56,7 +57,7 @@ function App() {
             element={<EditArticle loggedInUserId={loggedInUserId} />}
           />
           <Route path="/forgot-password" element={<ForgotPassword theme={theme} />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Error404 />} />
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/addarticle" element={<AddarticlePage/>} />
         </Routes>
