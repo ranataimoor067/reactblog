@@ -479,56 +479,20 @@ const resetPassword = async (req, res) => {
 
 const getOtherUser = async (req, res) => {
   try {
-    // Get the token from the authorization header
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      console.error("Authorization header is missing.");
-      return res.status(401).json({ error: "No token provided." });
-    }
-
-    const token = authHeader.split(' ')[1];
-    if (!token) {
-      console.error("Bearer token is missing.");
-      return res.status(401).json({ error: "Invalid token format." });
-    }
-
-    try {
-      // Verify and decode the token
-      jwt.verify(token, secretKey);
-    } catch (err) {
-      console.error("Error decoding token:", err.message);
-      return res.status(401).json({ error: "Invalid or expired token." });
-    }
-
     const { userId } = req.params;
-
-    if (!userId) {
-      return res.status(400).json({ error: "User ID is required" });
-    }
-
-    // Find user and select only public fields
-    const user = await User.findById(userId)
-      .select([
-        'username',
-        'name',
-        'picture',
-        'location',
-        'accountCreated',
-        'articlesPublished',
-        'likedArticles',
-        'commentedArticles',
-      ])
-      .populate('likedArticles')
-      .populate('commentedArticles');
-
+    
+    const user = await User.findById(userId).select(
+      'username name location picture dob age accountCreated articlesPublished'
+    );
+    
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({ user });
+    res.status(200).json(user);
   } catch (error) {
-    console.error("Error fetching user profile:", error);
-    res.status(500).json({ error: "An error occurred while fetching the user profile" });
+    console.error('Error fetching user:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
