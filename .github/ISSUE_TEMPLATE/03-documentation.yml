@@ -16,6 +16,10 @@ body:
         **Describe the change that is needed**
         A clear and concise description of what needs to be updated, fixed, or added in the documentation.
 
+        **Select which event you're participating from**
+        - [] Social Winter of Code 2025 (SWOC 2025)
+        - [] Innogeeks Winter of Code 3.0 (IWOC 2025)
+
         **Location of the documentation**
         Provide links or specific sections/pages where the changes are required (e.g., README.md, docs/setup-guide.md).
 

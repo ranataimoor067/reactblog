@@ -1,8 +1,9 @@
 ![swoc2024 Banner](./swoc.jpg)
+![iwoc2025 Banner](./iwoc.png)
 
-# React Blog - Social Winter of Code 2025 🌟
+# React Blog - Social Winter of Code 2025 & Innogeeks WInter of Code 3.0 2025🌟
 
-Welcome to **React Blog**, an exciting application selected for **Social Winter of Code 2025** (SWOC-2025)!
+Welcome to **React Blog**, an exciting application selected for **Social Winter of Code 2025** (SWOC-2025) alongside with **Innogeeks Winter of Code 3.0 2025**!
 
 This project is an open-source initiative aimed at building a robust and feature-rich blogging platform. We welcome contributors from all backgrounds to collaborate and make this project a success. If you like what you see, please consider giving this repository a **star**! 💥
 
