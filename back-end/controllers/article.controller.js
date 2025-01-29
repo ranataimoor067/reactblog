@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { Article, Comment } from '../models/article.model.js';
 import { User } from '../models/user.model.js';
 import { upload_on_cloudinary } from '../utils/cloudinary.js';
+import { Level } from '../models/level.model.js';
 
 const secretKey = process.env.SECRET_KEY;
 
@@ -163,6 +164,42 @@ const addArticle = async (req, res) => {
 
         // Increment the user's article count
         user.articlesPublished += 1;
+
+
+        //logic for user level
+        const levels=['Beginner','Intermidiate' , 'Advance', 'Expert', 'Legendry']
+        const xpgaps = [100, 300, 500, 700]
+        const fetchedLevel = await Level.findOne({authorId: userId})
+
+        if (!fetchedLevel) {
+            const newLevel = new Level({
+                levelProgress:10,
+                authorId:userId,
+            })
+            user.authorLevel = newLevel._id
+
+            await newLevel.save()
+
+        }else{
+            fetchedLevel.levelProgress += 20
+
+            let newLevel = levels[0]
+            let newtotallevel;
+            for (let i = 0; i < levels.length; i++) {
+                if (fetchedLevel.levelProgress > xpgaps[i]) {
+                    newLevel = levels[i+1]
+                    newtotallevel = levels[i]
+                }else{
+                    break
+                }
+            }
+            fetchedLevel.levelName = newLevel
+            fetchedLevel.levelTotalNumber = newtotallevel
+
+            
+            await fetchedLevel.save()
+        }
+
         await user.save();
 
         res.status(201).json({ message: "Article created successfully", article: newArticle });

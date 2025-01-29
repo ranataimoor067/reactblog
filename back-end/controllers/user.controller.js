@@ -159,7 +159,7 @@ const getProfile = async (req, res) => {
 
     // Verify the token
     const decoded = jwt.verify(token, secretKey);
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.userId).populate('authorLevel');
     if (!user) {
       console.error(`User not found for token with userId: ${decoded.userId}.`);
       return res.status(404).json({ error: "User not found." });
@@ -495,5 +495,7 @@ const getOtherUser = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
 
 export { getProfile, registerUser, loginUser, editProfile, deleteUserAccount, resetPassword, getOtherUser };

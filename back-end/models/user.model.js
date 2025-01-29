@@ -60,8 +60,12 @@ const userSchema = new Schema(
         likedArticles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
         commentedArticles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
         saveForLater:[{type: mongoose.Schema.Types.ObjectId, ref: 'Article'}],
-        draftArticles:[{type: mongoose.Schema.Types.ObjectId, ref: 'Article'}]
-    }
+        draftArticles:[{type: mongoose.Schema.Types.ObjectId, ref: 'Article'}],
+        authorLevel :{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Level'
+        }
+    },{timestamps: true}
 );
 
 const User = mongoose.model("User", userSchema);
