@@ -133,6 +133,10 @@ Currently there are few labels being used for SWOC2025 and new commers to this r
 - `level 2` This label is assigned for issues that requires CRUD operations to be made (e.g. adding new database schema, adding GET, POST, DELETE, etc. request to the database)
 - `level 3` This label is assigned for issues that requires system design, understanding the code architecture, etc. This is for high level issue that understands the whole code structure of the project.
 - `SWOC` This label is used to track for SWOC2025 contributions being made
+- `IWOC2025`This label is used to track for IWOC contributiosn being made
+- `Easy` This label is used for easy issues and PR for IWOC2025
+- `Medium` This label is used for intermediate issues and PR for IWOC2025
+- `Hard` This label is used for advance issues and PR for IWOC2025
 - `bug` `enhancement` `documentation` `good first issue` `duplicate` `help wanted` `wontfix` `invalid` are common labels issued by GitHub which will be used according to their label names
 
 My label system might look hard but this is to make sure that my contributors to this project learn and get skilled enough that they will get a well paid job for their careers. I hope this encourages you to learn more, contribute meaningful contribution for yourself and not feel discouraged by others. I'm looking forward to what amazing and exiciting contribution you can make. Cheers!
