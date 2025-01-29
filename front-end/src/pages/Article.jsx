@@ -8,6 +8,10 @@ import Modal from 'react-modal';
 import AddComment from './AddComment';
 import { GettingArticle } from '../Utils/loader';
 import Markdown from 'react-markdown';
+import './shareBtn.css';
+import { FaFacebook, FaTwitter, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
+import { FaLink } from "react-icons/fa6";
+import { MdEmail, MdShare, MdClose, MdCheck } from 'react-icons/md';
 
 Modal.setAppElement('#root');
 
@@ -21,6 +25,11 @@ const Article = ({ loggedInUserId }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [newComment, setNewComment] = useState('');
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isShareSent, setIsShareSent] = useState(false);
+  const [activeHover, setActiveHover] = useState(null);
   const url = `${link}`;
 
   useEffect(() => {
@@ -92,6 +101,48 @@ const Article = ({ loggedInUserId }) => {
     } catch (error) {
       alert(error.response?.data?.error || 'Failed to add comment');
     }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
+  };
+
+  const handleShare = (platform) => {
+    const articleUrl = encodeURIComponent(window.location.href);
+    const articleTitle = encodeURIComponent(article.title);
+    
+    const shareUrls = {
+      twitter: `https://twitter.com/messages/compose?text=${articleTitle}%20-%20${articleUrl}`,
+      facebook: `https://www.facebook.com/dialog/send?link=${articleUrl}&app_id=YOUR_FACEBOOK_APP_ID&redirect_uri=${encodeURIComponent(window.location.href)}`,
+      linkedin: `https://www.linkedin.com/messaging/compose?body=${articleTitle}%20-%20${articleUrl}`,
+      email: `mailto:?subject=${articleTitle}&body=${articleUrl}`,
+      whatsapp: `https://api.whatsapp.com/send?text=${articleTitle}%20-%20${articleUrl}`
+    };
+
+    // For platforms that require different handling
+    if (platform === 'facebook') {
+      window.open(shareUrls[platform], '_blank', 'width=600,height=400,location=no,toolbar=no');
+    } else {
+      window.open(shareUrls[platform], '_blank');
+    }
+  };
+
+  const handleShareClick = () => {
+    setIsShareOpen(!isShareOpen);
+    setIsShareSent(false);
+  };
+
+  const handlePlatformShare = (platform) => {
+    handleShare(platform);
+    setIsShareOpen(false);
+    setIsShareSent(true);
+    setTimeout(() => setIsShareSent(false), 2000);
   };
 
   if (loading) return <GettingArticle />;
@@ -179,6 +230,70 @@ const Article = ({ loggedInUserId }) => {
                 </svg>
                 <span className="font-medium">{article.comments?.length || 0} Comments</span>
               </button>
+
+              <div className="relative">
+                <div className="relative inline-block">
+                  <button
+                    onClick={handleShareClick}
+                    className={`share-button-main relative p-2 rounded-xl bg-white dark:bg-gray-800 
+                      hover:bg-gray-50 dark:hover:bg-gray-700
+                      transform hover:scale-105 active:scale-95
+                      transition-all duration-300 ease-in-out shadow-md hover:shadow-lg
+                      flex items-center
+                      ${isShareOpen ? 'open' : ''} ${isShareSent ? 'sent' : ''}`}
+                  >
+                    {!isShareOpen && !isShareSent && (
+                      <MdShare className="w-5 h-5 text-blue-600 dark:text-yellow-400" />
+                    )}
+                    {isShareOpen && (
+                      <MdClose className="w-5 h-5 text-red-500 dark:text-orange-400" />
+                    )}
+                    {isShareSent && (
+                      <MdCheck className="w-5 h-5 text-green-500 dark:text-green-400" />
+                    )}
+                  </button>
+
+                  {isShareOpen && (
+                    <div className="share-options-container absolute left-0 mt-4">
+                      <button
+                        onClick={handleCopyLink}
+                        className={`share-option relative p-2 rounded-xl bg-white dark:bg-gray-800
+                          transform hover:scale-110 active:scale-95
+                          transition-all duration-300 ease-in-out shadow-md hover:shadow-lg
+                          ${copySuccess ? 'ring-2 ring-green-400 ring-offset-2 dark:ring-offset-gray-900' : ''}`}
+                        title="Copy Link"
+                      >
+                        {copySuccess ? (
+                          <MdCheck className="w-5 h-5 text-green-500 dark:text-green-400" />
+                        ) : (
+                          <FaLink className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                        )}
+                      </button>
+                      {[
+                        { platform: 'facebook', icon: FaFacebook, color: 'blue' },
+                        { platform: 'twitter', icon: FaTwitter, color: 'sky' },
+                        { platform: 'linkedin', icon: FaLinkedin, color: 'blue' },
+                        { platform: 'whatsapp', icon: FaWhatsapp, color: 'green' },
+                        { platform: 'email', icon: MdEmail, color: 'red' }
+                      ].map(({ platform, icon: Icon, color }) => (
+                        <button
+                          key={platform}
+                          onClick={() => handlePlatformShare(platform)}
+                          onMouseEnter={() => setActiveHover(platform)}
+                          onMouseLeave={() => setActiveHover(null)}
+                          className={`share-option relative p-2 rounded-xl bg-white dark:bg-gray-800
+                            transform hover:scale-110 active:scale-95
+                            transition-all duration-300 ease-in-out shadow-md hover:shadow-lg
+                            ${activeHover === platform ? `ring-2 ring-${color}-400 ring-offset-2 dark:ring-offset-gray-900` : ''}`}
+                          title={platform.charAt(0).toUpperCase() + platform.slice(1)}
+                        >
+                          <Icon className={`w-5 h-5 text-${color}-500 dark:text-${color}-400`} />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
             
             {isAuthor && (
@@ -209,13 +324,6 @@ const Article = ({ loggedInUserId }) => {
         {/* Enhanced Article Content */}
         <div className="prose prose-sm sm:prose-lg max-w-none mb-8 sm:mb-16">
           {article.content && article.content.split('\n').map((paragraph, index) => (
-            // <p
-            //   key={index}
-            //   className="text-lg leading-relaxed text-gray-800 dark:text-gray-300 mb-8 animate-fadeIn hover:text-gray-900 dark:hover:text-gray-200 transition-colors duration-200"
-            //   style={{ animationDelay: `${index * 0.1}s` }}
-            // >
-            //   {paragraph}
-            // </p>
             <Markdown
               key={index}
               className="text-lg leading-relaxed text-gray-800 dark:text-gray-300 mb-8 animate-fadeIn hover:text-gray-900 dark:hover:text-gray-200 transition-colors duration-200"
