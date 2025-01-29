@@ -172,7 +172,7 @@ const ProfilePage = () => {
                 <p className="text-sm text-gray-500">Articles Published</p>
               </div>
               <div className='border-r border-gray-300 dark:border-gray-600'>
-                <p className="text-2xl font-extrabold text-indigo-700 dark:text-indigo-300">{"-"}</p>
+                <p className="text-2xl font-extrabold text-indigo-700 dark:text-indigo-300">{user?.likedArticles?.length || 0}</p>
                 <p className="text-sm text-gray-500">Articles Liked</p>
               </div>
               <div>
