@@ -24,6 +24,10 @@ body:
 
         ## Additional context
         Add any other context or screenshots about the feature request here.
+
+        **Select which event you're participating from**
+        - [] Social Winter of Code 2025 (SWOC 2025)
+        - [] Innogeeks Winter of Code 3.0 (IWOC 2025)
     validations:
       required: true
   - type: checkboxes
