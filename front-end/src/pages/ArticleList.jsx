@@ -69,9 +69,16 @@ const ArticleList = () => {
 
   const sortArticles = (articles, sortOrder) => {
     return [...articles].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+      switch (sortOrder) {
+        case 'most-liked':
+          return (b.likes || 0) - (a.likes || 0);
+        case 'newest':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case 'oldest':
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        default:
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
     });
   };
 
@@ -158,6 +165,7 @@ const ArticleList = () => {
               onChange={handleSortChange}
               className="ml-4 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none transition-colors dark:bg-gray-700 dark:text-gray-200"
             >
+              <option value="most-liked">Most Liked</option>
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
               <option value="more than 500 words">More than 500 words</option>
