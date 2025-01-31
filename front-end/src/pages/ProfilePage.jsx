@@ -150,6 +150,21 @@ const ProfilePage = () => {
                 </div>
                 <div className='border-t border-gray-300 dark:border-gray-600'></div>
 
+
+                <div className="flex justify-between gap-8">
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Your Level</span>
+                    <span className="text-gray-700 dark:text-gray-200 font-medium min-w-[100px] text-left">{user.authorLevel ? user.authorLevel.levelName : "-"}</span>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Level Progress</span>
+                    <span className="text-gray-700 dark:text-gray-200 font-medium min-w-[190px] text-left">
+                    {user.authorLevel ? user.authorLevel.levelProgress  : "-"}
+                    </span>
+                  </div>
+                </div>
+                <div className='border-t border-gray-300 dark:border-gray-600'></div>
+
                 {/* Third Line: Account created  */}
                 <div className="flex justify-between gap-2">
                   <div className="flex flex-col items-start">
