@@ -158,6 +158,7 @@ const addArticle = async (req, res) => {
             authorName: user.username,
             username, // Add this if required in the Article schema
             comments: [],
+            status: 'published' // Set status as published
         });
 
         await newArticle.save();
@@ -658,100 +659,101 @@ const saveforlater = async (req, res) => {
 }
 
 const saveasdraft = async (req, res) => {
-    //two types 1. alll data first time 2. artcle id edited
-    //if first one then save it with boolean value
-    //if id provided then sreach and edit it 
-    const {title, content, tag, articleid} = req.body
-    const filebuffer = req.file ? req.file.buffer : null
-
-    const name = title;
-
-    const authHeader = req.headers.authorization;
-    console.log(authHeader);
-    if (!authHeader) {
-        console.error("Authorization header is missing.");
-        return res.status(401).json({ error: "No token provided." });
-    }
-
-    const token = authHeader.split(" ")[1];
-    if (!token) {
-        console.error("Bearer token is missing.");
-        return res.status(401).json({ error: "Invalid token format." });
-    }
-
-    // Decode and Verify Token
-    let decoded;
     try {
-        decoded = jwt.verify(token, secretKey);
-    } catch (err) {
-        console.error("Error decoding token:", err.message);
-        return res.status(401).json({ error: "Invalid or expired token." });
-    }
+        const {title, content, tag} = req.body;
+        const filebuffer = req.file ? req.file.buffer : null;
 
-    // Find the authenticated user
-    const userId = decoded.userId;
-    const user = await User.findById(userId);
-    console.log("this is user", user)
-    if (!user) {
-        console.error(`User with ID ${userId} not found.`);
-        return res.status(404).json({ error: "User not found." });
-    }
-
-    if (!articleid) {
-        // as no article create a new article
-        try {
-            const username = user.username
-
-            const newArticle= new Article()
-            newArticle.isDraft= true
-            newArticle.author = userId
-            newArticle.authorName = username
-            newArticle.name = name ? name :" "
-            newArticle.title = title ? title : " "
-            newArticle.content = content ? content : " "
-            newArticle.tag = tag
-
-            if (filebuffer) {
-                const uploadedurl = await upload_on_cloudinary(filebuffer)
-                newArticle.thumbnail= uploadedurl
-            }else{
-                newArticle.thumbnail = " "
-            }
-
-            await newArticle.save()
-
-            return res.status(200).send({success:"article saved as draft successfully (id not provideed new article is created)",savedArticle: newArticle})
-        } catch (error) {
-            console.log(error)
-            return res.status(500).send({error: "eror while saving as draft", errMessage: error.message})
+        // Validate Authorization Header
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: "No token provided." });
         }
-    }else{
-        try {
-            const fetchedArticle = await Article.findById(articleid)
-            if (!fetchedArticle) {
-                return res.status(400).send({error:"error while fetching or fetched article not found"})
-            }
 
-            fetchedArticle.isDraft= true
-
-            if(title) fetchedArticle.title = title
-            if(content) fetchedArticle.content = content
-            if(tag) fetchedArticle.tag = tag
-
-            if (filebuffer) {
-                const uploadedurl = await upload_on_cloudinary(filebuffer)
-                fetchedArticle.thumbnail= uploadedurl
-            }
-
-            await fetchedArticle.save()
-
-            return res.status(200).send({success:"article saved as draft successfully (id is provided and no new article is created)",savedArticle: fetchedArticle})
-        } catch (error) {
-            console.log(error)
-            return res.status(500).send({error:"error while saving as draft", errMessage: error.message})
+        const token = authHeader.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "Invalid token format." });
         }
+
+        // Decode and Verify Token
+        const decoded = jwt.verify(token, secretKey);
+        const userId = decoded.userId;
+        
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        let uploadedUrl;
+        if (filebuffer) {
+            uploadedUrl = await upload_on_cloudinary(filebuffer);
+            if (!uploadedUrl) {
+                return res.status(400).json({ error: "Error uploading thumbnail" });
+            }
+        }
+
+        const newArticle = new Article({
+            title: title || "",
+            name: title || "",
+            content: content || "",
+            tag: tag,
+            thumbnail: uploadedUrl || "",
+            author: userId,
+            authorName: user.username,
+            status: 'draft'
+        });
+
+        await newArticle.save();
+
+        return res.status(201).json({
+            success: true,
+            message: "Draft created successfully",
+            article: newArticle
+        });
+
+    } catch (error) {
+        console.error("Error saving draft:", error);
+        return res.status(500).json({
+            success: false,
+            error: "Error saving draft",
+            message: error.message
+        });
     }
-}
+};
+
+const getUserDrafts = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: "No token provided." });
+        }
+
+        const token = authHeader.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "Invalid token format." });
+        }
+
+        const decoded = jwt.verify(token, secretKey);
+        const userId = decoded.userId;
+
+        const drafts = await Article.find({
+            author: userId,
+            status: 'draft'
+        }).sort({ updatedAt: -1 });
+
+        return res.status(200).json({
+            success: true,
+            drafts
+        });
+
+    } catch (error) {
+        console.error("Error fetching drafts:", error);
+        return res.status(500).json({
+            success: false,
+            error: "Error fetching drafts",
+            message: error.message
+        });
+    }
+};
 
 export {
     addArticle,
@@ -765,5 +767,6 @@ export {
     likeArticle,
     getArticleByTag,
     saveforlater,
-    saveasdraft
+    saveasdraft,
+    getUserDrafts
 }
