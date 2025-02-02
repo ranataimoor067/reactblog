@@ -20,6 +20,7 @@ import AddarticlePage from "./pages/AddarticlePage";
 import Error404 from "./pages/Error404";
 import ScrollToTop from "./components/ScrollToTop";
 import PublicProfile from "./pages/PublicProfile";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/article-list" element={<ArticleList />} />
           <Route path="/contributors" element={<Contributors />} />
           <Route
