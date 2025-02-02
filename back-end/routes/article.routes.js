@@ -2,6 +2,7 @@ import { Router } from "express";
 import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser, likeArticle, getArticleByTag, saveforlater, saveasdraft, getUserDrafts } from "../controllers/article.controller.js";
 import multer from 'multer'
 import { upload_on_cloudinary } from "../utils/cloudinary.js";
+import { Check_add_achievement, Check_add_achievement_comments, Check_add_achievement_liked } from "../middleware/achievement.middleware.js";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -9,7 +10,7 @@ const upload = multer({ storage: storage });
 const articleRouter = Router()
 
 // add article route
-articleRouter.post('/addarticle', upload.single("thumbnail"), addArticle); 
+articleRouter.post('/addarticle', Check_add_achievement, upload.single("thumbnail"), addArticle); 
 
 // get article route
 articleRouter.post('/getarticle', getarticles);
@@ -21,7 +22,7 @@ articleRouter.get('/getallarticle', getAllArticles);
 articleRouter.post("/getarticlesbyuser", getarticlesbyuser)
 
 // add comment route
-articleRouter.post('/addcomment', addcomments);
+articleRouter.post('/addcomment', Check_add_achievement_comments, addcomments);
 
 //edit article
 articleRouter.post('/editarticle', upload.single("thumbnail") ,editArticle)
@@ -33,7 +34,7 @@ articleRouter.post('/getarticlebyid', getarticlebyid)
 articleRouter.delete('/deletearticle', deleteArticle);
 
 // Like/Unlike article route
-articleRouter.post('/like/:articleId', likeArticle);
+articleRouter.post('/like/:articleId', Check_add_achievement_liked, likeArticle);
 
 articleRouter.post('/getarticlebytag',getArticleByTag);
     
