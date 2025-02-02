@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser, likeArticle, getArticleByTag, saveforlater, saveasdraft } from "../controllers/article.controller.js";
+import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser, likeArticle, getArticleByTag, saveforlater, saveasdraft, getUserDrafts } from "../controllers/article.controller.js";
 import multer from 'multer'
 import { upload_on_cloudinary } from "../utils/cloudinary.js";
 
-const upload = multer({storage: multer.memoryStorage()})
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 const articleRouter = Router()
 
 // add article route
@@ -40,5 +42,8 @@ articleRouter.post('/getarticlebytag',getArticleByTag);
 articleRouter.post('/saveforlater', saveforlater)
 
 //save as draft
-articleRouter.post('/saveasdraft', upload.single('thumbnail') ,saveasdraft)
+articleRouter.post('/create-draft', upload.single('thumbnail') ,saveasdraft)
+
+//get user drafts
+articleRouter.get('/drafts', getUserDrafts)
 export { articleRouter };
