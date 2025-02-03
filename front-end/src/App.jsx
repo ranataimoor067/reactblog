@@ -21,6 +21,7 @@ import Error404 from "./pages/Error404";
 import ScrollToTop from "./components/ScrollToTop";
 import PublicProfile from "./pages/PublicProfile";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import DraftsPage from './pages/DraftsPage';
 
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/addarticle" element={<AddarticlePage/>} />
           <Route path="/profile/:userId" element={<PublicProfile />} />
+          <Route path="/drafts" element={<DraftsPage />} />
         </Routes>
         
       </div>
