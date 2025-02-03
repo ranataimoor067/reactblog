@@ -189,7 +189,7 @@ const addArticle = async (req, res) => {
             for (let i = 0; i < levels.length; i++) {
                 if (fetchedLevel.levelProgress > xpgaps[i]) {
                     newLevel = levels[i+1]
-                    newtotallevel = levels[i]
+                    newtotallevel = xpgaps[i]
                 }else{
                     break
                 }

@@ -159,7 +159,7 @@ const getProfile = async (req, res) => {
 
     // Verify the token
     const decoded = jwt.verify(token, secretKey);
-    const user = await User.findById(decoded.userId).populate('authorLevel');
+    const user = await User.findById(decoded.userId).populate('authorLevel').populate('achievements');
     if (!user) {
       console.error(`User not found for token with userId: ${decoded.userId}.`);
       return res.status(404).json({ error: "User not found." });

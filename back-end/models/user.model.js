@@ -64,7 +64,11 @@ const userSchema = new Schema(
         authorLevel :{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Level'
-        }
+        },
+        achievements:[{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Achievement"
+        }]
     },{timestamps: true}
 );
 
