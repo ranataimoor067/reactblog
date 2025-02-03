@@ -14,6 +14,7 @@ const AddArticlePage = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [editorMode, setEditorMode] = useState('normal'); // 'normal' or 'markdown'
+    const [savingDraft, setSavingDraft] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -61,6 +62,37 @@ const AddArticlePage = () => {
         setLoading(false);
     };
 
+    const handleSaveDraft = async (e) => {
+        e.preventDefault();
+        setSavingDraft(true);
+        try {
+            const token = localStorage.getItem('token');
+            const data = new FormData();
+            
+            // Only append fields that have values
+            if (formData.title) data.append('title', formData.title);
+            if (formData.content) data.append('content', formData.content);
+            if (formData.thumbnail) data.append('thumbnail', formData.thumbnail);
+            if (formData.tag) data.append('tag', formData.tag);
+
+            await axios.post(
+                `${url}/api/article/create-draft`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+
+            // Redirect to drafts page or show success message
+            window.location.href = '/drafts';
+        } catch (err) {
+            setError(err.response?.data?.error || 'Error saving draft');
+        }
+        setSavingDraft(false);
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-indigo-100 via-purple-100 to-indigo-200 text-white flex items-center justify-center p-6">
@@ -176,13 +208,23 @@ const AddArticlePage = () => {
                         <button
                             type="submit"
                             className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300"
+                            disabled={loading || savingDraft}
                         >
-                            {loading ? (<div>Creating.....</div>) : (<div>Create</div>) }
+                            {loading ? (<div>Creating.....</div>) : (<div>Create</div>)}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleSaveDraft}
+                            className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
+                            disabled={loading || savingDraft}
+                        >
+                            {savingDraft ? 'Saving...' : 'Save as Draft'}
                         </button>
                         <button
                             type="button"
                             onClick={() => (window.location.href = '/article-list')}
                             className="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-400 transition duration-300"
+                            disabled={loading || savingDraft}
                         >
                             Cancel
                         </button>
