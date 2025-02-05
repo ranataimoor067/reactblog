@@ -8,6 +8,7 @@ import { PersistGate } from "redux-persist/integration/react"
 import { persistStore } from "redux-persist"
 import { ToastContainer } from 'react-toastify'
 import AnimatedCursor from 'react-animated-cursor'
+import CursorTrail from './components/CursorTrail.jsx'
 
 let persistor = persistStore(store);
 
@@ -36,7 +37,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <ToastContainer position="top-right" autoClose={3000}/>
-          <AnimatedCursor
+          {/* <AnimatedCursor
             innerSize={8}
             outerSize={35}
             innerScale={1}
@@ -49,8 +50,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             outerStyle={{
               border: '3px solid var(--cursor-color)'
             }}
-          />          
+          />           */}
           <App />
+          <CursorTrail/>
         </PersistGate>
       </Provider>
     </ErrorBoundary>
