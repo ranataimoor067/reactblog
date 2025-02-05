@@ -95,21 +95,21 @@ const AddArticlePage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-indigo-100 via-purple-100 to-indigo-200 text-white flex items-center justify-center p-6">
-            <div className="bg-white text-black rounded-lg shadow-xl w-full max-w-3xl p-8">
-                <h2 className="text-2xl font-bold mb-6  text-center text-indigo-600">
-                    <div className='border-4 border-purple-500 inline-block px-3 rounded-md'>Create a New Article</div>    
+        <div className="min-h-screen bg-gradient-to-b from-indigo-100 via-purple-100 to-indigo-200 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 text-white flex items-center justify-center p-6">
+            <div className="bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-xl w-full max-w-3xl p-8">
+                <h2 className="text-2xl font-bold mb-6 text-center text-indigo-600 dark:text-indigo-400">
+                    <div className='border-4 border-purple-500 dark:border-purple-400 inline-block px-3 rounded-md'>Create a New Article</div>    
                 </h2>
 
                 {error && (
-                    <div className="mb-4 p-4 bg-red-100 border border-red-300 text-red-600 rounded-md">
+                    <div className="mb-4 p-4 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 rounded-md">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium mb-1">
+                        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
                             Title
                         </label>
                         <input
@@ -119,18 +119,18 @@ const AddArticlePage = () => {
                             value={formData.title}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">
+                        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
                             Content Editor Mode
                         </label>
                         <select
                             value={editorMode}
                             onChange={(e) => setEditorMode(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         >
                             <option value="normal">Normal Text</option>
                             <option value="markdown">Markdown Editor</option>
@@ -138,7 +138,7 @@ const AddArticlePage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">
+                        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
                             Content
                         </label>
                         {editorMode === 'normal' ? (
@@ -149,20 +149,20 @@ const AddArticlePage = () => {
                                 onChange={(e) => handleContentChange(e.target.value)}
                                 required
                                 rows="6"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none resize-none"
+                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                             />
                         ) : (
                             <MDEditor
                                 value={formData.content}
                                 onChange={handleContentChange}
                                 height={400}
-                                className="rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+                                className="rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
                             />
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">
+                        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
                             Thumbnail
                         </label>
                         <input
@@ -171,19 +171,19 @@ const AddArticlePage = () => {
                             accept="image/*"
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">
+                        <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
                             Tag
                         </label>
                         <select
                             name="tag"
                             value={formData.tag}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         >
                             <option value="" disabled>Select Tag</option>
                             <option value="Tech">Technology</option>
@@ -207,7 +207,7 @@ const AddArticlePage = () => {
                     <div className="flex justify-center space-x-4">
                         <button
                             type="submit"
-                            className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white py-2 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 dark:hover:from-indigo-600 dark:hover:to-purple-600 transition duration-300 transform hover:scale-105"
                             disabled={loading || savingDraft}
                         >
                             {loading ? (<div>Creating.....</div>) : (<div>Create</div>)}
@@ -215,7 +215,7 @@ const AddArticlePage = () => {
                         <button
                             type="button"
                             onClick={handleSaveDraft}
-                            className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300"
+                            className="bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-500 dark:to-indigo-500 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-indigo-700 dark:hover:from-purple-600 dark:hover:to-indigo-600 transition duration-300 transform hover:scale-105"
                             disabled={loading || savingDraft}
                         >
                             {savingDraft ? 'Saving...' : 'Save as Draft'}
@@ -223,7 +223,7 @@ const AddArticlePage = () => {
                         <button
                             type="button"
                             onClick={() => (window.location.href = '/article-list')}
-                            className="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-400 transition duration-300"
+                            className="bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition duration-300 transform hover:scale-105"
                             disabled={loading || savingDraft}
                         >
                             Cancel
