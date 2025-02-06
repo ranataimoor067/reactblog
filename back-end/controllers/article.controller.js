@@ -168,36 +168,36 @@ const addArticle = async (req, res) => {
 
 
         //logic for user level
-        const levels=['Beginner','Intermidiate' , 'Advance', 'Expert', 'Legendry']
+        const levels = ['Beginner', 'Intermidiate', 'Advance', 'Expert', 'Legendry']
         const xpgaps = [100, 300, 500, 700]
-        const fetchedLevel = await Level.findOne({authorId: userId})
+        const fetchedLevel = await Level.findOne({ authorId: userId })
 
         if (!fetchedLevel) {
             const newLevel = new Level({
-                levelProgress:10,
-                authorId:userId,
+                levelProgress: 10,
+                authorId: userId,
             })
             user.authorLevel = newLevel._id
 
             await newLevel.save()
 
-        }else{
+        } else {
             fetchedLevel.levelProgress += 20
 
             let newLevel = levels[0]
             let newtotallevel;
             for (let i = 0; i < levels.length; i++) {
                 if (fetchedLevel.levelProgress > xpgaps[i]) {
-                    newLevel = levels[i+1]
+                    newLevel = levels[i + 1]
                     newtotallevel = xpgaps[i]
-                }else{
+                } else {
                     break
                 }
             }
             fetchedLevel.levelName = newLevel
             fetchedLevel.levelTotalNumber = newtotallevel
 
-            
+
             await fetchedLevel.save()
         }
 
@@ -640,27 +640,27 @@ const saveforlater = async (req, res) => {
         const saveforlaterindex = user.saveForLater.indexOf(article._id)
         if (saveforlaterindex > -1) {
             //article present in save for later
-            user.saveForLater.splice(saveforlaterindex,1)
+            user.saveForLater.splice(saveforlaterindex, 1)
             await user.save()
-            return res.status(200).send({message:"article already in save for later so removed from savefor later", upatedUser: user})
+            return res.status(200).send({ message: "article already in save for later so removed from savefor later", upatedUser: user })
 
         } else {
             //article not prosent in savefor later 
             user.saveForLater.push(article._id)
             await user.save()
-            return res.status(200).send({message:"article added to save for later", upatedUser: user})
+            return res.status(200).send({ message: "article added to save for later", upatedUser: user })
         }
 
 
     } catch (error) {
         console.log(error)
-        return res.status(500).send({error:"error while adding to save for later", errMessage: error.message})
+        return res.status(500).send({ error: "error while adding to save for later", errMessage: error.message })
     }
 }
 
 const saveasdraft = async (req, res) => {
     try {
-        const {title, content, tag} = req.body;
+        const { title, content, tag } = req.body;
         const filebuffer = req.file ? req.file.buffer : null;
 
         // Validate Authorization Header
@@ -677,7 +677,7 @@ const saveasdraft = async (req, res) => {
         // Decode and Verify Token
         const decoded = jwt.verify(token, secretKey);
         const userId = decoded.userId;
-        
+
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ error: "User not found." });
@@ -755,6 +755,66 @@ const getUserDrafts = async (req, res) => {
     }
 };
 
+const getsaveforlater = async (req, res) => {
+    // Validate Authorization Header
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "No token provided." });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({ error: "Invalid token format." });
+    }
+
+    // Decode and Verify Token
+    const decoded = jwt.verify(token, secretKey);
+    const userId = decoded.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ error: "User not found." });
+    }
+
+    await user.populate('saveForLater')
+
+    return res.status(200).send({ message: "fetched successfully", fetchedArticles: user.saveForLater })
+
+}
+
+const removeSaveforLater = async (req, res) => {
+    // Validate Authorization Header
+    const authHeader = req.headers.authorization;
+    const {id}= req.body 
+    if (!authHeader) {
+        return res.status(401).json({ error: "No token provided." });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({ error: "Invalid token format." });
+    }
+
+    // Decode and Verify Token
+    const decoded = jwt.verify(token, secretKey);
+    const userId = decoded.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ error: "User not found." });
+    }
+
+    if(user.saveForLater.includes(id)){
+        const index = user.saveForLater.indexOf(id)
+        if (index > -1) {
+            user.saveForLater.splice(index,1)
+        }
+    }
+
+    await user.save()
+
+    return res.status(200).send({ message: "save for later updated successfully", editedSaveforLater: user.saveForLater })
+}
 export {
     addArticle,
     getarticles,
@@ -768,5 +828,7 @@ export {
     getArticleByTag,
     saveforlater,
     saveasdraft,
-    getUserDrafts
+    getUserDrafts,
+    getsaveforlater,
+    removeSaveforLater
 }
