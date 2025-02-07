@@ -323,11 +323,28 @@ const addcomments = async (req, res) => {
 
 const getAllArticles = async (req, res) => {
     try {
-        const articles = await Article.find();
-        if (articles.length === 0) {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 9;
+        const skip = (page - 1) * limit;
+
+        const totalArticles = await Article.countDocuments();
+        const totalPages = Math.ceil(totalArticles / limit);
+        
+        const articles = await Article.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        if (articles.length === 0 && page === 1) {
             return res.status(404).json({ message: 'No articles found' });
         }
-        res.status(200).json(articles);
+
+        res.status(200).json({
+            articles,
+            currentPage: page,
+            totalPages,
+            totalArticles
+        });
     } catch (error) {
         console.error('Error fetching all articles:', error);
         res.status(500).json({ error: 'Internal server error' });

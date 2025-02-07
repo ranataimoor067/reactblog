@@ -16,6 +16,10 @@ const ArticleList = () => {
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const url = `${link}`;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalArticles, setTotalArticles] = useState(0);
+  const articlesPerPage =9;
 
   // Comprehensive Animation Variants
   const pageVariants = {
@@ -83,10 +87,19 @@ const ArticleList = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get(`${url}/api/article/getallarticle`);
+        const response = await axios.get(`${url}/api/article/getallarticle`, {
+          params: {
+            page: currentPage,
+            limit: articlesPerPage
+          }
+        });
+        
         if (response.status === 200) {
-          setArticles(response.data);
-          setFilteredArticles(sortArticles(response.data, sortBy));
+          const { articles, totalPages, totalArticles } = response.data;
+          setArticles(articles);
+          setFilteredArticles(sortArticles(articles, sortBy));
+          setTotalPages(totalPages);
+          setTotalArticles(totalArticles);
         }
       } catch (err) {
         setError('Error fetching articles');
@@ -102,7 +115,7 @@ const ArticleList = () => {
 
     checkLogin();
     fetchArticles();
-  }, []);
+  }, [currentPage]);
   useEffect(() => {
     setFilteredArticles(sortArticles(articles, sortBy));
   }, [articles, sortBy]);
@@ -169,6 +182,55 @@ const ArticleList = () => {
       console.error('Error fetching articles by tag', error);
     }
   };
+
+  // Add pagination controls component
+  const PaginationControls = () => (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex justify-center items-center gap-2 mt-8 mb-4 text-sm"
+    >
+      <button
+        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+        disabled={currentPage === 1}
+        className={`px-2 py-1 ${
+          currentPage === 1 
+            ? 'text-gray-400 cursor-not-allowed dark:text-gray-600' 
+            : 'text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400'
+        } transition-colors duration-200`}
+      >
+        ← Prev
+      </button>
+      
+      <div className="flex gap-1">
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => setCurrentPage(index + 1)}
+            className={`w-8 h-8 rounded-full transition-colors duration-200 ${
+              currentPage === index + 1
+                ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800/50'
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+
+      <button
+        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+        disabled={currentPage === totalPages}
+        className={`px-2 py-1 ${
+          currentPage === totalPages 
+            ? 'text-gray-400 cursor-not-allowed dark:text-gray-600' 
+            : 'text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400'
+        } transition-colors duration-200`}
+      >
+        Next →
+      </button>
+    </motion.div>
+  );
 
   return (
     <motion.div 
@@ -244,74 +306,84 @@ const ArticleList = () => {
 
         {/* Articles Grid */}
         {!loading && filteredArticles.length > 0 && (
-          <motion.div 
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.1 }
-              }
-            }}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <AnimatePresence>
-              {filteredArticles.map((article) => (
-                <motion.div
-                  key={article._id}
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
-                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden"
-                >
-                  {/* Article Thumbnail */}
-                  {article.thumbnail && (
-                    <img
-                      src={article.thumbnail}
-                      alt={article.title}
-                      className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  )}
-
-                  {/* Article Content */}
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs">
-                        {article.tag || 'Uncategorized'}
-                      </span>
-                      <LikeButton
-                        articleId={article._id}
-                        initialLikes={article.likes || 0}
+          <>
+            <motion.div 
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.1 }
+                }
+              }}
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              <AnimatePresence>
+                {filteredArticles.map((article) => (
+                  <motion.div
+                    key={article._id}
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover="hover"
+                    className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden"
+                  >
+                    {/* Article Thumbnail */}
+                    {article.thumbnail && (
+                      <img
+                        src={article.thumbnail}
+                        alt={article.title}
+                        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
                       />
+                    )}
+
+                    {/* Article Content */}
+                    <div className="p-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs">
+                          {article.tag || 'Uncategorized'}
+                        </span>
+                        <LikeButton
+                          articleId={article._id}
+                          initialLikes={article.likes || 0}
+                        />
+                      </div>
+
+                      <h3 className="text-xl font-bold text-indigo-800 dark:text-indigo-200 mb-3">
+                        {article.title}
+                      </h3>
+
+                      <Markdown className="text-gray-600 dark:text-gray-300  h-20 mb-8 line-clamp-3">
+                        {article.content || 'No description available.'}
+                      </Markdown>
+
+                      {/* Read More Button with Advanced Animation */}
+                      <motion.button
+                        variants={buttonVariants}
+                        initial="initial"
+                        animate="animate"
+                        whileHover="hover"
+                        whileTap="tap"
+                        onClick={() => window.location.href = `/article/${article.name}`}
+                        className=" relative w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition duration-300 bottom-4"
+                      >
+                        Read More
+                      </motion.button>
                     </div>
-
-                    <h3 className="text-xl font-bold text-indigo-800 dark:text-indigo-200 mb-3">
-                      {article.title}
-                    </h3>
-
-                    <Markdown className="text-gray-600 dark:text-gray-300  h-20 mb-8 line-clamp-3">
-                      {article.content || 'No description available.'}
-                    </Markdown>
-
-                    {/* Read More Button with Advanced Animation */}
-                    <motion.button
-                      variants={buttonVariants}
-                      initial="initial"
-                      animate="animate"
-                      whileHover="hover"
-                      whileTap="tap"
-                      onClick={() => window.location.href = `/article/${article.name}`}
-                      className=" relative w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition duration-300 bottom-4"
-                    >
-                      Read More
-                    </motion.button>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+            
+            {/* Add Pagination Controls */}
+            <PaginationControls />
+            
+            {/* Add Articles Count */}
+            <p className="text-center text-gray-600 dark:text-gray-400 mt-4">
+              Showing {filteredArticles.length} of {totalArticles} articles
+            </p>
+          </>
         )}
 
         {/* No Articles State */}
