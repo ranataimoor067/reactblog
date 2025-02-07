@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { LoadingSpinner } from "./Utils/loader";
+import AchievementPage from "./components/AchievementComp/AchievementComp";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -58,6 +59,7 @@ function App() {
               element={<Article loggedInUserId={loggedInUserId} />}
             />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/achievements" element={<AchievementPage/>} />
             <Route path="/edit-profile" element={<EditProfilePage />} />
             <Route
               path="/edit-article/:id"
