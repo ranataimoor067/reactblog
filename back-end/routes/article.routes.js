@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser, likeArticle, getArticleByTag, saveforlater, saveasdraft, getUserDrafts } from "../controllers/article.controller.js";
+import { getarticles, addcomments,addArticle, getAllArticles, editArticle, getarticlebyid, deleteArticle, getarticlesbyuser, likeArticle, getArticleByTag, saveforlater, saveasdraft, getUserDrafts, getsaveforlater, removeSaveforLater } from "../controllers/article.controller.js";
 import multer from 'multer'
 import { upload_on_cloudinary } from "../utils/cloudinary.js";
 import { Check_add_achievement, Check_add_achievement_comments, Check_add_achievement_liked } from "../middleware/achievement.middleware.js";
@@ -47,4 +47,11 @@ articleRouter.post('/create-draft', upload.single('thumbnail') ,saveasdraft)
 
 //get user drafts
 articleRouter.get('/drafts', getUserDrafts)
+
+//get save for later articles
+articleRouter.get('/getsavedlarticles', getsaveforlater)
+
+//remove a article from savefor later
+articleRouter.post('/removeSavedArticle', removeSaveforLater)
+
 export { articleRouter };

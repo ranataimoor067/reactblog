@@ -12,7 +12,8 @@ import './shareBtn.css';
 import { FaFacebook, FaTwitter, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
 import { FaLink } from "react-icons/fa6";
 import { MdEmail, MdShare, MdClose, MdCheck } from 'react-icons/md';
-
+import { useSelector } from 'react-redux';
+import SaveForLaterButton from '../components/SaveForLaterComp/SaveforlaterButton';
 Modal.setAppElement('#root');
 
 const Article = ({ loggedInUserId }) => {
@@ -31,6 +32,9 @@ const Article = ({ loggedInUserId }) => {
   const [isShareSent, setIsShareSent] = useState(false);
   const [activeHover, setActiveHover] = useState(null);
   const url = `${link}`;
+
+    const isLoggedIn = useSelector((state) => state.auth.authStatus);
+
 
   useEffect(() => {
     const fetchArticleData = async () => {
@@ -291,9 +295,12 @@ const Article = ({ loggedInUserId }) => {
                         </button>
                       ))}
                     </div>
+                    
+                    
                   )}
                 </div>
               </div>
+                  {isLoggedIn ? <SaveForLaterButton articleId={article._id} usertoken={localStorage.getItem('token')} /> : " "}
             </div>
             
             {isAuthor && (
