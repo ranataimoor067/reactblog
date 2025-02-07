@@ -15,9 +15,9 @@ app.use(cors({ origin: '*', credentials: true }));
 
 app.use(express.json({extend: false}));
 
-app.listen(8081,()=>{
-    console.log(`server running on port `)
-})
+// app.listen(PORT,()=>{
+//     console.log(`server running on port ${PORT}`)
+// })
     
 // app.use("/",(req,res)=>{res.send('express running , mongo running')})
 //routes importing
