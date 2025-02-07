@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { link } from '../components/Baselink';
 import { useDispatch } from 'react-redux';
 import { logout as authLogout } from "../store/authSlice";
@@ -91,23 +91,23 @@ const ProfilePage = () => {
       <div className="profile-card max-w-lg mx-auto p-8 rounded-2xl shadow-2xl mb-12 bg-white dark:bg-gray-800 border-4 border-indigo-300 dark:border-indigo-600 transform hover:scale-105 transition-all duration-300">
         <div className="profile-header flex justify-center mb-6">
           {user.picture ? (
-              <img
-                src={user.picture}
-                alt="Profile"
-                className="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 dark:border-indigo-400 transform transition-transform duration-300 hover:scale-110 shadow-lg"
-              />
-            ) : (
-              <div className="w-40 h-40 rounded-full bg-indigo-200 dark:bg-indigo-600 flex items-center justify-center border-4 border-indigo-500 dark:border-indigo-400 shadow-lg">
-                <span className="text-indigo-700 dark:text-indigo-100 text-2xl font-semibold">
-                  {user.name
-                    ? user.name
-                        .split(' ')
-                        .map((word) => word[0])
-                        .join('')
-                    : 'N/A'}
-                </span>
-              </div>
-            )}
+            <img
+              src={user.picture}
+              alt="Profile"
+              className="w-40 h-40 rounded-full object-cover border-4 border-indigo-500 dark:border-indigo-400 transform transition-transform duration-300 hover:scale-110 shadow-lg"
+            />
+          ) : (
+            <div className="w-40 h-40 rounded-full bg-indigo-200 dark:bg-indigo-600 flex items-center justify-center border-4 border-indigo-500 dark:border-indigo-400 shadow-lg">
+              <span className="text-indigo-700 dark:text-indigo-100 text-2xl font-semibold">
+                {user.name
+                  ? user.name
+                    .split(' ')
+                    .map((word) => word[0])
+                    .join('')
+                  : 'N/A'}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="profile-details space-y-6">
@@ -116,7 +116,7 @@ const ProfilePage = () => {
 
             <div className="flex flex-col gap-3 mt-5 border border-indigo-700 dark:border-indigo-500 py-4">
               {/* Header */}
-              <h2 className="text-indigo-700 dark:text-indigo-300 font-semibold text-lg ml-5">Basic Information</h2>            
+              <h2 className="text-indigo-700 dark:text-indigo-300 font-semibold text-lg ml-5">Basic Information</h2>
               {/* Content */}
               <div className="flex flex-col gap-3 ml-5 mr-5">
                 {/* First Line: Username and Email */}
@@ -141,11 +141,11 @@ const ProfilePage = () => {
                   <div className="flex flex-col items-start">
                     <span className="text-sm text-gray-500 dark:text-gray-400">DOB</span>
                     <span className="text-gray-700 dark:text-gray-200 font-medium min-w-[190px] text-left">
-                    {user.dob ? new Date(user.dob).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric'
-                    }).replace(/ /g, '-') : "-"}
+                      {user.dob ? new Date(user.dob).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      }).replace(/ /g, '-') : "-"}
                     </span>
                   </div>
                 </div>
@@ -160,7 +160,7 @@ const ProfilePage = () => {
                   <div className="flex flex-col items-start">
                     <span className="text-sm text-gray-500 dark:text-gray-400">Level Progress</span>
                     <span className="text-gray-700 dark:text-gray-200 font-medium min-w-[190px] text-left">
-                    {user.authorLevel ? user.authorLevel.levelProgress  : "-"}
+                      {user.authorLevel ? user.authorLevel.levelProgress : "-"}
                     </span>
                   </div>
                 </div>
@@ -171,13 +171,23 @@ const ProfilePage = () => {
                   <div className="flex flex-col items-start">
                     <span className="text-sm text-gray-500 dark:text-gray-400">Account Created</span>
                     <span className="text-gray-700 dark:text-gray-200 font-medium">
-                    {user.accountCreated ? new Date(user.accountCreated).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric'
-                    }).replace(/ /g, '-') : '-'}
+                      {user.accountCreated ? new Date(user.accountCreated).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      }).replace(/ /g, '-') : '-'}
                     </span>
                   </div>
+                  <div className="flex flex-col items-start">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">Achievements</span>
+                        <span className="text-gray-700 dark:text-gray-200 font-medium min-w-[190px] text-left">
+                          {user.achievements ? (
+                            <Link to={'/achievements'}>
+                              Total achievements {user.achievements.length}
+                            </Link>
+                          ):("-")}
+                        </span>
+                      </div>
                 </div>
               </div>
             </div>
@@ -193,7 +203,7 @@ const ProfilePage = () => {
               </div>
               <div>
                 <p className="text-2xl font-extrabold text-indigo-700 dark:text-indigo-300">
-                    {user?.commentedArticles?.length || 0}
+                  {user?.commentedArticles?.length || 0}
                 </p>
                 <p className="text-sm text-gray-500">Articles Commented</p>
               </div>
@@ -208,7 +218,7 @@ const ProfilePage = () => {
           >
             Edit Profile
           </button>
-          
+
           <button
             onClick={() => navigate('/dashboard')}
             className="bg-gradient-to-r from-purple-600 to-red-600 dark:from-purple-500 dark:to-red-500 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
@@ -289,7 +299,7 @@ const ProfilePage = () => {
           </div>
         )}
       </div>
-        <SaveForLaterArticleList/>
+      <SaveForLaterArticleList />
       <div className="articles-section">
         <h2 className="text-3xl font-bold text-center text-indigo-700 dark:text-indigo-400 mb-8">Your Published Articles</h2>
         <div className="articles-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
