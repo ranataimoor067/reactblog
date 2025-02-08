@@ -25,6 +25,7 @@ import {userRouter} from "./routes/user.routes.js"
 import { articleRouter } from './routes/article.routes.js';
 import { sendMail } from './Utils/mailsender.js'
 import { achievementRouter } from './routes/achievements.route.js';
+
 app.get('/',async(req,res)=>{
     res.status(200).send("express")
 })
@@ -34,4 +35,5 @@ app.use('/sendMail', sendMail);
 app.use("/api/auth",userRouter)
 app.use("/api/article",articleRouter)
 app.use("/api/achievement", achievementRouter)
+
 export {app}
