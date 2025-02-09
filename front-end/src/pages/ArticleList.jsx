@@ -5,6 +5,7 @@ import Markdown from 'react-markdown';
 import { link } from '../components/Baselink';
 import LikeButton from '../components/LikeButton';
 import NoarticleImage from '../assets/noarticle.png';
+import { useSelector } from 'react-redux';
 
 const ArticleList = () => {
   const [articles, setArticles] = useState([]);
@@ -20,6 +21,7 @@ const ArticleList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalArticles, setTotalArticles] = useState(0);
   const articlesPerPage =9;
+  const theme = useSelector((state) => state.auth.theme);
 
   // Comprehensive Animation Variants
   const pageVariants = {
@@ -303,6 +305,40 @@ const ArticleList = () => {
             </select>
           </div>
         </motion.div>
+
+        {/* Add this button container after the header section */}
+        {isLoggedIn && (
+          <div className="max-w-7xl mx-auto px-4 mb-8 flex justify-end">
+            <button
+              onClick={() => window.location.href = '/addarticle'}
+              className={`
+                px-6 py-3 rounded-lg font-medium
+                transform transition-all duration-300 hover:scale-105
+                flex items-center gap-2 shadow-lg
+                ${theme === 'light'   
+                  ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                  : 'bg-indigo-500 text-white hover:bg-indigo-600'
+                }
+              `}
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M12 4v16m8-8H4" 
+                />
+              </svg>
+              Create Article
+            </button>
+          </div>
+        )}
 
         {/* Articles Grid */}
         {!loading && filteredArticles.length > 0 && (
