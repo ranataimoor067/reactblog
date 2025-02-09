@@ -148,7 +148,25 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
   };
 
+  const getYesterdayDate = () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return yesterday.toISOString().split('T')[0];
+  };
+
   const validateRegistration = () => {
+    
+    if (dob) {
+      const selectedDate = new Date(dob);
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      if (selectedDate > yesterday) {
+        setError('Date of birth cannot be later than yesterday');
+        return false;
+      }
+    }
+
     // Enhanced password validation
     if (!password) {
       setError('Password is required');
@@ -496,10 +514,11 @@ const Navbar = ({ theme, toggleTheme }) => {
                     placeholder="Profile Picture URL (Optional)"
                     className={`w-full p-3 rounded-lg border ${picture ? 'border-green-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-700'}`}
                   />
-                  <input
+                 <input
                     type="date"
                     value={dob}
                     onChange={(event) => setDob(event.target.value)}
+                    max={getYesterdayDate()} // Add max attribute to prevent future dates
                     className={`w-full p-3 rounded-lg border ${dob ? 'border-green-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:outline-none ${theme === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-700'}`}
                   />
                 </>
