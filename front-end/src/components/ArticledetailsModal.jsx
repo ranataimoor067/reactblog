@@ -6,7 +6,7 @@ const ArticleModal = ({ isOpen, onClose, title, content, image }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed z-10 inset-0 bg-black bg-opacity-60 flex justify-center items-center p-4">
+    <div className="fixed z-10  inset-0 bg-black bg-opacity-60 flex justify-center items-center p-4">
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }} 
         animate={{ opacity: 1, scale: 1 }} 
