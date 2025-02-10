@@ -165,6 +165,7 @@ const getProfile = async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
+    await user.populate({path:'likedArticles', strictPopulate:false})
     // Send back detailed user profile data
     res.json({
       user

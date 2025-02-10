@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { logout as authLogout } from "../store/authSlice";
 import { toast } from 'react-toastify';
 import SaveForLaterArticleList from '../components/SaveForLaterComp/SaveforLater';
+import LikedArticles from '../components/LikeArticles/LikeArticlesComp';
 
 const ProfilePage = () => {
   const [user, setUser] = useState({});
@@ -300,6 +301,8 @@ const ProfilePage = () => {
         )}
       </div>
       <SaveForLaterArticleList />
+        
+      <LikedArticles likedArticles={user.likedArticles} />
       <div className="articles-section">
         <h2 className="text-3xl font-bold text-center text-indigo-700 dark:text-indigo-400 mb-8">Your Published Articles</h2>
         <div className="articles-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
