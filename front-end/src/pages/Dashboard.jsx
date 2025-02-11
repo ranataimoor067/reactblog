@@ -496,7 +496,7 @@ function Dashboard() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Users className="w-5 h-5 text-gray-500" />
-                  <span className="font-medium text-gray-800">{comment.user?.name || 'Anonymous'}</span>
+                  <span className="font-medium text-gray-800">{comment.username || 'Anonymous'}</span>
                 </div>
                 <span className="text-sm text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString()}
