@@ -832,6 +832,42 @@ const removeSaveforLater = async (req, res) => {
 
     return res.status(200).send({ message: "save for later updated successfully", editedSaveforLater: user.saveForLater })
 }
+
+const recentComments = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Validate ID
+        if (!id) {
+            return res.status(400).json({ error: "Invalid user ID provided or not provided" });
+        }
+
+
+        console.log(`Fetching comments for user ID: ${id}`);
+
+        // Fetch comments with pagination
+        const fetchedComments = await Comment.find({ user: id })
+            .sort({ createdAt: -1 }) // Sort by latest comments
+            .populate('article')
+        if (!fetchedComments.length) {
+            return res.status(404).json({ message: "No comments found for this user" });
+        }
+
+        console.log(`Fetched ${fetchedComments.length} comments`);
+
+        
+
+        return res.status(200).send({
+            message: "Comments fetched successfully",
+            comments: fetchedComments,
+        });
+
+    } catch (error) {
+        console.error("Error fetching comments:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 export {
     addArticle,
     getarticles,
@@ -847,5 +883,6 @@ export {
     saveasdraft,
     getUserDrafts,
     getsaveforlater,
-    removeSaveforLater
+    removeSaveforLater,
+    recentComments
 }
