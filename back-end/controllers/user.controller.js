@@ -483,9 +483,8 @@ const getOtherUser = async (req, res) => {
     const { userId } = req.params;
     
     const user = await User.findById(userId).select(
-      'username name location picture dob age accountCreated articlesPublished'
+      'username name location picture dob age accountCreated articlesPublished followers following'
     );
-    
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
