@@ -99,12 +99,6 @@ const Contributors = () => {
               Certificate for {selectedContributor.login}
             </h2>
             <CertificateGenerator username={selectedContributor.login} />
-            {/* <button
-              className="mt-4 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg w-full transition-all duration-200 shadow-md"
-              onClick={() => setSelectedContributor(null)}
-            >
-              Close
-            </button> */}
           </div>
         </div>
       )}

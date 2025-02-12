@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { toPng } from "html-to-image";
+import backgroundImage from "../assets/logo.png";
 
 const CertificateGenerator = ({ username }) => {
   const certificateRef = useRef(null);
@@ -15,7 +16,7 @@ const CertificateGenerator = ({ username }) => {
       }
 
       setLoading(true);
-      setError(null); // Reset errors on new request
+      setError(null);
 
       try {
         const response = await fetch(`https://api.github.com/users/${username}`);
@@ -48,20 +49,23 @@ const CertificateGenerator = ({ username }) => {
     <div className="flex flex-col items-center">
       <div
         ref={certificateRef}
-        className="w-[650px] h-[450px] border-4 border-blue-600 bg-white p-8 shadow-2xl text-gray-900 relative rounded-xl flex flex-col items-center"
+        className="w-[650px] h-[450px] border-4 border-blue-600 bg-white p-8 shadow-2xl text-gray-900 relative rounded-xl flex flex-col items-center overflow-hidden"
       >
-        <h1 className="text-3xl font-bold text-blue-700 mb-2">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+        ></div>
+
+        <h1 className="text-3xl font-bold text-blue-700 mb-2 relative">
           Certificate of Appreciation
         </h1>
-        <p className="text-lg text-gray-700">This is proudly presented to</p>
+        <p className="text-lg text-gray-700 relative">This is proudly presented to</p>
 
-        {/* Loading & Error Messages */}
-        {loading && <p className="text-gray-500 mt-4">Fetching GitHub Profile...</p>}
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {loading && <p className="text-gray-500 mt-4 relative">Fetching GitHub Profile...</p>}
+        {error && <p className="text-red-500 mt-4 relative">{error}</p>}
 
-        {/* Display GitHub Profile */}
         {profile && !loading && (
-          <div className="flex flex-col items-center mt-4">
+          <div className="flex flex-col items-center mt-4 relative">
             <a href={profile.html_url} target="_blank" rel="noopener noreferrer">
               <img
                 src={profile.avatar_url}
@@ -77,14 +81,14 @@ const CertificateGenerator = ({ username }) => {
           </div>
         )}
 
-        <p className="mt-4 text-lg text-gray-700 text-center px-4">
-          For valuable contributions to the project and the open-source community.
+        <p className="mt-4 text-lg text-gray-700 text-center px-4 relative">
+          For valuable contributions to react-blog Project in Social Winter of Code (SWoC) from January 1, 2025 to March 1, 2025.
         </p>
 
-        <div className="mt-8 flex justify-between w-full px-6 text-gray-700">
+        <div className="mt-8 flex justify-between w-full px-6 text-gray-700 relative">
           <div className="text-left">
-            <p className="font-semibold text-sm">Project Team</p>
-            <p className="text-sm">[Your Project Name]</p>
+            <p className="font-semibold text-sm">Project Mentor</p>
+            <p className="text-sm">OkenHaha</p>
           </div>
           <div className="text-right">
             <p className="font-semibold text-sm">Date</p>
