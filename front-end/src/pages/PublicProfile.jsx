@@ -4,6 +4,8 @@ import axios from 'axios';
 import { link } from '../components/Baselink';
 import { GettingArticle } from '../Utils/loader';
 import { useSelector } from 'react-redux';
+import { FaUserPlus, FaUserMinus } from "react-icons/fa";
+import { BiLoaderAlt } from "react-icons/bi";
 
 const PublicProfile = () => {
     const { userId } = useParams();
@@ -13,10 +15,12 @@ const PublicProfile = () => {
     const [error, setError] = useState(null);
     const [isFollowing, setIsFollowing] = useState(false);
     const [followLoading, setFollowLoading] = useState(false);
+    const [followError, setFollowError] = useState(null);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
+                setError(null);
                 const response = await axios.get(`${link}/api/auth/user/${userId}`);
                 setUser(response.data);
                 console.log("response.data",response.data)
@@ -24,7 +28,7 @@ const PublicProfile = () => {
                 console.log("tempId",tempId)
                 if (tempId && response.data.followers) {
                     console.log(response.data.followers.includes(tempId))
-                    setIsFollowing(!response.data.followers.includes(tempId));
+                    setIsFollowing(response.data.followers.includes(tempId));
                 }
             } catch (err) {
                 setError(err.response?.data?.message || 'Failed to fetch user profile');
@@ -37,9 +41,14 @@ const PublicProfile = () => {
     }, [userId, currentUser]);
 
     const handleFollow = async () => {
-        if (!currentUser) return;
+        if (!currentUser) {
+            setFollowError('Please login to follow users');
+            return;
+        }
 
         setFollowLoading(true);
+        setFollowError(null);
+
         try {
             const config = {
                 headers: {
@@ -48,22 +57,25 @@ const PublicProfile = () => {
             };
 
             const endpoint = isFollowing ? 'unfollow' : 'follow';
-            const method = isFollowing ? 'delete' : 'post';
-            
-            const response = await axios[method](
+            const response = await axios.post(
                 `${link}/api/auth/${endpoint}/${userId}`,
                 {},
                 config
             );
 
+            // Update local state
             setIsFollowing(!isFollowing);
             setUser(prev => ({
                 ...prev,
                 followers: response.data.followers
             }));
+            
+            // Clear any existing errors
+            setFollowError(null);
         } catch (error) {
             console.error(`Error ${isFollowing ? 'unfollowing' : 'following'} user:`, error);
-            setError(error.response?.data?.message || `Failed to ${isFollowing ? 'unfollow' : 'follow'} user`);
+            setFollowError(error.response?.data?.error || `Failed to ${isFollowing ? 'unfollow' : 'follow'} user`);
+            // Don't update isFollowing state if there's an error
         } finally {
             setFollowLoading(false);
         }
@@ -76,6 +88,13 @@ const PublicProfile = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-16 pb-12">
             <div className="container mx-auto px-4 max-w-4xl">
+                {/* Show follow error if exists */}
+                {followError && (
+                    <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                        {followError}
+                    </div>
+                )}
+                
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mt-8">
                     {/* Profile Header */}
                     <div className="flex items-center justify-between mb-8">
@@ -101,27 +120,51 @@ const PublicProfile = () => {
                         {currentUser && currentUser.userId !== userId && (
                             <button
                                 onClick={handleFollow}
-                                disabled={followLoading || isFollowing}
-                                className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 ${
-                                    followLoading
+                                disabled={followLoading}
+                                className={`
+                                    flex items-center justify-center gap-2
+                                    px-4 sm:px-6 py-2 
+                                    rounded-full font-semibold
+                                    transition-all duration-300 ease-in-out
+                                    transform hover:scale-105
+                                    text-sm sm:text-base
+                                    min-w-[120px] sm:min-w-[140px]
+                                    ${followLoading
                                         ? 'bg-gray-300 cursor-not-allowed'
                                         : isFollowing
-                                        ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                        : 'bg-blue-600 text-white hover:bg-blue-700'
-                                } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                                            ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-red-500 hover:text-white dark:hover:bg-red-600'
+                                            : 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
+                                    }
+                                    focus:outline-none focus:ring-2 
+                                    ${isFollowing 
+                                        ? 'focus:ring-red-500' 
+                                        : 'focus:ring-blue-500'
+                                    }
+                                    focus:ring-offset-2 dark:focus:ring-offset-gray-800
+                                    shadow-md hover:shadow-lg
+                                `}
                             >
                                 {followLoading ? (
-                                    <span className="flex items-center space-x-2">
-                                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                                        </svg>
-                                        <span>Processing...</span>
+                                    <span className="flex items-center justify-center gap-2">
+                                        <BiLoaderAlt className="animate-spin h-5 w-5" />
+                                        <span className="hidden sm:inline">Processing...</span>
                                     </span>
-                                ) : isFollowing ? (
-                                    'Following'
                                 ) : (
-                                    'Follow'
+                                    <span className="flex items-center justify-center gap-2">
+                                        {isFollowing ? (
+                                            <>
+                                                <FaUserMinus className={`h-4 w-4 transition-colors duration-300 
+                                                    ${followLoading ? 'text-gray-400' : 'group-hover:text-white'}`} 
+                                                />
+                                                <span>Unfollow</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FaUserPlus className="h-4 w-4" />
+                                                <span>Follow</span>
+                                            </>
+                                        )}
+                                    </span>
                                 )}
                             </button>
                         )}
