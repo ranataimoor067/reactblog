@@ -1,5 +1,5 @@
 import express from 'express';
-import { loginUser, registerUser, getProfile, editProfile, deleteUserAccount, resetPassword, getOtherUser, followUser } from "../controllers/user.controller.js";
+import { loginUser, registerUser, getProfile, editProfile, deleteUserAccount, resetPassword, getOtherUser, followUser, unfollowUser } from "../controllers/user.controller.js";
 import { genrateOtp, generateOTPForDelete, generateOTPForPassword } from '../Utils/otpgenerate.js';
 import multer from 'multer'
 
@@ -35,5 +35,6 @@ userRouter.get('/user/:userId', getOtherUser);
 
 // Follow/Unfollow routes
 userRouter.post('/follow/:userToFollowId', followUser);
+userRouter.post('/unfollow/:userToUnfollowId', unfollowUser);
 
 export { userRouter };

@@ -549,4 +549,54 @@ const followUser = async (req, res) => {
     }
 };
 
-export { getProfile, registerUser, loginUser, editProfile, deleteUserAccount, resetPassword, getOtherUser, followUser };
+const unfollowUser = async (req, res) => {
+  try {
+      const { userToUnfollowId } = req.params;
+      
+      // Get current user from token
+      const authHeader = req.headers.authorization;
+      if (!authHeader) {
+          return res.status(401).json({ error: "No token provided." });
+      }
+      const token = authHeader.split(' ')[1];
+      const decoded = jwt.verify(token, secretKey);
+      const currentUserId = decoded.userId;
+
+      // Check if trying to unfollow self
+      if (currentUserId === userToUnfollowId) {
+          return res.status(400).json({ error: "You cannot unfollow yourself" });
+      }
+
+      // Find both users
+      const userToUnfollow = await User.findById(userToUnfollowId);
+      const currentUser = await User.findById(currentUserId);
+
+      if (!userToUnfollow || !currentUser) {
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      // Check if actually following
+      if (!currentUser.following.includes(userToUnfollowId)) {
+          return res.status(400).json({ error: "You are not following this user" });
+      }
+
+      // Remove from following and followers lists
+      currentUser.following = currentUser.following.filter(id => id.toString() !== userToUnfollowId);
+      userToUnfollow.followers = userToUnfollow.followers.filter(id => id.toString() !== currentUserId);
+
+      await currentUser.save();
+      await userToUnfollow.save();
+
+      res.status(200).json({ 
+          message: "Successfully unfollowed user",
+          following: currentUser.following,
+          followers: userToUnfollow.followers
+      });
+
+  } catch (error) {
+      console.error("Error in unfollowUser:", error);
+      res.status(500).json({ error: "An error occurred while unfollowing user" });
+  }
+};
+
+export { getProfile, registerUser, loginUser, editProfile, deleteUserAccount, resetPassword, getOtherUser, followUser, unfollowUser };
