@@ -24,7 +24,8 @@ const Navbar = ({ theme, toggleTheme }) => {
   );
 
   const url = `${link}`;
-  const [loginCredential, setLoginCredential] = useState(useSelector((state) => state.auth.user));
+  const authUser = useSelector((state) => state.auth.user);
+  const [loginCredential, setLoginCredential] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -36,7 +37,6 @@ const Navbar = ({ theme, toggleTheme }) => {
   const [open, setOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const isLoggedIn = useSelector((state) => state.auth.authStatus);
-  const [user, setUser] = useState("");
   const [toggle, setToggle] = useState(false);
   const [otp, setOtp] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
@@ -251,6 +251,12 @@ const Navbar = ({ theme, toggleTheme }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (authUser) {
+      setLoginCredential(authUser.username || "");
+    }
+  }, [authUser]);
+
   const logout = () => {
     localStorage.removeItem("token");
     dispatch(authLogout())
@@ -329,7 +335,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                         }`}
                     >
                       <HiUser className="w-5 h-5" />
-                      <span>{loginCredential}</span>
+                      <span>{authUser?.username || ""}</span>
                     </button>
                     <button
                       onClick={logout}
@@ -414,7 +420,7 @@ const Navbar = ({ theme, toggleTheme }) => {
                   className={`w-full text-left ${linkClass}`}
                 >
                   <HiUser className="w-5 h-5 mr-2" />
-                  <span>{loginCredential}</span>
+                  <span>{authUser?.username || ""}</span>
                 </button>
                 <button
                   onClick={logout}
