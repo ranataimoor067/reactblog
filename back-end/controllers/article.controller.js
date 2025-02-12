@@ -832,6 +832,152 @@ const removeSaveforLater = async (req, res) => {
 
     return res.status(200).send({ message: "save for later updated successfully", editedSaveforLater: user.saveForLater })
 }
+
+const recentComments = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Validate ID
+        if (!id) {
+            return res.status(400).json({ error: "Invalid user ID provided or not provided" });
+        }
+
+
+        console.log(`Fetching comments for user ID: ${id}`);
+
+        // Fetch comments with pagination
+        const fetchedComments = await Comment.find({ user: id })
+            .sort({ createdAt: -1 }) // Sort by latest comments
+            .populate('article')
+        if (!fetchedComments.length) {
+            return res.status(404).json({ message: "No comments found for this user" });
+        }
+
+        console.log(`Fetched ${fetchedComments.length} comments`);
+
+        
+
+        return res.status(200).send({
+            message: "Comments fetched successfully",
+            comments: fetchedComments,
+        });
+
+    } catch (error) {
+        console.error("Error fetching comments:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+const categoryMap = async (req, res) => {
+    try {
+        const { uid } = req.body;
+
+        // Validate uid (must be a valid MongoDB ObjectId)
+        if (!uid || !mongoose.Types.ObjectId.isValid(uid)) {
+            return res.status(400).json({ error: "Invalid or missing user ID" });
+        }
+
+        console.log(`Fetching articles for author ID: ${uid}`);
+
+        // Fetch articles for the given author
+        const fetchedArticles = await Article.find({ author: uid });
+
+        if (!fetchedArticles.length) {
+            return res.status(404).json({ message: "No articles found for this author" });
+        }
+
+        console.log(`Found ${fetchedArticles.length} articles`);
+
+        // Construct category map
+        const categoryMap = fetchedArticles.reduce((acc, article) => {
+            if (article.tag) {
+                acc[article.tag] = (acc[article.tag] || 0) + 1;
+            }
+            return acc;
+        }, {});
+
+        console.log("Category Map:", categoryMap);
+
+        return res.status(200).json({
+            message: "Category map generated successfully",
+            categoryMap,
+            totalArticles: fetchedArticles.length
+        });
+
+    } catch (error) {
+        console.error("Error fetching category map:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+const monthToArticleMap= async (req, res) => {
+    try {
+        const { authorId } = req.params;
+
+        // Validate authorId
+        if (!authorId || !mongoose.Types.ObjectId.isValid(authorId)) {
+            return res.status(400).json({ error: "Invalid or missing author ID" });
+        }
+
+        console.log(`Fetching articles for author ID: ${authorId}`);
+
+        // Fetch articles by author
+        const articles = await Article.find({ author: authorId });
+
+        if (!articles.length) {
+            return res.status(404).json({ message: "No articles found for this author" });
+        }
+
+        console.log(`Total articles fetched: ${articles.length}`);
+
+        // Define month names
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        // Initialize stats object
+        const stats = {
+            labels: [],
+            published: [],
+            liked: [],
+            comments: []
+        };
+
+        // Get today's date
+        const today = new Date();
+
+        for (let i = 5; i >= 0; i--) {
+            const month = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            stats.labels.push(monthNames[month.getMonth()]);
+
+            // Filter articles by the month and year
+            const monthArticles = articles.filter(article => {
+                const articleDate = new Date(article.createdAt);
+                return articleDate.getMonth() === month.getMonth() &&
+                       articleDate.getFullYear() === month.getFullYear();
+            });
+
+            // Compute statistics
+            const monthLikes = monthArticles.reduce((sum, article) => sum + (article.likes?.length || 0), 0);
+            const monthComments = monthArticles.reduce((sum, article) => sum + (article.comments?.length || 0), 0);
+
+            stats.published.push(monthArticles.length);
+            stats.liked.push(monthLikes);
+            stats.comments.push(monthComments);
+        }
+
+        console.log("Monthly statistics computed:", stats);
+
+        return res.status(200).json({
+            message: "Monthly statistics retrieved successfully",
+            stats
+        });
+
+    } catch (error) {
+        console.error("Error processing monthly stats:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+
 export {
     addArticle,
     getarticles,
@@ -847,5 +993,8 @@ export {
     saveasdraft,
     getUserDrafts,
     getsaveforlater,
-    removeSaveforLater
+    categoryMap,
+    monthToArticleMap,
+    removeSaveforLater,
+    recentComments
 }

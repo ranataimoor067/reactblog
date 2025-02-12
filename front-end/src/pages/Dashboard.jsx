@@ -68,6 +68,7 @@ function Dashboard() {
         const userResponse = await axios.get(`${url}/api/auth/getProfile`, {
           headers: { Authorization: token }
         });
+        console.log(userResponse.data)
         setUser(userResponse.data.user);
 
         
@@ -83,9 +84,10 @@ function Dashboard() {
 
         
         const commentsResponse = await axios.get(
-          `${url}/api/comments/recent/${userResponse.data.user._id}`,
+          `${url}/api/article/getrecentomment/${userResponse.data.user._id}`,
           { headers: { Authorization: token } }
         );
+        console.log(commentsResponse.data.comments)
         setRecentComments(commentsResponse.data.comments);
 
         setLoading(false);
@@ -162,8 +164,8 @@ function Dashboard() {
   const processCategoryStats = (articles) => {
     const categoryCount = {};
     articles.forEach(article => {
-      if (article.category) {
-        categoryCount[article.category] = (categoryCount[article.category] || 0) + 1;
+      if (article.tag) {
+        categoryCount[article.tag] = (categoryCount[article.tag] || 0) + 1;
       }
     });
 
@@ -494,7 +496,7 @@ function Dashboard() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Users className="w-5 h-5 text-gray-500" />
-                  <span className="font-medium text-gray-800">{comment.user?.name || 'Anonymous'}</span>
+                  <span className="font-medium text-gray-800">{comment.username || 'Anonymous'}</span>
                 </div>
                 <span className="text-sm text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString()}
