@@ -300,7 +300,33 @@ const Article = ({ loggedInUserId }) => {
                   )}
                 </div>
               </div>
-                  {isLoggedIn ? <SaveForLaterButton articleId={article._id} usertoken={localStorage.getItem('token')} /> : " "}
+                  {isLoggedIn ? <SaveForLaterButton articleId={article._id} usertoken={localStorage.getItem('token')} /> : (
+                    <button
+  onClick={() => {
+    console.log(article);
+
+    // Retrieve saved articles or initialize an empty array
+    let savedArticles = JSON.parse(localStorage.getItem("SavedArray") || "[]");
+
+    // Check if article is already in the list
+    const index = savedArticles.findIndex(item => item._id === article._id);
+
+    if (index > -1) {
+      // If article exists, remove it
+      savedArticles.splice(index, 1);
+    } else {
+      // Otherwise, add it
+      savedArticles.push(article);
+    }
+
+    // Save updated array back to localStorage
+    localStorage.setItem("SavedArray", JSON.stringify(savedArticles));
+  }}
+>
+  Save For Later
+</button>
+
+                  )}
             </div>
             
             {isAuthor && (

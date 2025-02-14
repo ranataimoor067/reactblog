@@ -10,6 +10,7 @@ import { HiHome, HiInformationCircle, HiNewspaper, HiUser, HiMenu, HiX } from 'r
 import { LuSearch } from "react-icons/lu";
 import { login as authLogin, logout as authLogout } from "../store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { FaBookBookmark } from "react-icons/fa6";
 
 const Navbar = ({ theme, toggleTheme }) => {
   axios.interceptors.request.use(
@@ -321,7 +322,18 @@ const Navbar = ({ theme, toggleTheme }) => {
                 <span>Articles</span>
                 <div className={getUnderlineClass('/article-list')} />
               </Link>
+              
+              {
+                isLoggedIn ? (""):(
 
+                  <Link to={'/savedArticles'}>
+                    <div className="flex flex-row gap-3 justify-center items-center">
+                      <FaBookBookmark size={15} color="gray"/>
+                      <span> Saved For Later Articles</span>
+                    </div>
+                  </Link>
+                )
+              }
 
               <div className="flex items-center space-x-4">
                 {isLoggedIn ? (
