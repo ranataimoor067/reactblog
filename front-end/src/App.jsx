@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { LoadingSpinner } from "./Utils/loader";
 import AchievementPage from "./components/AchievementComp/AchievementComp";
+import SavedArticles from "./pages/SavedArticles";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -71,6 +72,7 @@ function App() {
             <Route path="/addarticle" element={<AddarticlePage />} />
             <Route path="/profile/:userId" element={<PublicProfile />} />
             <Route path="/drafts" element={<DraftsPage />} />
+            <Route path="/savedArticles" element={<SavedArticles/>} />
           </Routes>
         </Suspense>
       </div>
