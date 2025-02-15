@@ -6,7 +6,9 @@ import { GettingArticle } from '../Utils/loader';
 import { useSelector } from 'react-redux';
 import { FaUserPlus, FaUserMinus } from "react-icons/fa";
 import { BiLoaderAlt } from "react-icons/bi";
-
+import { motion, AnimatePresence } from 'framer-motion';
+import Markdown from 'react-markdown';
+import LikeButton from '../components/LikeButton';
 const PublicProfile = () => {
     const { userId } = useParams();
     const { user: currentUser } = useSelector((state) => state.auth);
@@ -16,6 +18,11 @@ const PublicProfile = () => {
     const [isFollowing, setIsFollowing] = useState(false);
     const [followLoading, setFollowLoading] = useState(false);
     const [followError, setFollowError] = useState(null);
+    const [articles, setArticles] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [articlesLoading, setArticlesLoading] = useState(true);
+    const [articlesError, setArticlesError] = useState(null);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -23,11 +30,8 @@ const PublicProfile = () => {
                 setError(null);
                 const response = await axios.get(`${link}/api/auth/user/${userId}`);
                 setUser(response.data);
-                console.log("response.data",response.data)
                 const tempId = localStorage.getItem("userId")
-                console.log("tempId",tempId)
                 if (tempId && response.data.followers) {
-                    console.log(response.data.followers.includes(tempId))
                     setIsFollowing(response.data.followers.includes(tempId));
                 }
             } catch (err) {
@@ -39,6 +43,30 @@ const PublicProfile = () => {
 
         fetchUserProfile();
     }, [userId, currentUser]);
+
+    useEffect(() => {
+        const fetchUserArticles = async () => {
+            try {
+                setArticlesLoading(true);
+                setArticlesError(null);
+                const response = await axios.post(
+                    `${link}/api/article/getarticlesbyuser`,
+                    { uid: userId }
+                );
+                if (response.data.success) {
+                    setArticles(response.data.articleDetails);
+                }
+            } catch (err) {
+                setArticlesError(err.response?.data?.message || 'Failed to fetch articles');
+            } finally {
+                setArticlesLoading(false);
+            }
+        };
+
+        if (userId) {
+            fetchUserArticles();
+        }
+    }, [userId, currentPage]);
 
     const handleFollow = async () => {
         if (!currentUser) {
@@ -216,6 +244,199 @@ const PublicProfile = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Articles Section */}
+            <div className="container mx-auto px-4 max-w-7xl mt-8">
+                <h2 className="text-5xl font-extrabold text-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-transparent bg-clip-text mb-12">
+                    Published Articles
+                </h2>
+
+                {articlesLoading ? (
+                    <div className="flex justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+                    </div>
+                ) : articlesError ? (
+                    <div className="text-red-500 text-center">{articlesError}</div>
+                ) : articles?.length > 0 ? (
+                    <>
+                        <motion.div 
+                            initial="hidden"
+                            animate="visible"
+                            variants={{
+                                hidden: { opacity: 0 },
+                                visible: {
+                                    opacity: 1,
+                                    transition: { staggerChildren: 0.1 }
+                                }
+                            }}
+                            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                        >
+                            <AnimatePresence>
+                                {articles.map((article) => (
+                                    <motion.div
+                                        key={article._id}
+                                        variants={{
+                                            hidden: { 
+                                                opacity: 0, 
+                                                scale: 0.9,
+                                                y: 20 
+                                            },
+                                            visible: { 
+                                                opacity: 1, 
+                                                scale: 1,
+                                                y: 0,
+                                                transition: {
+                                                    type: "spring",
+                                                    stiffness: 200,
+                                                    damping: 10
+                                                }
+                                            },
+                                            hover: {
+                                                scale: 1.03,
+                                                boxShadow: "0 15px 30px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.08)",
+                                                transition: { duration: 0.3 }
+                                            }
+                                        }}
+                                        initial="hidden"
+                                        animate="visible"
+                                        whileHover="hover"
+                                        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden"
+                                    >
+                                        {article.thumbnail && (
+                                            <img
+                                                src={article.thumbnail}
+                                                alt={article.title}
+                                                className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                                            />
+                                        )}
+                                        <div className="p-6">
+                                            <div className="flex justify-between items-center mb-4">
+                                                <span className="px-3 py-1 bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300 rounded-full text-xs">
+                                                    {article.tag || 'Uncategorized'}
+                                                </span>
+                                                <LikeButton
+                                                    articleId={article._id}
+                                                    initialLikes={article.likes || 0}
+                                                />
+                                            </div>
+
+                                            <h3 className="text-xl font-bold text-indigo-800 dark:text-indigo-200 mb-3">
+                                                {article.title}
+                                            </h3>
+
+                                            <Markdown className="text-gray-600 dark:text-gray-300 h-20 mb-8 line-clamp-3">
+                                                {article.content 
+                                                    ? `${article.content.substring(0, 300)}${article.content.length > 300 ? '...' : ''}`
+                                                    : 'No description available.'}
+                                            </Markdown>
+
+                                            <motion.button
+                                                variants={{
+                                                    initial: { 
+                                                        opacity: 0, 
+                                                        scale: 0.9,
+                                                        y: 20 
+                                                    },
+                                                    animate: { 
+                                                        opacity: 1, 
+                                                        scale: 1,
+                                                        y: 0,
+                                                        transition: { 
+                                                            type: "spring",
+                                                            stiffness: 300,
+                                                            damping: 10,
+                                                            duration: 0.4
+                                                        }
+                                                    },
+                                                    hover: {
+                                                        scale: 1.05,
+                                                        rotate: [0, -5, 5, 0],
+                                                        transition: { 
+                                                            type: "spring",
+                                                            stiffness: 300,
+                                                            duration: 0.2
+                                                        }
+                                                    },
+                                                    tap: { 
+                                                        scale: 0.95,
+                                                        transition: { duration: 0.1 }
+                                                    }
+                                                }}
+                                                initial="initial"
+                                                animate="animate"
+                                                whileHover="hover"
+                                                whileTap="tap"
+                                                onClick={() => window.location.href = `/article/${article.name}`}
+                                                className="relative w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition duration-300 bottom-4"
+                                            >
+                                                Read More
+                                            </motion.button>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </motion.div>
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="flex justify-center items-center gap-2 mt-8 mb-4 text-sm"
+                            >
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                    className={`px-2 py-1 ${
+                                        currentPage === 1 
+                                            ? 'text-gray-400 cursor-not-allowed dark:text-gray-600' 
+                                            : 'text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400'
+                                    } transition-colors duration-200`}
+                                >
+                                    ← Prev
+                                </button>
+                                
+                                <div className="flex gap-1">
+                                    {[...Array(totalPages)].map((_, index) => (
+                                        <button
+                                            key={index + 1}
+                                            onClick={() => setCurrentPage(index + 1)}
+                                            className={`w-8 h-8 rounded-full transition-colors duration-200 ${
+                                                currentPage === index + 1
+                                                    ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300'
+                                                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800/50'
+                                            }`}
+                                        >
+                                            {index + 1}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                    className={`px-2 py-1 ${
+                                        currentPage === totalPages 
+                                            ? 'text-gray-400 cursor-not-allowed dark:text-gray-600' 
+                                            : 'text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400'
+                                    } transition-colors duration-200`}
+                                >
+                                    Next →
+                                </button>
+                            </motion.div>
+                        )}
+                        
+                        {/* Articles Count */}
+                        <p className="text-center text-gray-600 dark:text-gray-400 mt-4">
+                            Showing {articles.length} articles
+                        </p>
+                    </>
+                ) : (
+                    <div className="text-center text-gray-600 dark:text-gray-400 mt-4">
+                        No articles published yet by this user
+                    </div>
+                )}
             </div>
         </div>
     );
