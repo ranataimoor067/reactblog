@@ -15,7 +15,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/article/getallarticle",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/getallarticle",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -132,7 +132,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/addarticle",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/addarticle",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -238,7 +238,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/editarticle",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/editarticle",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -350,7 +350,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/addcomment",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/addcomment",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -403,7 +403,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/getarticle",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/getarticle",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -434,7 +434,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/getarticlesbyuser",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/getarticlesbyuser",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -465,7 +465,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/getarticlebyid",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/getarticlebyid",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -506,7 +506,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/deletearticle",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/deletearticle",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -541,7 +541,7 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/like/678a6a43dac71c1608aff1e1",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/like/678a6a43dac71c1608aff1e1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -573,7 +573,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/article/getarticlebytag",
+					"raw": "https://reactblog-jq7b.vercel.app/api/article/getarticlebytag",
 					"protocol": "http",
 					"host": [
 						"localhost"
