@@ -5,8 +5,8 @@ import Read from "../assets/read-blog.jpg";
 import mission from "../assets/mission.jpg";
 import values from "../assets/values.avif";
 import vision from "../assets/vision.avif";
-import Contributors from "../pages/Contributors";
-import ContributorsLink from "./contributors/ContributorsLink";
+// import Contributors from "../pages/Contributors";
+// import ContributorsLink from "./contributors/ContributorsLink";
 
 function Centre() {
   return (
@@ -162,7 +162,7 @@ function Centre() {
         </div>
       </section>
 
-      <section className="relative py-16 overflow-hidden">
+      {/* <section className="relative py-16 overflow-hidden">
         <div className="relative container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2
@@ -189,7 +189,7 @@ function Centre() {
             <ContributorsLink classes="w-14 h-14" />
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="relative py-16 overflow-hidden">
         <div className="relative container mx-auto px-4">

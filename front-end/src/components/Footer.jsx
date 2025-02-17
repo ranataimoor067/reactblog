@@ -67,14 +67,14 @@ function Footer() {
                     </a>
                   </li>
 
-                  <li>
+                  {/* <li>
                     <Link
                       className="relative text-gray-700 transition hover:text-gray-700/75 dark:text-white dark:hover:text-white/75 before:absolute before:bottom-0 before:left-0 before:h-[2px] before:w-0 before:bg-blue-500 before:transition-all before:duration-300 hover:before:w-full"
                       to="/contributors"
                     >
                       Contributors
                     </Link>
-                  </li>
+                  </li> */}
 
                   <li>
                     <Link
@@ -100,12 +100,12 @@ function Footer() {
                       href="mailto:reactblogswoc@gmail.com"
                     >
                       {" "}
-                      reactblogswoc@gmail.com{" "}
+                      ranatamoor067@gmail.com{" "}
                     </a>
                     <div className="mt-6 flex justify-center gap-4 lg:justify-start">
                       <a
                         className="text-black hover:text-gray-700 dark:text-white dark:hover:text-white/75"
-                        href="https://github.com/OkenHaha/react-blog"
+                        href="https://github.com/"
                         rel="noreferrer"
                       >
                         <span className="sr-only"> GitHub </span>
