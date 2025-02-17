@@ -28,7 +28,7 @@
 					]
 				},
 				"url": {
-					"raw": "https://reactblog-jq7b.vercel.app/api/auth/login",
+					"raw": "http://localhost:8080/api/auth/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -94,7 +94,7 @@
 					]
 				},
 				"url": {
-					"raw": "https://reactblog-jq7b.vercel.app/api/auth/register",
+					"raw": "http://localhost:8080/api/auth/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -132,7 +132,7 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "https://reactblog-jq7b.vercel.app/api/auth/getProfile",
+					"raw": "http://localhost:8080/api/auth/getProfile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -186,7 +186,7 @@
 					]
 				},
 				"url": {
-					"raw": "https://reactblog-jq7b.vercel.app/api/auth/editProfile",
+					"raw": "http://localhost:8080/api/auth/editProfile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -227,7 +227,7 @@
 					]
 				},
 				"url": {
-					"raw": "https://reactblog-jq7b.vercel.app/api/auth/deleteAccount",
+					"raw": "http://localhost:8080/api/auth/deleteAccount",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -273,7 +273,7 @@
 					]
 				},
 				"url": {
-					"raw": "https://reactblog-jq7b.vercel.app/api/auth/reset-password",
+					"raw": "http://localhost:8080/api/auth/reset-password",
 					"protocol": "http",
 					"host": [
 						"localhost"
