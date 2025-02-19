@@ -7,10 +7,10 @@ dotenv.config()
 const app = express();
 // const PORT = process.env.PORT || 8080
 
-  app.use(cors({ origin: '*', credentials: true }));
+//   app.use(cors({ origin: '*', credentials: true }));
 // uncomment the cors above when testing it locally and comment the one below. 
 // make sure you reverse the changes being made when you about to make a PR
- app.use(cors({ origin: 'https://reactblog-u2ls.vercel.app/', credentials: true }));
+ app.use(cors({ origin: 'https://reactblog-u2ls.vercel.app', credentials: true }));
 app.use(cors({ origin: '*', credentials: true }));
 
 app.use(express.json({extend: false}));
